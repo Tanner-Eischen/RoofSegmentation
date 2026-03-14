@@ -26,15 +26,31 @@ _IMAGENET_STD_ARR = np.array(IMAGENET_STD, dtype=np.float32).reshape(1, 1, 3)
 _model_cache: dict[str, Any] = {}  # path -> (model, device, image_size, args)
 
 
-def load_model(model_path: str | Path) -> tuple[Any, torch.device, int, dict]:
-    """Load best.pt and return (model, device, image_size, args). Cached by path."""
+def load_model(model_path: str | Path, auto_download: bool = True) -> tuple[Any, torch.device, int, dict]:
+    """Load best.pt and return (model, device, image_size, args). Cached by path.
+
+    If model not found locally and auto_download=True, downloads from Hugging Face.
+    """
     path = Path(model_path).resolve()
     path_str = str(path)
     if path_str in _model_cache:
         return _model_cache[path_str]
 
     if not path.exists():
-        raise FileNotFoundError(f"Model not found: {path}")
+        if auto_download:
+            print(f"Model not found at {path}. Downloading from Hugging Face...")
+            try:
+                from huggingface_hub import hf_hub_download
+                hf_hub_download(
+                    repo_id="TannerEischen/roof-segmentation",
+                    filename="best.pt",
+                    local_dir=str(path.parent),
+                )
+                print(f"Model downloaded to {path}")
+            except Exception as e:
+                raise FileNotFoundError(f"Model not found and download failed: {e}")
+        else:
+            raise FileNotFoundError(f"Model not found: {path}")
 
     ckpt = torch.load(path, map_location="cpu", weights_only=False)
     args = ckpt.get("args") or {}

@@ -14,6 +14,7 @@ uvicorn>=0.22.0
 python-multipart>=0.0.6
 httpx>=0.24.0
 googlemaps>=4.10.0
+huggingface_hub>=0.20.0
 
 # Test dependencies
 pytest>=7.0.0
