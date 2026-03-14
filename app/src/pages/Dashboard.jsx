@@ -198,7 +198,7 @@ export default function Dashboard() {
               <>
                 <div className="text-2xl font-bold text-[var(--color-primary)]">{Math.round(roofAreaPx).toLocaleString()}</div>
                 <div className="text-xs text-slate-500">roof area (px²)</div>
-                <div className="mt-2 text-sm text-slate-400">{polygons.length} polygon(s) detected</div>
+                <div className="mt-2 text-sm text-slate-400" data-testid="polygons-detected">{polygons.length} polygon(s) detected</div>
               </>
             ) : (
               <div className="text-slate-500 text-sm">—</div>
