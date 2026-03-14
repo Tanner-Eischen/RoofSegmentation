@@ -1,0 +1,3 @@
+# For running sagemaker_launch.py locally (AWS SDK). Pin to v2 for sagemaker.pytorch.PyTorch.
+sagemaker>=2.150.0,<3.0.0
+boto3>=1.26.0

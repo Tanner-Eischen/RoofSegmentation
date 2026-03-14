@@ -1,0 +1,37 @@
+{
+  "samples": [
+    {
+      "id": "sample1",
+      "label": "Sample Residential Roof 1",
+      "address": "123 Oak Street, Springfield, IL",
+      "lat": 39.7817,
+      "lng": -89.6501,
+      "roof_area_px": 45600,
+      "confidence": 87.3,
+      "polygon_count": 2,
+      "roof_coverage_percent": 11.1
+    },
+    {
+      "id": "sample2",
+      "label": "Sample Residential Roof 2",
+      "address": "456 Maple Avenue, Austin, TX",
+      "lat": 30.2672,
+      "lng": -97.7431,
+      "roof_area_px": 62300,
+      "confidence": 91.5,
+      "polygon_count": 3,
+      "roof_coverage_percent": 15.2
+    },
+    {
+      "id": "sample3",
+      "label": "Sample Commercial Roof",
+      "address": "789 Industrial Blvd, Denver, CO",
+      "lat": 39.7392,
+      "lng": -104.9903,
+      "roof_area_px": 128400,
+      "confidence": 94.2,
+      "polygon_count": 1,
+      "roof_coverage_percent": 31.3
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+.venv
+venv
+env
+.ipynb_checkpoints
+
+# Node
+app/node_modules
+npm-debug.log*
+
+# Build artifacts (we build in Docker)
+app/dist
+
+# IDE
+.vscode
+.idea
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.*
+
+# Test and coverage
+.coverage
+htmlcov
+.pytest_cache
+
+# Large files
+models/*.pt
+models/*.pth
+*.egg-info
+
+# Documentation
+*.md
+!README.md
+
+# Screenshots
+stitch_screens/
