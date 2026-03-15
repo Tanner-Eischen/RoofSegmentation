@@ -68,3 +68,6 @@ segmentation_model_data/filenames/
 
 # Stitch screens (generated)
 stitch_screens/
+
+# Claude local config
+.claude/
