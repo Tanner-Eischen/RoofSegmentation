@@ -131,8 +131,7 @@ export default function Batch() {
                   <td className="py-3 px-4">
                     {job.status === 'complete' && job.results?.length > 0 && (
                       <Link
-                        to="/"
-                        state={{ batchResults: job.results, batchId: job.job_id }}
+                        to={`/batch/${job.job_id}/results`}
                         className="text-[var(--color-primary)] hover:underline inline-flex items-center gap-1"
                       >
                         View report

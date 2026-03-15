@@ -1,10 +1,7 @@
 import { useState } from 'react';
-import { useLocation } from 'react-router-dom';
 import { geocode, getSatelliteUrl, fetchSatelliteImageBlob, runInferenceFromBlob } from '../api';
 
 export default function Dashboard() {
-  const location = useLocation();
-  const batchResults = location.state?.batchResults || null;
   const [address, setAddress] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -45,43 +42,6 @@ export default function Dashboard() {
     <div className="flex flex-1 overflow-hidden p-4 lg:p-6">
       <div className="flex flex-1 gap-6 min-h-0">
         <div className="flex-1 flex flex-col gap-4 overflow-auto">
-          {/* Batch Results View */}
-          {batchResults && batchResults.length > 0 ? (
-            <div className="flex flex-col gap-4">
-              <h2 className="text-lg font-semibold">Batch Analysis Results</h2>
-              <div className="rounded-xl border border-slate-800 overflow-hidden">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="bg-slate-900 border-b border-slate-800">
-                      <th className="text-left py-3 px-4 text-slate-400 font-medium">Address</th>
-                      <th className="text-left py-3 px-4 text-slate-400 font-medium">Roof Area (px²)</th>
-                      <th className="text-left py-3 px-4 text-slate-400 font-medium">Polygons</th>
-                      <th className="text-left py-3 px-4 text-slate-400 font-medium">Confidence</th>
-                      <th className="text-left py-3 px-4 text-slate-400 font-medium">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {batchResults.map((result, idx) => (
-                      <tr key={idx} className="border-b border-slate-800 hover:bg-slate-900/50">
-                        <td className="py-3 px-4 text-slate-100 max-w-xs truncate">{result.formatted_address || result.address}</td>
-                        <td className="py-3 px-4">{result.roof_area_px ? Math.round(result.roof_area_px).toLocaleString() : '—'}</td>
-                        <td className="py-3 px-4">{result.polygons?.length || 0}</td>
-                        <td className="py-3 px-4">{result.confidence ? `${result.confidence}%` : '—'}</td>
-                        <td className="py-3 px-4">
-                          <span className={`inline-flex px-2 py-0.5 rounded text-xs font-medium ${
-                            result.status === 'complete' ? 'bg-green-900/40 text-green-300' : 'bg-red-900/40 text-red-300'
-                          }`}>
-                            {result.status}
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          ) : (
-            <>
           {/* Single Address Analysis */}
           <form onSubmit={handleAnalyze} className="flex gap-3 max-w-2xl">
             <div className="relative flex-1">
@@ -162,8 +122,6 @@ export default function Dashboard() {
               )}
             </div>
           </div>
-            </>
-          )}
         </div>
         <aside className="w-80 shrink-0 flex flex-col gap-4">
           <div className="rounded-xl border border-slate-800 bg-slate-900 p-4">

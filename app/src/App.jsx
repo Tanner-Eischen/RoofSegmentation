@@ -4,6 +4,7 @@ import Layout from './components/Layout'
 import Dashboard from './pages/Dashboard'
 import Compare from './pages/Compare'
 import Batch from './pages/Batch'
+import BatchResults from './pages/BatchResults'
 import { checkDemoMode } from './api'
 
 export default function App() {
@@ -30,6 +31,7 @@ export default function App() {
           <Route index element={<Dashboard />} />
           <Route path="compare" element={<Compare />} />
           <Route path="batch" element={<Batch />} />
+          <Route path="batch/:jobId/results" element={<BatchResults />} />
         </Route>
       </Routes>
     </BrowserRouter>

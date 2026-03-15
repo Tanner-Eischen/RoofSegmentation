@@ -9,6 +9,36 @@ A roof segmentation tool that takes an address, fetches satellite imagery, and d
 - **Batch Processing**: Upload CSV files with multiple addresses for bulk analysis
 - **Comparison View**: Compare roof detection between two properties side-by-side
 
+## Quick Start (2-Minute Demo)
+
+```bash
+# 1. Start the backend (Python 3.10+ required)
+python -m venv venv && source venv/bin/activate
+pip install -r requirements.txt
+cd api && python -m uvicorn main:app --reload --port 8000 &
+
+# 2. Start the frontend (Node 18+ required)
+cd ../app && npm install && npm run dev
+```
+
+Open http://localhost:5173 and enter any address. No API key required - demo mode works with sample data.
+
+For live satellite imagery, set `GOOGLE_MAPS_API_KEY` before starting the backend.
+
+Open http://localhost:5173 and enter any address. No API key required - demo mode works with sample data.
+
+For live satellite imagery, set `GOOGLE_MAPS_API_KEY` before starting the backend.
+
+## Screenshots
+
+| Dashboard | Batch Processing |
+|-----------|------------------|
+| ![Dashboard showing roof detection](docs/dashboard.png) | ![Batch results table](docs/batch-results.png) |
+
+> **Note:** To add screenshots, capture the UI and save to `docs/` directory:
+> - `docs/dashboard.png` - Main analysis view with satellite imagery and roof mask
+> - `docs/batch-results.png` - Batch results table showing multiple addresses
+
 ## Architecture
 
 ```
