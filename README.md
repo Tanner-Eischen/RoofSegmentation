@@ -25,6 +25,12 @@ Open http://localhost:5173 and enter any address. No API key required - demo mod
 
 For live satellite imagery, set `GOOGLE_MAPS_API_KEY` before starting the backend.
 
+## Screenshots
+
+| Dashboard | Batch Processing |
+|-----------|------------------|
+| ![Dashboard](docs/dashboard.png) | ![Batch](docs/batch.png) |
+
 ## Architecture
 
 ```
