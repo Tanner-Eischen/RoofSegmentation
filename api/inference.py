@@ -58,7 +58,16 @@ def load_model(model_path: str | Path, auto_download: bool = True) -> tuple[Any,
     encoder_weights = args.get("encoder_weights") or None
     image_size = int(args.get("image_size", DEFAULT_IMAGE_SIZE))
 
-    model = smp.Unet(
+    # Build the architecture the checkpoint was trained with (train_v2.py saves
+    # args.arch). Legacy train.py checkpoints omit it -> default to U-Net.
+    arch = args.get("arch", "unet")
+    arches = {
+        "unet": smp.Unet,
+        "unetplusplus": smp.UnetPlusPlus,
+        "deeplabv3plus": smp.DeepLabV3Plus,
+    }
+    model_cls = arches.get(arch, smp.Unet)
+    model = model_cls(
         encoder_name=encoder,
         encoder_weights=encoder_weights,
         in_channels=3,
@@ -68,6 +77,11 @@ def load_model(model_path: str | Path, auto_download: bool = True) -> tuple[Any,
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = model.to(device)
     model.eval()
+
+    # Surface the tuned threshold (default 0.5 for legacy checkpoints) so
+    # run_inference uses it automatically.
+    args = dict(args)
+    args.setdefault("threshold", float(ckpt.get("threshold", THRESHOLD)))
 
     _model_cache[path_str] = (model, device, image_size, args)
     return model, device, image_size, args
@@ -85,15 +99,20 @@ def preprocess(image: np.ndarray, image_size: int) -> torch.Tensor:
 def run_inference(
     image: np.ndarray,
     model_path: str | Path,
-    threshold: float = THRESHOLD,
+    threshold: float | None = None,
 ) -> tuple[np.ndarray, list[list[list[float]]], float, float]:
     """
     Run segmentation on RGB image (HWC, 0-255).
     Returns (mask_uint8, polygons, roof_area_px, confidence).
     polygons: list of contours, each contour is list of [x,y] in original image coords.
     confidence: mean probability of predicted roof pixels (0-100).
+
+    If threshold is None, uses the tuned threshold stored in the checkpoint
+    (default 0.5 for legacy checkpoints).
     """
-    model, device, image_size, _ = load_model(model_path)
+    model, device, image_size, args = load_model(model_path)
+    if threshold is None:
+        threshold = float(args.get("threshold", THRESHOLD))
     orig_h, orig_w = image.shape[:2]
 
     x = preprocess(image, image_size).to(device)

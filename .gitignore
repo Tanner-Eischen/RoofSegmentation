@@ -18,6 +18,10 @@ models/*/
 *.pt
 *.pth
 *.bin
+*.ckpt
+
+# Pretrained RS-SSL encoder weights (downloaded via scripts/fetch_remote_weights.py)
+pretrained/
 
 # Node
 node_modules/
@@ -65,6 +69,12 @@ htmlcov/
 segmentation_model_data/images/
 segmentation_model_data/masks/
 segmentation_model_data/filenames/
+segmentation_model_data_v2/
+
+# Training outputs (checkpoints already covered by *.pt)
+outputs/
+outputs_*/
+outputs_v2*/
 
 # Stitch screens (generated)
 stitch_screens/

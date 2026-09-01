@@ -1,0 +1,4 @@
+# Extra dependencies for data preparation (scripts/prepare_airs.py) only.
+# Not required for training (train_v2.py) or inference (api/).
+# Install with: pip install -r requirements-data.txt
+rasterio>=1.3.0

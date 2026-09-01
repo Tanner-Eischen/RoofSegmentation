@@ -50,33 +50,12 @@ def get_args():
         action="store_true",
         help="If --images-dir/--masks-dir are s3:// URIs, sync them to local cache before training",
     )
-    p.add_argument("--epochs", type=int, default=50)
+    p.add_argument("--epochs", type=int, default=30)
     p.add_argument("--batch-size", type=int, default=8)
     p.add_argument("--lr", type=float, default=1e-3)
-    p.add_argument("--image-size", type=int, default=400, help="Train crop/size (square)")
+    p.add_argument("--image-size", type=int, default=256, help="Train crop/size (square)")
     p.add_argument("--workers", type=int, default=0)
     p.add_argument("--device", type=str, default="cuda" if torch.cuda.is_available() else "cpu")
-    p.add_argument(
-        "--exclude-empty-masks",
-        action="store_true",
-        help="Exclude training samples with no roof pixels",
-    )
-    p.add_argument(
-        "--pos-weight",
-        type=float,
-        default=20.0,
-        help="Weight for positive class in BCE loss (for class imbalance)",
-    )
-    p.add_argument(
-        "--use-focal",
-        action="store_true",
-        help="Use Focal loss instead of BCE",
-    )
-    p.add_argument(
-        "--use-cosine",
-        action="store_true",
-        help="Use cosine annealing learning rate scheduler",
-    )
     p.add_argument(
         "--encoder",
         type=str,
@@ -106,6 +85,24 @@ def get_args():
         "--no-label-filter",
         action="store_true",
         help="Do NOT exclude mask files with 'label' in filename",
+    )
+    p.add_argument(
+        "--train-file",
+        type=str,
+        default=None,
+        help="Optional manifest filename under data-root/filenames/ for training images",
+    )
+    p.add_argument(
+        "--val-file",
+        type=str,
+        default=None,
+        help="Optional manifest filename under data-root/filenames/ for validation images",
+    )
+    p.add_argument(
+        "--test-file",
+        type=str,
+        default=None,
+        help="Optional manifest filename under data-root/filenames/ for test images",
     )
     return p.parse_args()
 
@@ -160,32 +157,6 @@ def dice_loss(pred: torch.Tensor, target: torch.Tensor, smooth: float = 1e-6) ->
     return 1.0 - dice
 
 
-def focal_loss(pred: torch.Tensor, target: torch.Tensor, alpha: float = 0.25, gamma: float = 2.0) -> torch.Tensor:
-    """Focal loss for handling class imbalance. Focuses on hard examples."""
-    pred_prob = pred.sigmoid()
-    bce = F.binary_cross_entropy_with_logits(pred, target, reduction='none')
-    p_t = target * pred_prob + (1 - target) * (1 - pred_prob)
-    focal_weight = alpha * (1 - p_t) ** gamma
-    return (focal_weight * bce).mean()
-
-
-def combined_loss(
-    pred: torch.Tensor,
-    target: torch.Tensor,
-    criterion_bce: nn.Module,
-    use_focal: bool = False,
-    dice_weight: float = 1.0,
-    bce_weight: float = 1.0,
-) -> torch.Tensor:
-    """Combined BCE/Dice or Focal/Dice loss."""
-    if use_focal:
-        loss_pixel = focal_loss(pred, target)
-    else:
-        loss_pixel = criterion_bce(pred, target)
-    loss_dice = dice_loss(pred, target)
-    return bce_weight * loss_pixel + dice_weight * loss_dice
-
-
 def iou_binary(pred: torch.Tensor, target: torch.Tensor, thresh: float = 0.5, smooth: float = 1e-6) -> float:
     pred = (pred.sigmoid() > thresh).float()
     pred = pred.view(-1)
@@ -195,34 +166,53 @@ def iou_binary(pred: torch.Tensor, target: torch.Tensor, thresh: float = 0.5, sm
     return (intersection + smooth) / (union + smooth)
 
 
+def intersection_union_binary(pred: torch.Tensor, target: torch.Tensor, thresh: float = 0.5) -> tuple[torch.Tensor, torch.Tensor]:
+    pred = (pred.sigmoid() > thresh).float()
+    pred = pred.view(-1)
+    target = target.view(-1)
+    intersection = (pred * target).sum()
+    union = pred.sum() + target.sum() - intersection
+    return intersection, union
+
+
+def _resolve_manifest_name(data_root: Path, explicit_name: str | None, clean_name: str, default_name: str) -> str:
+    if explicit_name:
+        return explicit_name
+    filenames_dir = Path(data_root) / "filenames"
+    if (filenames_dir / clean_name).exists():
+        return clean_name
+    return default_name
+
+
 def train_one_epoch(
     model: nn.Module,
     loader: DataLoader,
     optimizer: torch.optim.Optimizer,
     criterion_bce: nn.Module,
     device: torch.device,
-    use_focal: bool = False,
 ) -> tuple[float, float]:
     model.train()
     total_loss = 0.0
     total_iou = 0.0
-    n = 0
+    num_batches = 0
     pbar = tqdm(loader, desc="Train", leave=False)
     for images, masks in pbar:
         images = images.to(device)
         masks = masks.to(device)
         optimizer.zero_grad()
         logits = model(images)
-        loss = combined_loss(logits, masks, criterion_bce, use_focal)
+        loss_bce = criterion_bce(logits, masks)
+        loss_dice = dice_loss(logits, masks)
+        loss = loss_bce + loss_dice
         loss.backward()
         optimizer.step()
         with torch.no_grad():
             iou = iou_binary(logits, masks)
         total_loss += loss.item()
         total_iou += iou.item()
-        n += images.size(0)
+        num_batches += 1
         pbar.set_postfix(loss=f"{loss.item():.4f}", iou=f"{iou.item():.4f}")
-    return total_loss / max(n, 1), total_iou / max(n, 1)
+    return total_loss / max(num_batches, 1), total_iou / max(num_batches, 1)
 
 
 @torch.no_grad()
@@ -231,22 +221,32 @@ def validate(
     loader: DataLoader,
     criterion_bce: nn.Module,
     device: torch.device,
-    use_focal: bool = False,
 ) -> tuple[float, float]:
     model.eval()
     total_loss = 0.0
     total_iou = 0.0
-    n = 0
+    total_intersection = 0.0
+    total_union = 0.0
+    smooth = 1e-6
+    num_batches = 0
     for images, masks in tqdm(loader, desc="Val", leave=False):
         images = images.to(device)
         masks = masks.to(device)
         logits = model(images)
-        loss = combined_loss(logits, masks, criterion_bce, use_focal)
+        loss_bce = criterion_bce(logits, masks)
+        loss_dice = dice_loss(logits, masks)
+        loss = loss_bce + loss_dice
         iou = iou_binary(logits, masks)
+        intersection, union = intersection_union_binary(logits, masks)
         total_loss += loss.item()
         total_iou += iou.item()
-        n += images.size(0)
-    return total_loss / max(n, 1), total_iou / max(n, 1)
+        total_intersection += intersection.item()
+        total_union += union.item()
+        num_batches += 1
+    val_loss = total_loss / max(num_batches, 1)
+    val_iou_batch_mean = total_iou / max(num_batches, 1)
+    val_iou_global = (total_intersection + smooth) / (total_union + smooth)
+    return val_loss, val_iou_batch_mean, val_iou_global
 
 
 def main():
@@ -255,17 +255,41 @@ def main():
     args.output_dir.mkdir(parents=True, exist_ok=True)
 
     images_dir, masks_dir = _resolve_images_masks_dirs(args)
+    train_file = _resolve_manifest_name(
+        args.data_root,
+        args.train_file,
+        "train_filenames_roof_outline_v1_clean.txt",
+        "train_filenames_roof_outline_v1.txt",
+    )
+    val_file = _resolve_manifest_name(
+        args.data_root,
+        args.val_file,
+        "val_filenames_roof_outline_v1_clean.txt",
+        "val_filenames_roof_outline_v1.txt",
+    )
+    test_file = _resolve_manifest_name(
+        args.data_root,
+        args.test_file,
+        "test_filenames_roof_outline_v1_clean.txt",
+        "test_filenames_roof_outline_v1.txt",
+    )
+
     train_pairs, val_pairs, test_pairs = get_train_val_test_pairs(
         args.data_root,
+        train_file=train_file,
+        val_file=val_file,
+        test_file=test_file,
         exclude_label_in_mask_name=not args.no_label_filter,
-        exclude_empty_masks=args.exclude_empty_masks,
         images_dir=images_dir,
         masks_dir=masks_dir,
     )
     if not train_pairs:
         print("No training pairs found. Check --data-root and that images/masks exist and mask names don't contain 'label' (unless --no-label-filter).", file=sys.stderr)
         sys.exit(1)
-    print(f"Train pairs: {len(train_pairs)}, Val: {len(val_pairs)}, Test: {len(test_pairs)}")
+    print(
+        f"Train pairs: {len(train_pairs)}, Val: {len(val_pairs)}, Test: {len(test_pairs)} "
+        f"| manifests: train={train_file}, val={val_file}, test={test_file}"
+    )
 
     try:
         import albumentations as A
@@ -275,8 +299,6 @@ def main():
             A.HorizontalFlip(p=0.5),
             A.VerticalFlip(p=0.5),
             A.RandomRotate90(p=0.5),
-            A.RandomBrightnessContrast(brightness_limit=0.2, contrast_limit=0.2, p=0.5),
-            A.GaussNoise(var_limit=(10.0, 50.0), p=0.3),
             A.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
             ToTensorV2(),
         ])
@@ -315,53 +337,44 @@ def main():
     )
     device = torch.device(args.device)
     model = model.to(device)
-    optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=1e-4)
+    optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr)
+    criterion_bce = nn.BCEWithLogitsLoss()
 
-    # Use pos_weight to handle class imbalance (roof pixels are rare)
-    pos_weight = torch.tensor([args.pos_weight]).to(device)
-    criterion_bce = nn.BCEWithLogitsLoss(pos_weight=pos_weight)
-
-    # Optional cosine annealing scheduler
-    scheduler = None
-    if args.use_cosine:
-        scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=args.epochs, eta_min=1e-6)
-
-    use_focal = args.use_focal
     best_val_iou = -1.0
     history = []
     for epoch in range(1, args.epochs + 1):
-        train_loss, train_iou = train_one_epoch(
-            model, train_loader, optimizer, criterion_bce, device, use_focal
-        )
+        train_loss, train_iou = train_one_epoch(model, train_loader, optimizer, criterion_bce, device)
         log = {"epoch": epoch, "train_loss": train_loss, "train_iou": train_iou}
         if val_loader:
-            val_loss, val_iou = validate(model, val_loader, criterion_bce, device, use_focal)
+            val_loss, val_iou_batch_mean, val_iou_global = validate(model, val_loader, criterion_bce, device)
             log["val_loss"] = val_loss
-            log["val_iou"] = val_iou
-            if val_iou > best_val_iou:
-                best_val_iou = val_iou
+            log["val_iou"] = val_iou_global
+            log["val_iou_global"] = val_iou_global
+            log["val_iou_batch_mean"] = val_iou_batch_mean
+            if val_iou_global > best_val_iou:
+                best_val_iou = val_iou_global
                 torch.save(
                     {
                         "epoch": epoch,
                         "model_state_dict": model.state_dict(),
                         "optimizer_state_dict": optimizer.state_dict(),
-                        "val_iou": val_iou,
+                        "val_iou": val_iou_global,
+                        "val_iou_global": val_iou_global,
+                        "val_iou_batch_mean": val_iou_batch_mean,
                         "args": vars(args),
                     },
                     args.output_dir / "best.pt",
                 )
         history.append(log)
-
-        lr = optimizer.param_groups[0]["lr"]
-        print(f"Epoch {epoch}: train_loss={train_loss:.4f} train_iou={train_iou:.4f} lr={lr:.2e}", end="")
+        print(f"Epoch {epoch}: train_loss={train_loss:.4f} train_iou={train_iou:.4f}", end="")
         if val_loader:
-            print(f" val_loss={val_loss:.4f} val_iou={val_iou:.4f}")
+            print(
+                f" val_loss={val_loss:.4f}"
+                f" val_iou_global={val_iou_global:.4f}"
+                f" val_iou_batch_mean={val_iou_batch_mean:.4f}"
+            )
         else:
             print()
-
-        if scheduler:
-            scheduler.step()
-
         if epoch % args.save_every == 0:
             torch.save(
                 {
@@ -373,7 +386,7 @@ def main():
                 args.output_dir / f"checkpoint_epoch_{epoch}.pt",
             )
     (args.output_dir / "history.json").write_text(json.dumps(history, indent=2))
-    print(f"Done. Best val IoU: {best_val_iou:.4f}. Checkpoints in {args.output_dir}")
+    print(f"Done. Best global val IoU: {best_val_iou:.4f}. Checkpoints in {args.output_dir}")
 
 
 if __name__ == "__main__":

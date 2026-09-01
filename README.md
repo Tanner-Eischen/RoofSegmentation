@@ -116,16 +116,82 @@ Response:
 
 ## Model Training
 
-The roof detection model is a U-Net with ResNet34 encoder trained on satellite imagery:
+> **Heads-up on the old setup.** The original `train.py` produced ~0.86 val IoU, but
+> that number was inflated: train/val/test splits shared the same two source tiles
+> (`tile1`/`tile2`), so the model saw near-identical geography across splits, and
+> ~half the manifest entries were missing on disk. `train_v2.py` fixes this with a
+> leak-free split, an external roof dataset (AIRS), a stronger base model, and honest
+> held-out test metrics.
+
+### 1. Prepare a leak-free dataset (AIRS + your tiles)
+
+AIRS (Aerial Imagery for Roof Segmentation, CC BY 4.0) adds geographic breadth.
+Download the GeoTIFF mosaics from
+[Kaggle](https://www.kaggle.com/datasets/atilol/aerialimageryforroofsegmentation)
+or [OpenDataLab](https://opendatalab.com/OpenDataLab/AIRS/download) and point the
+prep script at them. It tiles the mosaics into 512×512 patches (windowed reads,
+constant RAM), splits them by **spatial macro-block** so no patch straddles a
+train/val boundary, and re-splits your existing tiles by source.
 
 ```bash
-# Prepare your dataset in data/ directory
-# Expected structure: data/images/ and data/masks/
-
-python train.py --data_dir data/ --encoder resnet34 --epochs 50
+pip install -r requirements-data.txt          # adds rasterio
+python scripts/prepare_airs.py \
+    --airs-dir /path/to/airs \
+    --existing-dir segmentation_model_data \
+    --out segmentation_model_data_v2
+# -> segmentation_model_data_v2/{images,masks,filenames/*_filenames_clean.txt}
+# Built-in assertion guarantees no source unit appears in two splits.
 ```
 
-See `train.py` for full training options.
+> Your existing data has only 2 source tiles, so it can't form a held-out test set
+> on its own (`tile1`→train, `tile2`→val). AIRS's separate test mosaic supplies the
+> test split — that's the set `evaluate.py` measures honest accuracy on.
+
+### 2. Fetch a remote-sensing pretrained encoder (recommended)
+
+A U-Net++ with a Sentinel-2 self-supervised ResNet-50 encoder (SeCo) generalizes
+better than ImageNet pretraining for aerial imagery.
+
+```bash
+python scripts/fetch_remote_weights.py        # SeCo-1M ResNet-50 -> pretrained/
+```
+
+### 3. Train
+
+```bash
+python train_v2.py \
+    --data-root segmentation_model_data_v2 \
+    --arch unetplusplus --encoder resnet50 --encoder-init seco \
+    --image-size 512 --batch-size 4 --epochs 30 \
+    --scheduler cosine --loss bce_dice_focal \
+    --output-dir outputs_v2_unetpp_seco
+```
+
+> **VRAM.** U-Net++ + ResNet-50 at 512×512 needs **~4.1 GB at batch 4** (fits an 8 GB
+> GPU). Batch 8 OOMs on 8 GB — for batch 8 use `--arch deeplabv3plus` (~3.2 GB) or
+> `--image-size 384` (~4.6 GB). Add `--no-test-eval` if the final held-out eval OOMs,
+> then run `evaluate.py` separately.
+
+Improvements over `train.py`: U-Net++/DeepLabV3+ architecture choice, RS-SSL
+encoder init, cosine LR schedule, AMP + grad clipping, stronger augmentation
+(RandomResizedCrop + color jitter + noise), BCE+Dice+Focal loss for class
+imbalance, **threshold tuning on validation**, and a final **test-set evaluation**
+(`metrics.json`). The checkpoint stays a drop-in for the app — `api/inference.py`
+reads the architecture and tuned threshold from `best.pt`.
+
+A/B alternatives: `--arch unet|unetplusplus|deeplabv3plus`,
+`--encoder-init imagenet|seco|seco100k|none|<path>`, `--image-size 256|512`.
+
+### 4. Evaluate honestly
+
+```bash
+python evaluate.py --checkpoint outputs_v2_unetpp_seco/best.pt \
+    --data-root segmentation_model_data_v2 --split test           # held-out AIRS
+python evaluate.py --checkpoint outputs_v2_unetpp_seco/best.pt \
+    --data-root segmentation_model_data_v2 --split val --tta --sweep
+```
+
+The legacy trainer is still available as `python train.py ...` for comparison.
 
 ## Demo Mode
 

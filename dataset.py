@@ -41,7 +41,7 @@ def build_image_mask_pairs(
     pairs = []
     for name in filename_list:
         image_path = images_dir / name
-        mask_path = masks_dir / name
+        mask_path = masks_dir / (Path(name).stem + ".png")
         if not image_path.exists():
             continue
         if not mask_path.exists():
