@@ -2,6 +2,9 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Batch Page - Bulk Processing', () => {
   test.beforeEach(async ({ page }) => {
+    await page.route('**/api/health', async (route) => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: '{"status":"ok"}' });
+    });
     await page.goto('/batch');
   });
 
@@ -89,6 +92,9 @@ test.describe('Batch Page - Bulk Processing', () => {
 
 test.describe('Batch Results', () => {
   test('displays job status in table after upload', async ({ page }) => {
+    await page.route('**/api/health', async (route) => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: '{"status":"ok"}' });
+    });
     await page.goto('/batch');
 
     // Mock batch upload API

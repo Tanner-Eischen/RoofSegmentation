@@ -1,5 +1,7 @@
 # Roof Detection
 
+[![CI](https://github.com/Tanner-Eischen/RoofSegmentation/actions/workflows/ci.yml/badge.svg)](https://github.com/Tanner-Eischen/RoofSegmentation/actions/workflows/ci.yml)
+
 A roof segmentation tool that takes an address, fetches satellite imagery, and detects roof boundaries using a U-Net model.
 
 ## Features
@@ -226,9 +228,18 @@ roof_detection/
 # Backend tests
 pytest api/tests/ -v
 
-# Frontend tests
-cd app && npm test
+# Frontend unit tests, lint, and production build
+cd app
+npm test
+npm run lint
+npm run build
+
+# Browser tests (Playwright starts the Vite development server)
+npm run test:e2e
 ```
+
+Vitest is restricted to tests under `app/src`; Playwright owns the browser specs under
+`app/e2e`. GitHub Actions runs the backend, frontend, and browser suites as separate jobs.
 
 ### Docker
 

@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react'
-import { BrowserRouter, MemoryRouter } from 'react-router-dom'
+import { MemoryRouter } from 'react-router-dom'
 import { describe, it, expect, vi } from 'vitest'
 
 // Mock the api module
@@ -45,7 +45,6 @@ describe('Dashboard', () => {
     fireEvent.change(input, { target: { value: '123 Test St' } })
     fireEvent.click(button)
 
-    // Wait for error to appear
-    await new Promise(resolve => setTimeout(resolve, 100))
+    expect(await screen.findByText('Geocode failed')).toBeInTheDocument()
   })
 })

@@ -2,6 +2,9 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Compare Page - Property Comparison', () => {
   test.beforeEach(async ({ page }) => {
+    await page.route('**/api/health', async (route) => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: '{"status":"ok"}' });
+    });
     await page.goto('/compare');
   });
 
@@ -36,19 +39,20 @@ test.describe('Compare Page - Property Comparison', () => {
       });
     });
 
-    await page.route('**/api/satellite*', async (route) => {
+    await page.route(/\/api\/satellite(?:\/image)?(?:\?.*)?$/, async (route) => {
       const url = new URL(route.request().url());
       if (url.pathname.includes('/image')) {
         await route.fulfill({
           status: 200,
           contentType: 'image/png',
+          headers: { 'Access-Control-Allow-Origin': '*' },
           body: Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==', 'base64')
         });
       } else {
         await route.fulfill({
           status: 200,
           contentType: 'application/json',
-          body: JSON.stringify({ url: 'http://example.com/satellite.png' })
+          body: JSON.stringify({ url: '/samples/placeholder-satellite.svg' })
         });
       }
     });
@@ -57,6 +61,7 @@ test.describe('Compare Page - Property Comparison', () => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
+        headers: { 'Access-Control-Allow-Origin': '*' },
         body: JSON.stringify({
           mask_base64: 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
           polygons: [],

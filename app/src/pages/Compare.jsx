@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { geocode, getSatelliteUrl, fetchSatelliteImageBlob, runInferenceFromBlob } from '../api';
 
-function LocationCard({ label, address, onAddressChange, onAnalyze, loading, satelliteUrl, maskBase64, confidence }) {
+function LocationCard({ label, address, onAnalyze, loading, satelliteUrl, maskBase64, confidence }) {
   const [localAddr, setLocalAddr] = useState(address || '');
 
   return (

@@ -2,6 +2,9 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Dashboard - Roof Analysis', () => {
   test.beforeEach(async ({ page }) => {
+    await page.route('**/api/health', async (route) => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: '{"status":"ok"}' });
+    });
     await page.goto('/');
   });
 
@@ -32,12 +35,13 @@ test.describe('Dashboard - Roof Analysis', () => {
     });
 
     // Mock satellite URL API
-    await page.route('**/api/satellite*', async (route) => {
+    await page.route(/\/api\/satellite(?:\/image)?(?:\?.*)?$/, async (route) => {
       const url = new URL(route.request().url());
       if (url.pathname.includes('/image')) {
         await route.fulfill({
           status: 200,
           contentType: 'image/png',
+          headers: { 'Access-Control-Allow-Origin': '*' },
           body: Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==', 'base64')
         });
       } else {
@@ -45,7 +49,7 @@ test.describe('Dashboard - Roof Analysis', () => {
           status: 200,
           contentType: 'application/json',
           body: JSON.stringify({
-            url: 'http://example.com/satellite.png'
+            url: '/samples/placeholder-satellite.svg'
           })
         });
       }
@@ -56,6 +60,7 @@ test.describe('Dashboard - Roof Analysis', () => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
+        headers: { 'Access-Control-Allow-Origin': '*' },
         body: JSON.stringify({
           mask_base64: 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
           polygons: [[[100, 100], [200, 100], [200, 200], [100, 200]]],
@@ -93,18 +98,29 @@ test.describe('Dashboard - Roof Analysis', () => {
       });
     });
 
-    await page.route('**/api/satellite*', async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'image/png',
-        body: Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==', 'base64')
-      });
+    await page.route(/\/api\/satellite(?:\/image)?(?:\?.*)?$/, async (route) => {
+      const url = new URL(route.request().url());
+      if (url.pathname.includes('/image')) {
+        await route.fulfill({
+          status: 200,
+          contentType: 'image/png',
+          headers: { 'Access-Control-Allow-Origin': '*' },
+          body: Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==', 'base64')
+        });
+      } else {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({ url: '/samples/placeholder-satellite.svg' })
+        });
+      }
     });
 
     await page.route('**/api/inference*', async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
+        headers: { 'Access-Control-Allow-Origin': '*' },
         body: JSON.stringify({
           mask_base64: 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
           polygons: [],
@@ -135,18 +151,29 @@ test.describe('Dashboard - Roof Analysis', () => {
       });
     });
 
-    await page.route('**/api/satellite*', async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'image/png',
-        body: Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==', 'base64')
-      });
+    await page.route(/\/api\/satellite(?:\/image)?(?:\?.*)?$/, async (route) => {
+      const url = new URL(route.request().url());
+      if (url.pathname.includes('/image')) {
+        await route.fulfill({
+          status: 200,
+          contentType: 'image/png',
+          headers: { 'Access-Control-Allow-Origin': '*' },
+          body: Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==', 'base64')
+        });
+      } else {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({ url: '/samples/placeholder-satellite.svg' })
+        });
+      }
     });
 
     await page.route('**/api/inference*', async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
+        headers: { 'Access-Control-Allow-Origin': '*' },
         body: JSON.stringify({
           mask_base64: 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
           polygons: [],
@@ -178,6 +205,12 @@ test.describe('Dashboard - Roof Analysis', () => {
 });
 
 test.describe('Navigation', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.route('**/api/health', async (route) => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: '{"status":"ok"}' });
+    });
+  });
+
   test('can navigate between pages', async ({ page }) => {
     await page.goto('/');
 
