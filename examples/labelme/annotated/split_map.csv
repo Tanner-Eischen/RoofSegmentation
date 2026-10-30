@@ -1,0 +1,4 @@
+stem,split,group
+siteA_01,train,siteA
+siteB_01,val,siteB
+siteC_01,test,siteC

@@ -6,6 +6,7 @@ __pycache__/
 .Python
 venv/
 .venv/
+.venv-gpu/
 env/
 .env
 
@@ -75,6 +76,9 @@ segmentation_model_data_v2/
 outputs/
 outputs_*/
 outputs_v2*/
+data/
+runs/
+.ruff_cache/
 
 # Stitch screens (generated)
 stitch_screens/

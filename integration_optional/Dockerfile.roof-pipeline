@@ -1,0 +1,23 @@
+# Optional replacement Dockerfile for the original app, after trained weights exist.
+# Name Dockerfile in the repository root, or build -f Dockerfile.roof-pipeline.
+FROM node:20-alpine AS frontend-builder
+WORKDIR /app/app
+COPY app/package*.json ./
+RUN npm ci
+COPY app/ ./
+RUN npm run build
+
+FROM python:3.11-slim
+WORKDIR /app
+RUN apt-get update && apt-get install -y --no-install-recommends libgl1 libglib2.0-0 \
+    && rm -rf /var/lib/apt/lists/*
+COPY requirements.txt requirements-roof-pipeline.txt ./
+RUN pip install --no-cache-dir -r requirements.txt -r requirements-roof-pipeline.txt
+COPY api/ ./api/
+COPY roof_pipeline/ ./roof_pipeline/
+COPY --from=frontend-builder /app/app/dist ./app/dist
+RUN mkdir -p models
+ENV MODEL_PATH=/app/models/best.pt PYTHONUNBUFFERED=1 PYTHONPATH=/app:/app/api
+EXPOSE 8000
+HEALTHCHECK --interval=30s --timeout=15s --start-period=40s CMD python -c "import json,urllib.request; assert json.load(urllib.request.urlopen('http://127.0.0.1:8000/api/health',timeout=10)).get('model_loaded')"
+CMD ["uvicorn", "main:app", "--app-dir", "/app/api", "--host", "0.0.0.0", "--port", "8000"]

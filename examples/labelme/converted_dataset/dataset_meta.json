@@ -1,0 +1,5 @@
+{
+  "dataset": "User-labeled imagery",
+  "split_policy": "User-specified site/scene groups",
+  "labels": "Manual Labelme roof/building polygon masks; annotations must be reviewed"
+}

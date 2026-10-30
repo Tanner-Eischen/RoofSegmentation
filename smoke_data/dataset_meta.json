@@ -1,0 +1,4 @@
+{
+  "dataset": "Synthetic 96px roof-like fixtures",
+  "warning": "Only for testing code paths; never report model accuracy from this data"
+}

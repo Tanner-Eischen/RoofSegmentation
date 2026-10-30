@@ -4,6 +4,10 @@
 
 A roof segmentation tool that takes an address, fetches satellite imagery, and detects roof boundaries using a U-Net model.
 
+For the paired-label training pipeline, dataset leakage checks, and held-out evaluation,
+see [the training upgrade guide](README_UPGRADE.md). Its synthetic fixtures verify
+the code workflow; they do not establish roof segmentation accuracy.
+
 ## Features
 
 - **Address to Satellite**: Enter any address to fetch Google Maps satellite imagery

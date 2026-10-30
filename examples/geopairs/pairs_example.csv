@@ -1,0 +1,4 @@
+image,vector,split,group
+my_regions/siteA.tif,my_regions/siteA.geojson,train,siteA
+my_regions/siteB.tif,my_regions/siteB.geojson,val,siteB
+my_regions/siteC.tif,my_regions/siteC.geojson,test,siteC

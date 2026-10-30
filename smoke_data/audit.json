@@ -1,0 +1,42 @@
+{
+  "counts": {
+    "train": 12,
+    "val": 4,
+    "test": 4
+  },
+  "by_source": {
+    "artificial_smoke_only": 20
+  },
+  "empty_masks_by_split": {
+    "train": 0,
+    "val": 0,
+    "test": 0
+  },
+  "roof_fraction_by_split": {
+    "train": {
+      "mean": 0.07462565104166667,
+      "median": 0.06998697916666666,
+      "min": 0.03396267361111111,
+      "max": 0.1027560763888889
+    },
+    "val": {
+      "mean": 0.08040364583333334,
+      "median": 0.07183159722222222,
+      "min": 0.057074652777777776,
+      "max": 0.1208767361111111
+    },
+    "test": {
+      "mean": 0.07161458333333333,
+      "median": 0.06873914930555555,
+      "min": 0.05056423611111111,
+      "max": 0.0984157986111111
+    }
+  },
+  "duplicate_images": 0,
+  "groups_by_split": {
+    "train": 3,
+    "val": 1,
+    "test": 1
+  },
+  "total": 20
+}

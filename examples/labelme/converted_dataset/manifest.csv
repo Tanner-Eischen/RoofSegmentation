@@ -1,0 +1,4 @@
+sample_id,split,image,mask,group,source
+manual_siteA_01,train,images/manual_siteA_01.png,masks/manual_siteA_01.png,siteA,manually labeled
+manual_siteB_01,val,images/manual_siteB_01.png,masks/manual_siteB_01.png,siteB,manually labeled
+manual_siteC_01,test,images/manual_siteC_01.png,masks/manual_siteC_01.png,siteC,manually labeled

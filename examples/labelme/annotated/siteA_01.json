@@ -1,0 +1,60 @@
+{
+  "version": "5.0.0",
+  "flags": {},
+  "shapes": [
+    {
+      "label": "roof",
+      "shape_type": "polygon",
+      "points": [
+        [
+          23.0,
+          59.0
+        ],
+        [
+          23.0,
+          71.0
+        ],
+        [
+          36.0,
+          71.0
+        ],
+        [
+          36.0,
+          59.0
+        ]
+      ],
+      "group_id": null,
+      "description": "Synthetic example polygon, human labels required for real images",
+      "flags": {}
+    },
+    {
+      "label": "roof",
+      "shape_type": "polygon",
+      "points": [
+        [
+          45.0,
+          55.0
+        ],
+        [
+          45.0,
+          67.0
+        ],
+        [
+          65.0,
+          67.0
+        ],
+        [
+          65.0,
+          55.0
+        ]
+      ],
+      "group_id": null,
+      "description": "Synthetic example polygon, human labels required for real images",
+      "flags": {}
+    }
+  ],
+  "imagePath": "siteA_01.png",
+  "imageData": null,
+  "imageHeight": 96,
+  "imageWidth": 96
+}

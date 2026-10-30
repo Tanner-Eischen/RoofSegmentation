@@ -1,0 +1,42 @@
+{
+  "counts": {
+    "train": 1,
+    "val": 1,
+    "test": 1
+  },
+  "by_source": {
+    "manually labeled": 3
+  },
+  "empty_masks_by_split": {
+    "train": 0,
+    "val": 0,
+    "test": 0
+  },
+  "roof_fraction_by_split": {
+    "train": {
+      "mean": 0.049370659722222224,
+      "median": 0.049370659722222224,
+      "min": 0.049370659722222224,
+      "max": 0.049370659722222224
+    },
+    "val": {
+      "mean": 0.0734592013888889,
+      "median": 0.0734592013888889,
+      "min": 0.0734592013888889,
+      "max": 0.0734592013888889
+    },
+    "test": {
+      "mean": 0.056206597222222224,
+      "median": 0.056206597222222224,
+      "min": 0.056206597222222224,
+      "max": 0.056206597222222224
+    }
+  },
+  "duplicate_images": 0,
+  "groups_by_split": {
+    "train": 1,
+    "val": 1,
+    "test": 1
+  },
+  "total": 3
+}
