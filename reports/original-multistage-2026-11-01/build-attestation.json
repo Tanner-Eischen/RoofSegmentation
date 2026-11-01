@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "resolved_bases": {
+    "docker.io/library/node:22.20.0-alpine": "sha256:dbcedd8aeab47fbc0f4dd4bffa55b7c3c729a707875968d467aaaea42d6225af",
+    "docker.io/library/python:3.12-slim-bookworm": "sha256:e697c81897302a4c4333bade000d98038fbb21eb064f8ee1fd42d02ebcd9d337"
+  },
+  "result_image_id": "sha256:386d132222c6efd3254eb080629a709b228794cea3b20eeedf22931d6c656498",
+  "repo_digests": [
+    "roof-original-wave2@sha256:386d132222c6efd3254eb080629a709b228794cea3b20eeedf22931d6c656498"
+  ],
+  "image_descriptor": {
+    "mediaType": "application/vnd.oci.image.index.v1+json",
+    "digest": "sha256:386d132222c6efd3254eb080629a709b228794cea3b20eeedf22931d6c656498",
+    "size": 856
+  },
+  "image_user": "roof",
+  "source_build_kind": "original multistage Dockerfile with ordinary BuildKit cache; not a derivative or full no-cache claim",
+  "working_dockerfile_sha256": "b5abf3af01f1821d3936c364e4bdedf6877f9ee12e4b93fa8e7a426f50db264d",
+  "committed_dockerfile_sha256": "a97fcf11ee0d8ae032316e321714fafdeec62464b294990e9bdfd321d389990f",
+  "dockerfile_line_ending_normalized_bytes_equal_to_baseline": true,
+  "linux_lock_sha256": "830162adc9f86b81af6c77cab386d2dc0c936134ec178347d98b3c8bbcba4aac",
+  "logged_pip_wheel_count": 64,
+  "logged_pip_wheel_payload_approx_bytes": 371827200,
+  "total_network_bytes_separately_metered": false,
+  "network_budget_approx_bytes": 1000000000,
+  "build_timeout_seconds": 900,
+  "engine": {
+    "ID": "95304dee-f644-4d31-9107-e9c2b40113f8",
+    "ServerVersion": "29.1.3",
+    "OSType": "linux",
+    "Architecture": "x86_64",
+    "Driver": "overlayfs",
+    "OperatingSystem": "Ubuntu 24.04.3 LTS"
+  },
+  "gate_script_sha256": "026677115752cc6259bc968a001b89b16f09585acad5c3aaaf7207f6a0e77ad5"
+}

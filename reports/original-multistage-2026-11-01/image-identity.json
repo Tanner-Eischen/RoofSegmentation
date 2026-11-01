@@ -1,0 +1,6 @@
+{
+  "image_id": "sha256:386d132222c6efd3254eb080629a709b228794cea3b20eeedf22931d6c656498",
+  "created": "2026-11-01T01:00:52.512503679-06:00",
+  "user": "roof",
+  "build_kind": "original_multistage_Dockerfile"
+}

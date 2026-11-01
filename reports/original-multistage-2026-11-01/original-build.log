@@ -1,0 +1,290 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 1.44kB 0.1s done
+#1 DONE 0.1s
+
+#2 [internal] load metadata for docker.io/library/python:3.12-slim-bookworm
+#2 ...
+
+#3 [internal] load metadata for docker.io/library/node:22.20.0-alpine
+#3 DONE 0.8s
+
+#2 [internal] load metadata for docker.io/library/python:3.12-slim-bookworm
+#2 DONE 0.8s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 719B 0.1s done
+#4 DONE 0.1s
+
+#5 [internal] load build context
+#5 DONE 0.0s
+
+#6 [frontend-builder 1/6] FROM docker.io/library/node:22.20.0-alpine@sha256:dbcedd8aeab47fbc0f4dd4bffa55b7c3c729a707875968d467aaaea42d6225af
+#6 resolve docker.io/library/node:22.20.0-alpine@sha256:dbcedd8aeab47fbc0f4dd4bffa55b7c3c729a707875968d467aaaea42d6225af 0.0s done
+#6 DONE 0.0s
+
+#7 [stage-1 1/9] FROM docker.io/library/python:3.12-slim-bookworm@sha256:e697c81897302a4c4333bade000d98038fbb21eb064f8ee1fd42d02ebcd9d337
+#7 resolve docker.io/library/python:3.12-slim-bookworm@sha256:e697c81897302a4c4333bade000d98038fbb21eb064f8ee1fd42d02ebcd9d337
+#7 resolve docker.io/library/python:3.12-slim-bookworm@sha256:e697c81897302a4c4333bade000d98038fbb21eb064f8ee1fd42d02ebcd9d337 0.0s done
+#7 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 780.31kB 0.8s done
+#5 DONE 0.9s
+
+#8 [stage-1 2/9] WORKDIR /app
+#8 CACHED
+
+#9 [frontend-builder 2/6] WORKDIR /app/app
+#9 CACHED
+
+#10 [stage-1 3/9] RUN apt-get update && apt-get install -y --no-install-recommends     libexpat1     && rm -rf /var/lib/apt/lists/*
+#10 CACHED
+
+#11 [frontend-builder 3/6] COPY app/package*.json ./
+#11 DONE 0.1s
+
+#12 [stage-1 4/9] COPY requirements-release-linux.lock ./
+#12 DONE 0.1s
+
+#13 [stage-1 5/9] RUN pip install --no-cache-dir --require-hashes -r requirements-release-linux.lock
+#13 2.147 Looking in indexes: https://pypi.org/simple, https://download.pytorch.org/whl/cpu
+#13 2.614 Collecting affine==3.0.1 (from -r requirements-release-linux.lock (line 6))
+#13 2.779   Downloading affine-3.0.1-py3-none-any.whl (10 kB)
+#13 2.881 Collecting annotated-doc==0.0.5 (from -r requirements-release-linux.lock (line 10))
+#13 2.932   Downloading annotated_doc-0.0.5-py3-none-any.whl (5.3 kB)
+#13 3.055 Collecting annotated-types==0.8.0 (from -r requirements-release-linux.lock (line 14))
+#13 3.079   Downloading annotated_types-0.8.0-py3-none-any.whl (13 kB)
+#13 3.186 Collecting anyio==4.15.1 (from -r requirements-release-linux.lock (line 18))
+#13 3.219   Downloading anyio-4.15.1-py3-none-any.whl (132 kB)
+#13 3.440 Collecting attrs==26.1.0 (from -r requirements-release-linux.lock (line 25))
+#13 3.467   Downloading attrs-26.1.0-py3-none-any.whl (67 kB)
+#13 3.557 Collecting certifi==2026.10.23 (from -r requirements-release-linux.lock (line 31))
+#13 3.584   Downloading certifi-2026.10.23-py3-none-any.whl (135 kB)
+#13 3.696 Collecting click==8.5.0 (from -r requirements-release-linux.lock (line 38))
+#13 3.723   Downloading click-8.5.0-py3-none-any.whl (125 kB)
+#13 3.945 Collecting contourpy==1.4.0 (from -r requirements-release-linux.lock (line 45))
+#13 3.985   Downloading contourpy-1.4.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (383 kB)
+#13 4.164 Collecting cycler==0.12.1 (from -r requirements-release-linux.lock (line 117))
+#13 4.195   Downloading cycler-0.12.1-py3-none-any.whl (8.3 kB)
+#13 4.354 Collecting fastapi==0.162.0 (from -r requirements-release-linux.lock (line 121))
+#13 4.385   Downloading fastapi-0.162.0-py3-none-any.whl (148 kB)
+#13 4.522 Collecting filelock==4.2.5 (from -r requirements-release-linux.lock (line 125))
+#13 4.551   Downloading filelock-4.2.5-py3-none-any.whl (163 kB)
+#13 4.879 Collecting fonttools==4.68.0 (from -r requirements-release-linux.lock (line 131))
+#13 4.901   Downloading fonttools-4.68.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (5.4 MB)
+#13 4.982      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.4/5.4 MB 71.5 MB/s eta 0:00:00
+#13 5.094 Collecting fsspec==2026.9.0 (from -r requirements-release-linux.lock (line 198))
+#13 5.121   Downloading fsspec-2026.9.0-py3-none-any.whl (221 kB)
+#13 5.286 Collecting h11==0.16.0 (from -r requirements-release-linux.lock (line 204))
+#13 5.310   Downloading h11-0.16.0-py3-none-any.whl (37 kB)
+#13 5.427 Collecting hf-xet==1.8.0 (from -r requirements-release-linux.lock (line 211))
+#13 5.454   Downloading hf_xet-1.8.0-cp38-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (4.3 MB)
+#13 5.490      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.3/4.3 MB 155.6 MB/s eta 0:00:00
+#13 5.578 Collecting httpcore==1.0.9 (from -r requirements-release-linux.lock (line 230))
+#13 5.728   Downloading httpcore-1.0.9-py3-none-any.whl (78 kB)
+#13 5.866 Collecting httpcore2==2.16.0 (from -r requirements-release-linux.lock (line 234))
+#13 5.893   Downloading httpcore2-2.16.0-py3-none-any.whl (85 kB)
+#13 6.020 Collecting httpx==0.28.1 (from -r requirements-release-linux.lock (line 238))
+#13 6.042   Downloading httpx-0.28.1-py3-none-any.whl (73 kB)
+#13 6.150 Collecting httpx2==2.16.0 (from -r requirements-release-linux.lock (line 242))
+#13 6.178   Downloading httpx2-2.16.0-py3-none-any.whl (97 kB)
+#13 6.316 Collecting huggingface-hub==2.4.0 (from -r requirements-release-linux.lock (line 246))
+#13 6.342   Downloading huggingface_hub-2.4.0-py3-none-any.whl (857 kB)
+#13 6.357      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 857.0/857.0 kB 388.3 MB/s eta 0:00:00
+#13 6.431 Collecting idna==3.20 (from -r requirements-release-linux.lock (line 252))
+#13 6.460   Downloading idna-3.20-py3-none-any.whl (69 kB)
+#13 6.588 Collecting iniconfig==2.3.1 (from -r requirements-release-linux.lock (line 259))
+#13 6.611   Downloading iniconfig-2.3.1-py3-none-any.whl (7.6 kB)
+#13 6.676 Collecting jinja2==3.1.6 (from -r requirements-release-linux.lock (line 263))
+#13 6.698   Downloading jinja2-3.1.6-py3-none-any.whl (134 kB)
+#13 6.817 Collecting kiwisolver==1.5.1 (from -r requirements-release-linux.lock (line 267))
+#13 6.844   Downloading kiwisolver-1.5.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (1.5 MB)
+#13 6.858      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.5/1.5 MB 151.1 MB/s eta 0:00:00
+#13 6.978 Collecting markupsafe==3.0.4 (from -r requirements-release-linux.lock (line 410))
+#13 7.002   Downloading markupsafe-3.0.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (22 kB)
+#13 7.203 Collecting matplotlib==3.10.7 (from -r requirements-release-linux.lock (line 563))
+#13 7.225   Downloading matplotlib-3.10.7-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (8.7 MB)
+#13 7.287      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 8.7/8.7 MB 147.4 MB/s eta 0:00:00
+#13 7.353 Collecting mpmath==1.3.0 (from -r requirements-release-linux.lock (line 620))
+#13 7.374   Downloading mpmath-1.3.0-py3-none-any.whl (536 kB)
+#13 7.380      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 536.2/536.2 kB 108.9 MB/s eta 0:00:00
+#13 7.464 Collecting networkx==3.7 (from -r requirements-release-linux.lock (line 624))
+#13 7.490   Downloading networkx-3.7-py3-none-any.whl (2.1 MB)
+#13 7.508      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.1/2.1 MB 130.4 MB/s eta 0:00:00
+#13 7.982 Collecting numpy==2.2.6 (from -r requirements-release-linux.lock (line 628))
+#13 8.003   Downloading numpy-2.2.6-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (16.5 MB)
+#13 8.130      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.5/16.5 MB 133.3 MB/s eta 0:00:00
+#13 8.267 Collecting opencv-python-headless==4.12.0.88 (from -r requirements-release-linux.lock (line 693))
+#13 8.291   Downloading opencv_python_headless-4.12.0.88-cp37-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (54.0 MB)
+#13 8.873      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 54.0/54.0 MB 92.9 MB/s eta 0:00:00
+#13 9.001 Collecting opentelemetry-api==1.45.2 (from -r requirements-release-linux.lock (line 702))
+#13 9.530   Downloading opentelemetry_api-1.45.2-py3-none-any.whl (60 kB)
+#13 ...
+
+#14 [frontend-builder 4/6] RUN npm ci
+#14 2.470 npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+#14 8.296 
+#14 8.296 added 322 packages, and audited 323 packages in 8s
+#14 8.296 
+#14 8.296 73 packages are looking for funding
+#14 8.296   run `npm fund` for details
+#14 8.332 
+#14 8.332 25 vulnerabilities (1 low, 10 moderate, 12 high, 2 critical)
+#14 8.332 
+#14 8.332 To address issues that do not require attention, run:
+#14 8.332   npm audit fix
+#14 8.332 
+#14 8.332 To address all issues possible (including breaking changes), run:
+#14 8.332   npm audit fix --force
+#14 8.332 
+#14 8.332 Some issues need review, and may require choosing
+#14 8.332 a different dependency.
+#14 8.332 
+#14 8.332 Run `npm audit` for details.
+#14 8.333 npm notice
+#14 8.333 npm notice New major version of npm available! 10.9.3 -> 12.2.1
+#14 8.333 npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+#14 8.333 npm notice To update run: npm install -g npm@12.2.1
+#14 8.333 npm notice
+#14 DONE 9.7s
+
+#13 [stage-1 5/9] RUN pip install --no-cache-dir --require-hashes -r requirements-release-linux.lock
+#13 9.587 Collecting packaging==26.3 (from -r requirements-release-linux.lock (line 706))
+#13 9.610   Downloading packaging-26.3-py3-none-any.whl (129 kB)
+#13 9.914 Collecting pillow==13.0.0 (from -r requirements-release-linux.lock (line 714))
+#13 9.933   Downloading pillow-13.0.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (7.1 MB)
+#13 10.03      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 7.1/7.1 MB 75.1 MB/s eta 0:00:00
+#13 10.15 Collecting pip==26.2.2 (from -r requirements-release-linux.lock (line 803))
+#13 10.59   Downloading pip-26.2.2-py3-none-any.whl (1.8 MB)
+#13 10.61      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.8/1.8 MB 129.1 MB/s eta 0:00:00
+#13 10.76 Collecting pluggy==1.7.0 (from -r requirements-release-linux.lock (line 807))
+#13 10.78   Downloading pluggy-1.7.0-py3-none-any.whl (27 kB)
+#13 10.95 Collecting pydantic==2.14.2 (from -r requirements-release-linux.lock (line 811))
+#13 10.97   Downloading pydantic-2.14.2-py3-none-any.whl (490 kB)
+#13 11.61 Collecting pydantic-core==2.50.2 (from -r requirements-release-linux.lock (line 815))
+#13 11.63   Downloading pydantic_core-2.50.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (2.2 MB)
+#13 11.65      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.2/2.2 MB 144.8 MB/s eta 0:00:00
+#13 11.77 Collecting pygments==2.21.0 (from -r requirements-release-linux.lock (line 958))
+#13 11.79   Downloading pygments-2.21.0-py3-none-any.whl (1.3 MB)
+#13 11.80      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.3/1.3 MB 141.7 MB/s eta 0:00:00
+#13 11.93 Collecting pyparsing==3.3.3 (from -r requirements-release-linux.lock (line 962))
+#13 11.96   Downloading pyparsing-3.3.3-py3-none-any.whl (126 kB)
+#13 12.06 Collecting pytest==9.0.3 (from -r requirements-release-linux.lock (line 968))
+#13 12.08   Downloading pytest-9.0.3-py3-none-any.whl (375 kB)
+#13 12.17 Collecting pytest-asyncio==1.4.0 (from -r requirements-release-linux.lock (line 974))
+#13 12.20   Downloading pytest_asyncio-1.4.0-py3-none-any.whl (16 kB)
+#13 12.28 Collecting python-dateutil==3.0.0 (from -r requirements-release-linux.lock (line 978))
+#13 12.31   Downloading python_dateutil-3.0.0-py2.py3-none-any.whl (94 kB)
+#13 12.44 Collecting python-dotenv==1.2.4 (from -r requirements-release-linux.lock (line 982))
+#13 12.46   Downloading python_dotenv-1.2.4-py3-none-any.whl (23 kB)
+#13 12.55 Collecting python-multipart==0.0.32 (from -r requirements-release-linux.lock (line 986))
+#13 ...
+
+#15 [frontend-builder 5/6] COPY app/ ./
+#15 DONE 2.8s
+
+#13 [stage-1 5/9] RUN pip install --no-cache-dir --require-hashes -r requirements-release-linux.lock
+#13 12.60   Downloading python_multipart-0.0.32-py3-none-any.whl (30 kB)
+#13 12.71 Collecting pyyaml==6.0.3 (from -r requirements-release-linux.lock (line 990))
+#13 12.73   Downloading pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (807 kB)
+#13 12.74      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 807.9/807.9 kB 152.5 MB/s eta 0:00:00
+#13 12.91 Collecting rasterio==1.5.2 (from -r requirements-release-linux.lock (line 1067))
+#13 12.93   Downloading rasterio-1.5.2-cp312-cp312-manylinux_2_28_x86_64.whl (39.2 MB)
+#13 13.29      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 39.2/39.2 MB 108.9 MB/s eta 0:00:00
+#13 13.64 Collecting ruff==0.17.3 (from -r requirements-release-linux.lock (line 1106))
+#13 13.66   Downloading ruff-0.17.3-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (10.6 MB)
+#13 13.77      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 10.6/10.6 MB 100.2 MB/s eta 0:00:00
+#13 14.00 Collecting safetensors==0.8.0 (from -r requirements-release-linux.lock (line 1126))
+#13 14.02   Downloading safetensors-0.8.0-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (516 kB)
+#13 14.13 Collecting segmentation-models-pytorch==0.6.0 (from -r requirements-release-linux.lock (line 1147))
+#13 14.15   Downloading segmentation_models_pytorch-0.6.0-py3-none-any.whl (154 kB)
+#13 14.29 Collecting setuptools==84.2.1 (from -r requirements-release-linux.lock (line 1151))
+#13 14.31   Downloading setuptools-84.2.1-py3-none-any.whl (876 kB)
+#13 14.32      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 876.3/876.3 kB 164.1 MB/s eta 0:00:00
+#13 14.53 Collecting shapely==2.2.0 (from -r requirements-release-linux.lock (line 1155))
+#13 14.55   Downloading shapely-2.2.0-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (2.3 MB)
+#13 14.57      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.3/2.3 MB 126.1 MB/s eta 0:00:00
+#13 14.66 Collecting six==1.17.0 (from -r requirements-release-linux.lock (line 1221))
+#13 14.68   Downloading six-1.17.0-py2.py3-none-any.whl (11 kB)
+#13 14.82 Collecting starlette==1.10.0 (from -r requirements-release-linux.lock (line 1225))
+#13 15.08   Downloading starlette-1.10.0-py3-none-any.whl (80 kB)
+#13 15.15 Collecting sympy==1.14.0 (from -r requirements-release-linux.lock (line 1231))
+#13 15.17   Downloading sympy-1.14.0-py3-none-any.whl (6.3 MB)
+#13 15.23      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.3/6.3 MB 109.0 MB/s eta 0:00:00
+#13 15.38 Collecting timm==1.0.30 (from -r requirements-release-linux.lock (line 1235))
+#13 15.40   Downloading timm-1.0.30-py3-none-any.whl (2.7 MB)
+#13 15.43      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.7/2.7 MB 139.0 MB/s eta 0:00:00
+#13 15.55 Collecting torch==2.14.1+cpu (from -r requirements-release-linux.lock (line 1239))
+#13 15.79   Downloading https://download-r2.pytorch.org/whl/cpu/torch-2.14.1%2Bcpu-cp312-cp312-manylinux_2_28_x86_64.whl (196.3 MB)
+#13 ...
+
+#16 [frontend-builder 6/6] RUN npm run build
+#16 0.450 
+#16 0.450 > app@0.0.0 build
+#16 0.450 > vite build
+#16 0.450 
+#16 0.821 vite v7.3.7 building client environment for production...
+#16 0.893 transforming...
+#16 2.006 ✓ 44 modules transformed.
+#16 2.143 rendering chunks...
+#16 2.149 computing gzip size...
+#16 2.158 dist/index.html                   0.74 kB │ gzip:  0.44 kB
+#16 2.158 dist/assets/index-C-Bhcdg3.css   16.88 kB │ gzip:  4.20 kB
+#16 2.158 dist/assets/index-BF6PHF6i.js   236.93 kB │ gzip: 76.23 kB
+#16 2.159 ✓ built in 1.31s
+#16 DONE 4.1s
+
+#13 [stage-1 5/9] RUN pip install --no-cache-dir --require-hashes -r requirements-release-linux.lock
+#13 17.45      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 196.3/196.3 MB 121.9 MB/s eta 0:00:00
+#13 17.74 Collecting torchvision==0.29.2+cpu (from -r requirements-release-linux.lock (line 1278))
+#13 17.78   Downloading https://download-r2.pytorch.org/whl/cpu/torchvision-0.29.2%2Bcpu-py3-none-manylinux_2_28_x86_64.whl (1.7 MB)
+#13 17.79      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.7/1.7 MB 145.0 MB/s eta 0:00:00
+#13 17.86 Collecting tqdm==4.70.1 (from -r requirements-release-linux.lock (line 1286))
+#13 17.88   Downloading tqdm-4.70.1-py3-none-any.whl (80 kB)
+#13 17.96 Collecting truststore==0.10.5 (from -r requirements-release-linux.lock (line 1292))
+#13 17.99   Downloading truststore-0.10.5-py3-none-any.whl (19 kB)
+#13 18.05 Collecting typing-extensions==4.16.0 (from -r requirements-release-linux.lock (line 1298))
+#13 18.08   Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+#13 18.16 Collecting typing-inspection==0.4.4 (from -r requirements-release-linux.lock (line 1313))
+#13 18.18   Downloading typing_inspection-0.4.4-py3-none-any.whl (14 kB)
+#13 18.26 Collecting tzdata==2026.6 (from -r requirements-release-linux.lock (line 1319))
+#13 18.29   Downloading tzdata-2026.6-py2.py3-none-any.whl (348 kB)
+#13 18.38 Collecting uvicorn==0.38.0 (from -r requirements-release-linux.lock (line 1323))
+#13 18.40   Downloading uvicorn-0.38.0-py3-none-any.whl (68 kB)
+#13 18.49 Collecting wheel==0.48.0 (from -r requirements-release-linux.lock (line 1327))
+#13 18.52   Downloading wheel-0.48.0-py3-none-any.whl (33 kB)
+#13 19.13 Installing collected packages: mpmath, tzdata, typing-extensions, truststore, tqdm, sympy, six, setuptools, safetensors, ruff, pyyaml, python-multipart, python-dotenv, pyparsing, pygments, pluggy, pip, pillow, packaging, numpy, networkx, markupsafe, kiwisolver, iniconfig, idna, hf-xet, h11, fsspec, fonttools, filelock, cycler, click, certifi, attrs, annotated-types, annotated-doc, wheel, uvicorn, typing-inspection, shapely, python-dateutil, pytest, pydantic-core, opentelemetry-api, opencv-python-headless, jinja2, httpcore2, httpcore, contourpy, anyio, affine, torch, starlette, rasterio, pytest-asyncio, pydantic, matplotlib, httpx2, httpx, torchvision, huggingface-hub, fastapi, timm, segmentation-models-pytorch
+#13 27.02   Attempting uninstall: pip
+#13 27.02     Found existing installation: pip 25.0.1
+#13 27.07     Uninstalling pip-25.0.1:
+#13 27.69       Successfully uninstalled pip-25.0.1
+#13 131.8 Successfully installed affine-3.0.1 annotated-doc-0.0.5 annotated-types-0.8.0 anyio-4.15.1 attrs-26.1.0 certifi-2026.10.23 click-8.5.0 contourpy-1.4.0 cycler-0.12.1 fastapi-0.162.0 filelock-4.2.5 fonttools-4.68.0 fsspec-2026.9.0 h11-0.16.0 hf-xet-1.8.0 httpcore-1.0.9 httpcore2-2.16.0 httpx-0.28.1 httpx2-2.16.0 huggingface-hub-2.4.0 idna-3.20 iniconfig-2.3.1 jinja2-3.1.6 kiwisolver-1.5.1 markupsafe-3.0.4 matplotlib-3.10.7 mpmath-1.3.0 networkx-3.7 numpy-2.2.6 opencv-python-headless-4.12.0.88 opentelemetry-api-1.45.2 packaging-26.3 pillow-13.0.0 pip-26.2.2 pluggy-1.7.0 pydantic-2.14.2 pydantic-core-2.50.2 pygments-2.21.0 pyparsing-3.3.3 pytest-9.0.3 pytest-asyncio-1.4.0 python-dateutil-3.0.0 python-dotenv-1.2.4 python-multipart-0.0.32 pyyaml-6.0.3 rasterio-1.5.2 ruff-0.17.3 safetensors-0.8.0 segmentation-models-pytorch-0.6.0 setuptools-84.2.1 shapely-2.2.0 six-1.17.0 starlette-1.10.0 sympy-1.14.0 timm-1.0.30 torch-2.14.1+cpu torchvision-0.29.2+cpu tqdm-4.70.1 truststore-0.10.5 typing-extensions-4.16.0 typing-inspection-0.4.4 tzdata-2026.6 uvicorn-0.38.0 wheel-0.48.0
+#13 131.8 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+#13 DONE 132.4s
+
+#17 [stage-1 6/9] COPY api/ ./api/
+#17 DONE 0.1s
+
+#18 [stage-1 7/9] COPY roof_pipeline/ ./roof_pipeline/
+#18 DONE 0.1s
+
+#19 [stage-1 8/9] COPY --from=frontend-builder /app/app/dist ./app/dist
+#19 DONE 0.0s
+
+#20 [stage-1 9/9] RUN mkdir -p models && useradd --create-home --uid 10001 roof
+#20 DONE 0.2s
+
+#21 exporting to image
+#21 exporting layers
+#21 exporting layers 38.9s done
+#21 exporting manifest sha256:5629f16847aa913c06cebfc3a004b6da5b1b0b7f725f689a09d8f92393dc1c0d 0.0s done
+#21 exporting config sha256:33f223709605791c5ae972070ba4f29968aca9c6e2b6ce1ca9b46128277a0e08 0.0s done
+#21 exporting attestation manifest sha256:35b360cc8612a8d5081678281498c53e7204bf5ce923028f2c73a16b7f570280 0.0s done
+#21 exporting manifest list sha256:386d132222c6efd3254eb080629a709b228794cea3b20eeedf22931d6c656498 0.0s done
+#21 naming to docker.io/library/roof-original-wave2:20261101
+#21 naming to docker.io/library/roof-original-wave2:20261101 done
+#21 unpacking to docker.io/library/roof-original-wave2:20261101
+#21 unpacking to docker.io/library/roof-original-wave2:20261101 9.4s done
+#21 DONE 48.5s

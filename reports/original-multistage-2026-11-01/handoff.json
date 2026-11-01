@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "project_id": "building-segmentation",
+  "release_id": "original-multistage-2026-11-01",
+  "tested_product_revision": "6c16a49683938d1a5d6c0fb5cbc56f9b9524274f",
+  "report_commit": null,
+  "build_kind": "original_multistage_Dockerfile_with_normal_cache",
+  "status": "original_build_and_bounded_real_container_gate_passed_not_published",
+  "headline_accuracy_results": [],
+  "image_id": "sha256:386d132222c6efd3254eb080629a709b228794cea3b20eeedf22931d6c656498",
+  "bases": {
+    "docker.io/library/node:22.20.0-alpine": "sha256:dbcedd8aeab47fbc0f4dd4bffa55b7c3c729a707875968d467aaaea42d6225af",
+    "docker.io/library/python:3.12-slim-bookworm": "sha256:e697c81897302a4c4333bade000d98038fbb21eb064f8ee1fd42d02ebcd9d337"
+  },
+  "checks": {
+    "cli_http_artifacts_identical": true,
+    "supported_linux_profile_ready": true,
+    "corrupt_upload_status": 400,
+    "over_byte_limit_status": 413,
+    "concurrent_request_statuses": [
+      200,
+      503
+    ],
+    "static_frontend_http_matches_image": true,
+    "missing_weights_readiness_and_inference_status": 503
+  },
+  "resources": {
+    "memory_bytes": 1073741824,
+    "cpus": 2,
+    "all_own_containers_stopped": true,
+    "oom_killed": false
+  },
+  "scope": "Generated single-fixture model/HTTP/static-artifact integration only",
+  "selected_proof": "container-proof-v2/proof.json",
+  "preserved_failed_attempt": "container-proof/proof.json",
+  "scientific_source_or_lock_changes": false,
+  "browser": "not_run",
+  "deployment": "not_run",
+  "source_build_sha256": "846be4c8402b44a27516595d1d55311351ef02b8dbadec9640c73687b65bab6a",
+  "linux_lock_sha256": "830162adc9f86b81af6c77cab386d2dc0c936134ec178347d98b3c8bbcba4aac",
+  "proof_sha256": "c4cb81685bba85d8aba6da1634c02d9b5d7860d5c987864c79218bfd52e889b8",
+  "gate_script_sha256": "026677115752cc6259bc968a001b89b16f09585acad5c3aaaf7207f6a0e77ad5",
+  "limits": [
+    "No browser/layout/accessibility verification",
+    "No new model-quality or geographic measurement",
+    "Ordinary BuildKit cache; no fully cold-cache claim",
+    "Package advisory qualifiers remain; no security certification"
+  ]
+}

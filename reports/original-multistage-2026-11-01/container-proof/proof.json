@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "scope": "Generated single-image container integration; no quality/browser/deployment claim",
+  "image_id": "sha256:386d132222c6efd3254eb080629a709b228794cea3b20eeedf22931d6c656498",
+  "checkpoint_sha256": "2c5757995dafaa206abac4e22e384cdef78b4d93ab9026975050307ac2d9c7c5",
+  "release_sha256": "54832764edf43ccdfba1243bbfc3f8ad73ac97f58dd6665b9bb071b77248b9b0",
+  "input_sha256": "27d688b896818cc4088d57e84e627c51a64240aa9764ef4b2ebe1fe04b44fb5d",
+  "containers": [
+    {
+      "id": "0768149760ca6bf939605937c3422178e8836cf38aa7326556ced46d39c934db",
+      "name": "roof-wave2-cli-3b70b2a776c8",
+      "image_id": "sha256:386d132222c6efd3254eb080629a709b228794cea3b20eeedf22931d6c656498",
+      "memory_limit_bytes": 1073741824,
+      "cpu_limit": 2.0,
+      "readonly_rootfs": true,
+      "oom_killed": false,
+      "exit_code": 0,
+      "running": false,
+      "mounts": [
+        {
+          "destination": "/run/model.pt",
+          "type": "bind",
+          "read_only": true
+        },
+        {
+          "destination": "/run/model.release.json",
+          "type": "bind",
+          "read_only": true
+        },
+        {
+          "destination": "/run/fixture.png",
+          "type": "bind",
+          "read_only": true
+        }
+      ]
+    },
+    {
+      "id": "0097419d2d80c9989d754f947850706f5af7e2a6d904a609d78a4aa35588dfac",
+      "name": "roof-wave2-http-3b70b2a776c8",
+      "image_id": "sha256:386d132222c6efd3254eb080629a709b228794cea3b20eeedf22931d6c656498",
+      "memory_limit_bytes": 1073741824,
+      "cpu_limit": 2.0,
+      "readonly_rootfs": true,
+      "oom_killed": false,
+      "exit_code": 0,
+      "running": false,
+      "mounts": [
+        {
+          "destination": "/run/fixture.png",
+          "type": "bind",
+          "read_only": true
+        },
+        {
+          "destination": "/run/model.pt",
+          "type": "bind",
+          "read_only": true
+        },
+        {
+          "destination": "/run/model.release.json",
+          "type": "bind",
+          "read_only": true
+        }
+      ]
+    }
+  ]
+}

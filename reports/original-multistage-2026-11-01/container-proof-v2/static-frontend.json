@@ -1,0 +1,19 @@
+{
+  "index_status": 200,
+  "index_sha256": "04397fa984396e96308f5bb3ddd701ee0559fc13333e3b6966268db1742ddbb9",
+  "assets": [
+    {
+      "route": "/assets/index-BF6PHF6i.js",
+      "status": 200,
+      "bytes": 236934,
+      "sha256": "39c8d37fc2160e6f76f80dce216581cffa99b9af307847d367db38fe17343731"
+    },
+    {
+      "route": "/assets/index-C-Bhcdg3.css",
+      "status": 200,
+      "bytes": 16880,
+      "sha256": "72573f85e40c36a8927b653394853941b379d4c506a5601124beb4a0ebffa5cc"
+    }
+  ],
+  "scope": "HTTP bytes and image hashes only; no browser/UI/layout assertion"
+}

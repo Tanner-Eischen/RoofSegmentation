@@ -68,9 +68,11 @@ pass difference below 1e-6, and identical masks. This is an integration check,
 not a new accuracy result. API/serving/pipeline regression tests, frontend unit
 checks, lint and build passed. A native WSL Docker source-overlay image passed
 real CLI/HTTP parity, readiness, missing-weight and overload controls at 1 GiB /
-two CPUs. It derives from a recorded cached dependency image; a fresh original
-multistage Dockerfile build is a separate unrun gate. Browser interaction and
-deployment remain unverified. Nothing was pushed or published.
+two CPUs. The [original multistage Dockerfile gate](reports/original-multistage-2026-11-01/README.md)
+also passed a full dependency/frontend build and real serving/static-byte checks.
+Its exact base/image identifiers are recorded separately from the cached
+derivative. Browser interaction and deployment remain unverified. Nothing was
+pushed or published.
 
 The [dependency advisory follow-up](reports/dependency-audit-2026-11-01/README.md)
 records narrow Router/Vite/parser fixes, early image-format rejection, fresh
@@ -84,8 +86,8 @@ an unprivileged user and a Python readiness probe. Compose mounts `models/` read
 only; supply `best.pt` plus its `best.release.json`. The adopted Linux lock is a
 separate profile from the Windows CPU proof. `docker compose config --quiet`
 passes. The separate source-overlay container proof identifies the exact image,
-source build and dependency-lock hashes; it does not validate a fresh build of
-the original multistage Dockerfile.
+source build and dependency-lock hashes. The separate original-build supplement
+now records the actual multistage build and resulting image's serving checks.
 
 `python -m roof_pipeline.predict` preserves the experimental GeoTIFF and explicit
 tile/threshold-override research path. Use the shared serving CLI for registered

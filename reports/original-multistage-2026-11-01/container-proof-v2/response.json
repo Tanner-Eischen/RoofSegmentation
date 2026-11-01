@@ -1,0 +1,58 @@
+{
+  "run_id": "f15d11cb-1fc8-42ce-b023-d70724cb4e2e",
+  "input_sha256": "27d688b896818cc4088d57e84e627c51a64240aa9764ef4b2ebe1fe04b44fb5d",
+  "polygons": [],
+  "roof_area_px": 0,
+  "pixel_coverage": 0.0,
+  "valid_pixel_count": 12707,
+  "mean_foreground_probability": null,
+  "probability_definition": "Mean model probability over predicted foreground pixels; uncalibrated",
+  "width": 131,
+  "height": 97,
+  "area": null,
+  "area_unit": "pixels",
+  "georeferencing_status": "unavailable_image_space_only",
+  "polygon_coordinates": "image_pixels_xy",
+  "polygon_limitation": "External simplified contours; holes and sub-three-point components omitted",
+  "mode": "real",
+  "model": {
+    "runtime": {
+      "profile_id": "cpu-python312-linux-v1",
+      "profile_matches": true,
+      "profile_lock_sha256": "830162adc9f86b81af6c77cab386d2dc0c936134ec178347d98b3c8bbcba4aac",
+      "locked_package_count": 64,
+      "version_mismatches": {},
+      "python": "3.12.16",
+      "platform": "linux",
+      "source_build_sha256": "846be4c8402b44a27516595d1d55311351ef02b8dbadec9640c73687b65bab6a",
+      "source_files_complete": true
+    },
+    "model_id": "roof-pipeline-2c5757995dafaa20",
+    "model_release_sha256": "54832764edf43ccdfba1243bbfc3f8ad73ac97f58dd6665b9bb071b77248b9b0",
+    "checkpoint_sha256": "2c5757995dafaa206abac4e22e384cdef78b4d93ab9026975050307ac2d9c7c5",
+    "architecture": "unet-resnet34",
+    "image_size": 512,
+    "normalization": "imagenet_rgb_v1",
+    "threshold": 0.5,
+    "device": "cpu",
+    "precision": "float32",
+    "preprocessing_version": "imagenet-rgb-edgepad-tiled-v1",
+    "overlap": 64,
+    "label_definition": "binary building extent"
+  },
+  "artifacts": {
+    "mask": {
+      "filename": "f15d11cb-1fc8-42ce-b023-d70724cb4e2e-mask.png",
+      "sha256": "93fa7b7cf95d6f9e8dabdc32b9aaf9ee3a4d87cf50ada7d5cbc463c134a5e834",
+      "media_type": "image/png",
+      "bytes": 92
+    },
+    "probability": {
+      "filename": "f15d11cb-1fc8-42ce-b023-d70724cb4e2e-probability.npy",
+      "sha256": "1546a78fe1b06dfc755f965c891359cf18a34de99fe983d89a2cb0dc7637b9a6",
+      "media_type": "application/octet-stream",
+      "format": "numpy_float32_no_pickle",
+      "bytes": 50956
+    }
+  }
+}

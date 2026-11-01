@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "scope": "Same generated fixture in two Linux images; not model-quality evaluation",
+  "original_vs_cached_derivative_probability_max_abs_difference": 0.0,
+  "thresholded_masks_identical": true,
+  "original_probability_sha256": "1546a78fe1b06dfc755f965c891359cf18a34de99fe983d89a2cb0dc7637b9a6",
+  "previous_packet_probability_sha256": "1546a78fe1b06dfc755f965c891359cf18a34de99fe983d89a2cb0dc7637b9a6"
+}

@@ -41,9 +41,21 @@ htmlcov
 # Large files
 data/
 runs/
-models/*.pt
-models/*.pth
+models/
+*.pt
+*.pth
+*.ckpt
+*.safetensors
 *.egg-info
+
+# Local evidence and scratch are never build inputs.
+reports/
+requirements/history/
+scratch/
+tmp/
+work/
+outputs/
+outputs_*/
 
 # Documentation
 *.md

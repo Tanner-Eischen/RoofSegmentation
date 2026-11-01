@@ -55,7 +55,7 @@ def request(base, route, content=None):
         return error.code, json.load(error)
 
 
-def verify(image, checkpoint, release, fixture, out):
+def verify(image, checkpoint, release, fixture, out, *, check_static=False):
     out.mkdir(parents=True, exist_ok=False)
     image_id = json.loads(docker("image", "inspect", image))[0]["Id"]
     content = fixture.read_bytes()
@@ -143,7 +143,13 @@ def verify(image, checkpoint, release, fixture, out):
             "ROOF_MAX_BATCH_IMAGES=1",
         ]
         if available:
-            args += mounts
+            args += [
+                "--env",
+                "MODEL_PATH=/run/model.pt",
+                "--env",
+                "ROOF_MODEL_RELEASE=/run/model.release.json",
+                *mounts,
+            ]
         else:
             args += [
                 "--env",
@@ -206,6 +212,54 @@ def verify(image, checkpoint, release, fixture, out):
         status, ready = request(base, "/api/health/ready")
         assert status == 200 and ready["supported_profile_ready"]
         save("readiness.json", ready)
+        if check_static:
+            # Compare HTTP bytes with files in this exact image; no UI assertions.
+            frontend_code = (
+                "import hashlib,json;from pathlib import Path;"
+                "r=Path('/app/app/dist');"
+                "print(json.dumps({p.relative_to(r).as_posix():hashlib.sha256(p.read_bytes()).hexdigest() "
+                "for p in r.rglob('*') if p.is_file()}))"
+            )
+            expected_frontend = json.loads(
+                docker("exec", container, "python", "-c", frontend_code)
+            )
+            with urllib.request.urlopen(base + "/", timeout=30) as response:
+                index = response.read()
+                assert response.status == 200
+                assert "text/html" in response.headers.get("Content-Type", "")
+            assert hashlib.sha256(index).hexdigest() == expected_frontend["index.html"]
+            assets = []
+            for route in sorted(
+                set(
+                    re.findall(
+                        r'(?:src|href)="(/assets/[^\"]+)"', index.decode("utf-8")
+                    )
+                )
+            ):
+                with urllib.request.urlopen(base + route, timeout=30) as response:
+                    body = response.read()
+                    assert response.status == 200
+                actual_hash = hashlib.sha256(body).hexdigest()
+                assert actual_hash == expected_frontend[route.lstrip("/")]
+                assets.append(
+                    {
+                        "route": route,
+                        "status": 200,
+                        "bytes": len(body),
+                        "sha256": actual_hash,
+                    }
+                )
+            assert any(item["route"].endswith(".js") for item in assets)
+            assert any(item["route"].endswith(".css") for item in assets)
+            save(
+                "static-frontend.json",
+                {
+                    "index_status": 200,
+                    "index_sha256": expected_frontend["index.html"],
+                    "assets": assets,
+                    "scope": "HTTP bytes and image hashes only; no browser/UI/layout assertion",
+                },
+            )
         status, result = request(base, "/api/inference", content)
         assert status == 200
         mask = base64.b64decode(result.pop("mask_base64"), validate=True)
@@ -236,6 +290,8 @@ def verify(image, checkpoint, release, fixture, out):
             "over_byte_limit_status": 413,
             "concurrent_request_statuses": statuses,
         }
+        if check_static:
+            record["checks"]["static_frontend_http_matches_image"] = True
         record["runtime"] = ready["model"]["runtime"]
         docker("stop", "--time", "10", container)
         active.remove(container)
@@ -262,9 +318,15 @@ def main():
     for name in ("checkpoint", "model-release", "fixture", "out"):
         parser.add_argument("--" + name, type=Path, required=True)
     parser.add_argument("--image", required=True)
+    parser.add_argument("--check-static", action="store_true")
     args = parser.parse_args()
     result = verify(
-        args.image, args.checkpoint, args.model_release, args.fixture, args.out
+        args.image,
+        args.checkpoint,
+        args.model_release,
+        args.fixture,
+        args.out,
+        check_static=args.check_static,
     )
     print(
         json.dumps(
