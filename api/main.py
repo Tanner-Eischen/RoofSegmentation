@@ -152,7 +152,12 @@ def create_app(settings: Settings | None = None):
             )
         try:
             _, metadata = service.load()
-            return {"status": "ready", "mode": "real", "model": metadata}
+            return {
+                "status": "ready",
+                "mode": "real",
+                "model": metadata,
+                "supported_profile_ready": metadata["runtime"]["profile_matches"],
+            }
         except ModelUnavailable:
             return JSONResponse(
                 {

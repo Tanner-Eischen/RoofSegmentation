@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "scope": "Packaging-only unpublished commit correction; source/receipts not relabeled as tested new commit",
+  "locks": {
+    "requirements-serving-windows.lock": {
+      "working_sha256": "d8a209c58fa794232f9e154429707c0847667368aa08885a3af1cdebc79b2a5e",
+      "staged_sha256": "d8a209c58fa794232f9e154429707c0847667368aa08885a3af1cdebc79b2a5e",
+      "receipt_sha256": "d8a209c58fa794232f9e154429707c0847667368aa08885a3af1cdebc79b2a5e"
+    },
+    "requirements-release-linux.lock": {
+      "working_sha256": "830162adc9f86b81af6c77cab386d2dc0c936134ec178347d98b3c8bbcba4aac",
+      "staged_sha256": "830162adc9f86b81af6c77cab386d2dc0c936134ec178347d98b3c8bbcba4aac",
+      "receipt_sha256": "830162adc9f86b81af6c77cab386d2dc0c936134ec178347d98b3c8bbcba4aac"
+    }
+  },
+  "prior_linux_index_sha256": "f06d489d7be02b0f9e84651bf059e3771a052bd52a2a5aab3af37b1e71bd0090",
+  "linux_lock_line_ending_normalized_content_unchanged": true,
+  "tested_source_build_sha256": "846be4c8402b44a27516595d1d55311351ef02b8dbadec9640c73687b65bab6a",
+  "source_index_mapping": {
+    "api/main.py": {
+      "tested_raw_sha256": "6771c4d49cb44eaa1ea82361b442baf9a0fcd204fea21b4051b01798fd493d74",
+      "git_index_sha256": "6771c4d49cb44eaa1ea82361b442baf9a0fcd204fea21b4051b01798fd493d74",
+      "line_ending_normalized_bytes_equal": true
+    },
+    "api/inference.py": {
+      "tested_raw_sha256": "b781efb05ffd6c1b7c8292c8c7335aab9d9d3b7eca762c8f436184cd86ae3fed",
+      "git_index_sha256": "b781efb05ffd6c1b7c8292c8c7335aab9d9d3b7eca762c8f436184cd86ae3fed",
+      "line_ending_normalized_bytes_equal": true
+    },
+    "roof_pipeline/inference_service.py": {
+      "tested_raw_sha256": "cb88311294a1a08c7e63cacbd6a44a5ee5b010ce95a7ad05bb993da05f22813a",
+      "git_index_sha256": "9f7746c6b92befd0de5ccca2d0ec820e550333b36dc5884298314e2c69b6197f",
+      "line_ending_normalized_bytes_equal": true
+    },
+    "roof_pipeline/release.py": {
+      "tested_raw_sha256": "0c5970d110d0cf319cc0d21c4961c9f463ca5704e54346f2e965513f780f4a24",
+      "git_index_sha256": "0c5970d110d0cf319cc0d21c4961c9f463ca5704e54346f2e965513f780f4a24",
+      "line_ending_normalized_bytes_equal": true
+    },
+    "roof_pipeline/runtime.py": {
+      "tested_raw_sha256": "cb8b0eeaadd2048b511ad7f77f9dbe29cfa71afbcd31253859ae3a70b2512ee0",
+      "git_index_sha256": "cb8b0eeaadd2048b511ad7f77f9dbe29cfa71afbcd31253859ae3a70b2512ee0",
+      "line_ending_normalized_bytes_equal": true
+    },
+    "roof_pipeline/models.py": {
+      "tested_raw_sha256": "a8e6858236397f27ecfc8d62495a12eed69535a0d9853404684fae046e6b5198",
+      "git_index_sha256": "a8e6858236397f27ecfc8d62495a12eed69535a0d9853404684fae046e6b5198",
+      "line_ending_normalized_bytes_equal": true
+    },
+    "roof_pipeline/dataset.py": {
+      "tested_raw_sha256": "fd507b806ffc7872951684bc15924131cf4f32b1460c3472afc3ee43b664d552",
+      "git_index_sha256": "fd507b806ffc7872951684bc15924131cf4f32b1460c3472afc3ee43b664d552",
+      "line_ending_normalized_bytes_equal": true
+    },
+    "roof_pipeline/predict.py": {
+      "tested_raw_sha256": "982312da3924a0c5fa4ad79276eef1d267f746a689a5bdc81884dabaf4e8d673",
+      "git_index_sha256": "982312da3924a0c5fa4ad79276eef1d267f746a689a5bdc81884dabaf4e8d673",
+      "line_ending_normalized_bytes_equal": true
+    }
+  },
+  "historical_evidence_modified": false,
+  "final_gate_policy": "subprocess.run(check=True) or explicit assertions before amend"
+}

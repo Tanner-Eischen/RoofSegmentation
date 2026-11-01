@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "environment_created": true,
+  "retained_environments_modified": false,
+  "fresh_install_completed": true,
+  "attempts": [
+    {
+      "offline": true,
+      "hashes_required": true,
+      "result": "strict first-index lookup could not find pinned certifi on priority CPU index"
+    },
+    {
+      "offline": true,
+      "hashes_required": true,
+      "index_strategy": "pip-compatible best-match across the two trusted hash-bound indexes",
+      "result": "fonttools wheel not available in local cache"
+    },
+    {
+      "dry_run": true,
+      "hashes_required": true,
+      "resolved_exact_packages": 65,
+      "would_download_packages": 20,
+      "result": "resolution succeeded; installation/downloads not performed"
+    },
+    {
+      "offline": false,
+      "hashes_required": true,
+      "only_binary": true,
+      "resolved_exact_packages": 65,
+      "installed": 65,
+      "prepared_uncached_packages": 20,
+      "result": "passed after size/disk bound; dependency check48tests and genuine parity passed"
+    }
+  ],
+  "scope_limit": "Complete-profile wheel estimate265MB below authorized1GB cap; no retained env or historical artifact mutation"
+}

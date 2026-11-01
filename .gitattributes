@@ -1,2 +1,5 @@
 # Evidence manifests bind exact bytes; Git newline conversion must preserve them.
 reports/** -text whitespace=trailing-space,space-before-tab,cr-at-eol
+# Runtime identity exposes these exact lock bytes across Windows/Linux checkout.
+requirements-serving-windows.lock -text whitespace=trailing-space,space-before-tab,cr-at-eol
+requirements-release-linux.lock -text whitespace=trailing-space,space-before-tab,cr-at-eol

@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "checkpoint_sha256": "2c5757995dafaa206abac4e22e384cdef78b4d93ab9026975050307ac2d9c7c5",
+  "model_release_sha256": "54832764edf43ccdfba1243bbfc3f8ad73ac97f58dd6665b9bb071b77248b9b0",
+  "input_sha256": "b35a94e5a716936b2a2e34eacd4d89ec95f15e2b29cd668c7087c420fba6d129",
+  "input_shape": [
+    97,
+    131,
+    3
+  ],
+  "input_kind": "generated numerical fixture; no source imagery",
+  "scope": "Single-input float32 CPU integration; no model accuracy or geographic performance measurement",
+  "cli_api_probability_max_abs_diff": 0.0,
+  "independent_forward_probability_max_abs_diff": 9.313225746154785e-10,
+  "tolerance_abs": 1e-06,
+  "thresholded_masks_identical": true,
+  "probability_artifact_sha256": "e2c5f95ff0a05341bd21780f8c0ab332c01a84708f2c7458a19dd330c0f261b4",
+  "mask_artifact_sha256": "93fa7b7cf95d6f9e8dabdc32b9aaf9ee3a4d87cf50ada7d5cbc463c134a5e834",
+  "pixel_coverage": 0.0,
+  "valid_pixel_count": 12707,
+  "checks": {
+    "hash_bound_model_release": true,
+    "corrupt_upload_rejected": true,
+    "unavailable_imagery_is_failure": true,
+    "artifact_hashes_match": true
+  },
+  "cpu_threads": 2,
+  "runtime_versions": {
+    "torch": "2.14.1+cpu",
+    "torchvision": "0.29.2+cpu",
+    "numpy": "2.2.6",
+    "Pillow": "13.0.0",
+    "segmentation-models-pytorch": "0.6.0",
+    "fastapi": "0.162.0",
+    "starlette": "1.10.0",
+    "python-multipart": "0.0.32",
+    "httpx": "0.28.1"
+  },
+  "source_sha256": {
+    "api/main.py": "6771c4d49cb44eaa1ea82361b442baf9a0fcd204fea21b4051b01798fd493d74",
+    "roof_pipeline/inference_service.py": "cb88311294a1a08c7e63cacbd6a44a5ee5b010ce95a7ad05bb993da05f22813a",
+    "roof_pipeline/release.py": "0c5970d110d0cf319cc0d21c4961c9f463ca5704e54346f2e965513f780f4a24",
+    "roof_pipeline/runtime.py": "cb8b0eeaadd2048b511ad7f77f9dbe29cfa71afbcd31253859ae3a70b2512ee0",
+    "roof_pipeline/models.py": "a8e6858236397f27ecfc8d62495a12eed69535a0d9853404684fae046e6b5198",
+    "roof_pipeline/dataset.py": "fd507b806ffc7872951684bc15924131cf4f32b1460c3472afc3ee43b664d552",
+    "roof_pipeline/predict.py": "982312da3924a0c5fa4ad79276eef1d267f746a689a5bdc81884dabaf4e8d673",
+    "scripts/verify_serving_parity.py": "7d4ecabe164ac56975ba8e0992047dd40d720e17b645d4a42ddcd9787ac0f374"
+  },
+  "not_run": [
+    "browser",
+    "container",
+    "deployment",
+    "training",
+    "dataset-wide evaluation"
+  ]
+}

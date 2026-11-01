@@ -1,0 +1,7 @@
+{
+  "image_id": "sha256:85619cb83bb18c8061cbd3a817b7db64edd44ff92d24ce11e28d0a2ac4d55592",
+  "base_image_id": "sha256:157e09a1d21c0967a4ffdc88083f399d22e0889e19291cee7eac6461f1b79175",
+  "created": "2026-11-01T01:33:18.635703845-05:00",
+  "user": "roof",
+  "build_kind": "cached-runtime-source-overlay"
+}

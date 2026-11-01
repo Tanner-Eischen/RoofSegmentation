@@ -1,0 +1,12 @@
+{
+  "engine": {
+    "ID": "95304dee-f644-4d31-9107-e9c2b40113f8",
+    "ServerVersion": "29.1.3",
+    "OSType": "linux",
+    "Architecture": "x86_64",
+    "Driver": "overlayfs",
+    "OperatingSystem": "Ubuntu 24.04.3 LTS"
+  },
+  "base_image_id": "sha256:157e09a1d21c0967a4ffdc88083f399d22e0889e19291cee7eac6461f1b79175",
+  "build_kind": "cached-runtime-source-overlay; not original multistage Dockerfile fresh build"
+}

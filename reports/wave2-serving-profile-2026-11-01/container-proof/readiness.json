@@ -1,0 +1,30 @@
+{
+  "status": "ready",
+  "mode": "real",
+  "model": {
+    "runtime": {
+      "profile_id": "cpu-python312-linux-v1",
+      "profile_matches": true,
+      "profile_lock_sha256": "830162adc9f86b81af6c77cab386d2dc0c936134ec178347d98b3c8bbcba4aac",
+      "locked_package_count": 64,
+      "version_mismatches": {},
+      "python": "3.12.16",
+      "platform": "linux",
+      "source_build_sha256": "846be4c8402b44a27516595d1d55311351ef02b8dbadec9640c73687b65bab6a",
+      "source_files_complete": true
+    },
+    "model_id": "roof-pipeline-2c5757995dafaa20",
+    "model_release_sha256": "54832764edf43ccdfba1243bbfc3f8ad73ac97f58dd6665b9bb071b77248b9b0",
+    "checkpoint_sha256": "2c5757995dafaa206abac4e22e384cdef78b4d93ab9026975050307ac2d9c7c5",
+    "architecture": "unet-resnet34",
+    "image_size": 512,
+    "normalization": "imagenet_rgb_v1",
+    "threshold": 0.5,
+    "device": "cpu",
+    "precision": "float32",
+    "preprocessing_version": "imagenet-rgb-edgepad-tiled-v1",
+    "overlap": 64,
+    "label_definition": "binary building extent"
+  },
+  "supported_profile_ready": true
+}

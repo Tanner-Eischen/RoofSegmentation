@@ -19,6 +19,7 @@ from PIL import Image, UnidentifiedImageError
 from roof_pipeline.models import DEFAULT_ASPP_RATES, create_model
 from roof_pipeline.predict import predict_array
 from roof_pipeline.release import checkpoint_config, read_checkpoint, validate_release
+from roof_pipeline.runtime import runtime_identity
 
 
 class ModelUnavailable(RuntimeError):
@@ -86,6 +87,7 @@ class ModelService:
             else self.path.with_suffix(".release.json")
         )
         self.max_bytes, self.max_pixels = max_bytes, max_pixels
+        self.runtime_identity = runtime_identity()
         self._fingerprint = None
         self._loaded = None
         self._load_lock = threading.Lock()
@@ -151,6 +153,7 @@ class ModelService:
                 if probe.shape != (1, 1, 32, 32) or not torch.isfinite(probe).all():
                     raise ValueError("Invalid model output")
                 metadata = {
+                    "runtime": self.runtime_identity,
                     "model_id": release["model_id"],
                     "model_release_sha256": release_hash,
                     "checkpoint_sha256": checkpoint_hash,

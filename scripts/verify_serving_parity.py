@@ -213,10 +213,13 @@ def verify(checkpoint, release, out):
                         name: importlib.metadata.version(name)
                         for name in (
                             "torch",
+                            "torchvision",
                             "numpy",
                             "Pillow",
                             "segmentation-models-pytorch",
                             "fastapi",
+                            "starlette",
+                            "python-multipart",
                             "httpx",
                         )
                     },
@@ -226,6 +229,7 @@ def verify(checkpoint, release, out):
                             "api/main.py",
                             "roof_pipeline/inference_service.py",
                             "roof_pipeline/release.py",
+                            "roof_pipeline/runtime.py",
                             "roof_pipeline/models.py",
                             "roof_pipeline/dataset.py",
                             "roof_pipeline/predict.py",

@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "scope": "Generated single-image container integration; no quality/browser/deployment claim",
+  "image_id": "sha256:85619cb83bb18c8061cbd3a817b7db64edd44ff92d24ce11e28d0a2ac4d55592",
+  "checkpoint_sha256": "2c5757995dafaa206abac4e22e384cdef78b4d93ab9026975050307ac2d9c7c5",
+  "release_sha256": "54832764edf43ccdfba1243bbfc3f8ad73ac97f58dd6665b9bb071b77248b9b0",
+  "input_sha256": "27d688b896818cc4088d57e84e627c51a64240aa9764ef4b2ebe1fe04b44fb5d",
+  "containers": [
+    {
+      "id": "9bac966be1b6c1287ec8d7efcfcfc859e2837bcb199370a688e2386560869c44",
+      "name": "roof-wave2-cli-0059c57b5b96",
+      "image_id": "sha256:85619cb83bb18c8061cbd3a817b7db64edd44ff92d24ce11e28d0a2ac4d55592",
+      "memory_limit_bytes": 1073741824,
+      "cpu_limit": 2.0,
+      "readonly_rootfs": true,
+      "oom_killed": false,
+      "exit_code": 0,
+      "running": false,
+      "mounts": [
+        {
+          "destination": "/run/model.pt",
+          "type": "bind",
+          "read_only": true
+        },
+        {
+          "destination": "/run/model.release.json",
+          "type": "bind",
+          "read_only": true
+        },
+        {
+          "destination": "/run/fixture.png",
+          "type": "bind",
+          "read_only": true
+        }
+      ]
+    },
+    {
+      "id": "316be15536f0900be839175ac5932b1949cc5770b26f8a3a029c980be5696b61",
+      "name": "roof-wave2-http-0059c57b5b96",
+      "image_id": "sha256:85619cb83bb18c8061cbd3a817b7db64edd44ff92d24ce11e28d0a2ac4d55592",
+      "memory_limit_bytes": 1073741824,
+      "cpu_limit": 2.0,
+      "readonly_rootfs": true,
+      "oom_killed": false,
+      "exit_code": 0,
+      "running": false,
+      "mounts": [
+        {
+          "destination": "/run/model.pt",
+          "type": "bind",
+          "read_only": true
+        },
+        {
+          "destination": "/run/model.release.json",
+          "type": "bind",
+          "read_only": true
+        },
+        {
+          "destination": "/run/fixture.png",
+          "type": "bind",
+          "read_only": true
+        }
+      ]
+    },
+    {
+      "id": "842e4e19cad9ac2ac7d05345a100399f0ab5f1a74bde1b3ea162e5f07f9acd5f",
+      "name": "roof-wave2-missing-0059c57b5b96",
+      "image_id": "sha256:85619cb83bb18c8061cbd3a817b7db64edd44ff92d24ce11e28d0a2ac4d55592",
+      "memory_limit_bytes": 1073741824,
+      "cpu_limit": 2.0,
+      "readonly_rootfs": true,
+      "oom_killed": false,
+      "exit_code": 0,
+      "running": false,
+      "mounts": []
+    }
+  ],
+  "checks": {
+    "cli_http_artifacts_identical": true,
+    "supported_linux_profile_ready": true,
+    "corrupt_upload_status": 400,
+    "over_byte_limit_status": 413,
+    "concurrent_request_statuses": [
+      200,
+      503
+    ],
+    "missing_weights_readiness_and_inference_status": 503
+  },
+  "runtime": {
+    "profile_id": "cpu-python312-linux-v1",
+    "profile_matches": true,
+    "profile_lock_sha256": "830162adc9f86b81af6c77cab386d2dc0c936134ec178347d98b3c8bbcba4aac",
+    "locked_package_count": 64,
+    "version_mismatches": {},
+    "python": "3.12.16",
+    "platform": "linux",
+    "source_build_sha256": "846be4c8402b44a27516595d1d55311351ef02b8dbadec9640c73687b65bab6a",
+    "source_files_complete": true
+  },
+  "status": "passed"
+}

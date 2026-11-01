@@ -1,0 +1,12 @@
+FROM roof-release:20261031-ca-patched
+WORKDIR /app
+COPY api/__init__.py api/main.py api/inference.py ./api/
+COPY roof_pipeline/ ./roof_pipeline/
+COPY requirements-release-linux.lock ./
+COPY app/dist/ ./app/dist/
+ENV MODEL_PATH=/run/model.pt ROOF_MODEL_RELEASE=/run/model.release.json ROOF_CPU_THREADS=2 ROOF_DEMO_MODE=false PYTHONUNBUFFERED=1
+LABEL org.roofsegmentation.build.kind="cached-runtime-source-overlay"
+USER roof
+EXPOSE 8000
+HEALTHCHECK --interval=30s --timeout=15s --start-period=30s --retries=3 CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health/ready', timeout=10)"
+CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]

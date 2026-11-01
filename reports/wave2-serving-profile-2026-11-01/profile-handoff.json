@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "project_id": "building-segmentation",
+  "release_id": "wave2-serving-profile-2026-11-01",
+  "tested_revision": null,
+  "source_worktree_dirty_at_capture": true,
+  "status": "fresh_supported_cpu_install_and_cached_derivative_container_verified_not_published",
+  "headline_accuracy_results": [],
+  "checks": {
+    "fresh_hash_locked_windows_install": true,
+    "installed_package_count": 65,
+    "targeted_python_tests": 48,
+    "fresh_environment_dependency_check": "passed",
+    "windows_cli_http_probability_max_difference": 0,
+    "container_cli_http_artifacts_identical": true,
+    "windows_container_probability_max_abs_difference": 3.8743019104003906e-07,
+    "windows_container_thresholded_masks_identical": true,
+    "linux_supported_profile_ready": true,
+    "bounded_own_containers_stopped": true,
+    "browser": "not_run",
+    "fresh_original_dockerfile_build": "not_run",
+    "deployment": "not_run"
+  },
+  "runtime_source_build_sha256": "846be4c8402b44a27516595d1d55311351ef02b8dbadec9640c73687b65bab6a",
+  "container_image_id": "sha256:85619cb83bb18c8061cbd3a817b7db64edd44ff92d24ce11e28d0a2ac4d55592",
+  "cached_base_image_id": "sha256:157e09a1d21c0967a4ffdc88083f399d22e0889e19291cee7eac6461f1b79175",
+  "locks": {
+    "windows_sha256": "d8a209c58fa794232f9e154429707c0847667368aa08885a3af1cdebc79b2a5e",
+    "linux_sha256": "830162adc9f86b81af6c77cab386d2dc0c936134ec178347d98b3c8bbcba4aac"
+  },
+  "limits": [
+    "Generated fixture integration only; no new quality measurement",
+    "Source overlay on exact cached dependency image, not original multistage fresh build",
+    "Advisory CPU-local lookup skips and normalized upstream queries remain distinct; no security certification",
+    "Historical packets/environments retained; no browser/deployment claim"
+  ],
+  "evidence": {
+    "container_proof_sha256": "104113819e6f3bfd9e4aef7106529a11204acb9f6930d004d2b698f7df55a4c5",
+    "fresh_windows_proof_sha256": "47d7f012fd1d6178abac9b71d388c64704dbe6d8b7dfe0b25fdf06d36c7e23ba",
+    "build_manifest_sha256": "299c66caf87520ffbe6293829db80ba8dbfc18041504f508261f78bd6c9521f4",
+    "fresh_install_receipt_sha256": "1b529989b68a627cbf134acddb304cebca8e128ddb783dba42fe782075846fbe"
+  },
+  "audit": {
+    "records": 65,
+    "recognized": 63,
+    "known_matches": 0,
+    "skipped": [
+      {
+        "name": "torch",
+        "skip_reason": "Dependency not found on PyPI and could not be audited: torch (2.14.1+cpu)"
+      },
+      {
+        "name": "torchvision",
+        "skip_reason": "Dependency not found on PyPI and could not be audited: torchvision (0.29.2+cpu)"
+      }
+    ],
+    "same_day_public_upstream_supplement_matches": 0,
+    "exact_cpu_build_security_certification": false,
+    "remaining_npm_development_advisory_records": 25
+  }
+}

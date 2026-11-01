@@ -27,7 +27,7 @@ or arbitrary-sensor performance. Follow-up test reuse makes later comparisons
 development results. Training used a recorded dirty source snapshot; the packet
 retains its base commit and exact per-file fingerprints. Imagery and weights are
 not redistributed in the compact packet. Public packet access remains pending
-commit and publication.
+external publication. The compact packet is committed locally.
 
 ```bash
 # Verify the compact packet; no GPU, model loading, or original dataset required
@@ -46,11 +46,13 @@ not-ready; outages never generate substitute masks. Address and remote-imagery
 routes are unavailable. Old comparison/address-batch pages remain in source but
 are not routed in this release.
 
-See [setup, reproduction and verification](docs/SERVING_INTEGRATION_2026-11-01.md).
+See [current serving setup and container evidence](reports/wave2-serving-profile-2026-11-01/README.md).
 From the repository root, prepare a fresh release manifest and configure both
 `MODEL_PATH` and `ROOF_MODEL_RELEASE`; then run `python -m uvicorn api.main:app`.
-Use `requirements-serving.txt` for the tested Python 3.12 CPU direct-dependency
-profile. No model download is implicit, and large weights are not bundled here.
+On Windows, install `requirements-serving.txt` in a separate Python 3.12
+environment; it selects the validated full hash lock. Linux/CI/Docker use
+`requirements-release-linux.lock`. Historical direct pins are retained under
+`requirements/history/`. No model download is implicit, and weights are not bundled.
 
 For frontend development, run `npm ci`, `npm test`, `npm run lint`, and
 `npm run dev` in `app/`. Vite proxies `/api` to the loopback backend on port 8000.
@@ -64,8 +66,11 @@ A new genuine baseline-checkpoint integration on a generated non-square fixture
 found zero difference between CLI and HTTP probabilities, an independent forward
 pass difference below 1e-6, and identical masks. This is an integration check,
 not a new accuracy result. API/serving/pipeline regression tests, frontend unit
-checks, lint and build passed. Browser interaction and a new container run remain
-unverified; the Docker engine was unavailable. Nothing was published or deployed.
+checks, lint and build passed. A native WSL Docker source-overlay image passed
+real CLI/HTTP parity, readiness, missing-weight and overload controls at 1 GiB /
+two CPUs. It derives from a recorded cached dependency image; a fresh original
+multistage Dockerfile build is a separate unrun gate. Browser interaction and
+deployment remain unverified. Nothing was pushed or published.
 
 The [dependency advisory follow-up](reports/dependency-audit-2026-11-01/README.md)
 records narrow Router/Vite/parser fixes, early image-format rejection, fresh
@@ -78,7 +83,9 @@ The Dockerfile uses package-relative copy paths, the retained Linux CPU hash loc
 an unprivileged user and a Python readiness probe. Compose mounts `models/` read
 only; supply `best.pt` plus its `best.release.json`. The adopted Linux lock is a
 separate profile from the Windows CPU proof. `docker compose config --quiet`
-passes, but does not establish a working image or model-serving container.
+passes. The separate source-overlay container proof identifies the exact image,
+source build and dependency-lock hashes; it does not validate a fresh build of
+the original multistage Dockerfile.
 
 `python -m roof_pipeline.predict` preserves the experimental GeoTIFF and explicit
 tile/threshold-override research path. Use the shared serving CLI for registered
