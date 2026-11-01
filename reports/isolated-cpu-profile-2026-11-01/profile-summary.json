@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "project_id": "building-segmentation",
+  "release_id": "isolated-cpu-profile-2026-11-01",
+  "tested_product_revision": "f9861a3d92c60b5a6ada81f10bfe05a9baed110b",
+  "report_commit": null,
+  "profile_id": "existing-roof-completion-patched-cpu",
+  "isolated_environment": true,
+  "environment_mutated": false,
+  "new_downloads": false,
+  "status": "current_source_isolated_cpu_integration_verified_not_published",
+  "checks": {
+    "declared_locked_packages": 65,
+    "installed_version_mismatches": 0,
+    "installed_dependency_check": "passed;66 packages compatible",
+    "targeted_python_tests_passed": 46,
+    "actual_current_repository_imports": true,
+    "cli_http_probability_max_abs_difference": 0.0,
+    "independent_forward_max_abs_difference": 9.313225746154785e-10,
+    "old_new_profile_decoded_pixels_equal": true,
+    "old_new_profile_probability_max_abs_difference": 0.0,
+    "browser": "not_run",
+    "container": "not_run_engine_unavailable",
+    "training": "no baseline/research training;existing tiny smoke regression executed"
+  },
+  "audit": {
+    "records": 66,
+    "recognized": 63,
+    "known_matches": 0,
+    "skipped": [
+      {
+        "name": "roof-segmentation-workbench",
+        "skip_reason": "Dependency not found on PyPI and could not be audited: roof-segmentation-workbench (0.3.0)"
+      },
+      {
+        "name": "torch",
+        "skip_reason": "Dependency not found on PyPI and could not be audited: torch (2.14.1+cpu)"
+      },
+      {
+        "name": "torchvision",
+        "skip_reason": "Dependency not found on PyPI and could not be audited: torchvision (0.29.2+cpu)"
+      }
+    ],
+    "public_upstream_version_supplement_known_matches": 0,
+    "exact_original_cpu_wheel_archive_hashes_reverified": false
+  },
+  "headline_accuracy_results": [],
+  "limits": [
+    "Single generated fixture does not measure real imagery accuracy or generalization",
+    "Historical CUDA/CPU accuracy remains attached to its original runtime",
+    "No browser/container/deployment verification",
+    "Package advisory matches are not whole-system security certification; CPU local builds and local project need explicit qualification",
+    "Default requirements-serving.txt and original environments were not replaced"
+  ]
+}

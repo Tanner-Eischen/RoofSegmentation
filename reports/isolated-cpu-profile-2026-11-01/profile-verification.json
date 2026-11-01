@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "source_revision": "f9861a3d92c60b5a6ada81f10bfe05a9baed110b",
+  "product_source_worktree_dirty": false,
+  "profile_id": "existing-roof-completion-patched-cpu",
+  "python_version": "3.12.14",
+  "isolated_no_system_site_packages": true,
+  "environment_dependency_count": 66,
+  "installed_versions": {
+    "affine": "3.0.1",
+    "annotated-doc": "0.0.5",
+    "annotated-types": "0.8.0",
+    "anyio": "4.15.1",
+    "attrs": "26.1.0",
+    "certifi": "2026.10.23",
+    "click": "8.5.0",
+    "colorama": "0.4.6",
+    "contourpy": "1.4.0",
+    "cycler": "0.12.1",
+    "fastapi": "0.162.0",
+    "filelock": "4.2.5",
+    "fonttools": "4.68.0",
+    "fsspec": "2026.9.0",
+    "h11": "0.16.0",
+    "hf-xet": "1.8.0",
+    "httpcore": "1.0.9",
+    "httpcore2": "2.16.0",
+    "httpx": "0.28.1",
+    "httpx2": "2.16.0",
+    "huggingface-hub": "2.4.0",
+    "idna": "3.20",
+    "iniconfig": "2.3.1",
+    "jinja2": "3.1.6",
+    "kiwisolver": "1.5.1",
+    "markupsafe": "3.0.4",
+    "matplotlib": "3.10.7",
+    "mpmath": "1.3.0",
+    "networkx": "3.7",
+    "numpy": "2.2.6",
+    "opencv-python-headless": "4.12.0.88",
+    "opentelemetry-api": "1.45.2",
+    "packaging": "26.3",
+    "pillow": "13.0.0",
+    "pip": "26.2.2",
+    "pluggy": "1.7.0",
+    "pydantic": "2.14.2",
+    "pydantic-core": "2.50.2",
+    "pygments": "2.21.0",
+    "pyparsing": "3.3.3",
+    "pytest": "9.0.3",
+    "pytest-asyncio": "1.4.0",
+    "python-dateutil": "3.0.0",
+    "python-dotenv": "1.2.4",
+    "python-multipart": "0.0.32",
+    "pyyaml": "6.0.3",
+    "rasterio": "1.5.2",
+    "roof-segmentation-workbench": "0.3.0",
+    "ruff": "0.17.3",
+    "safetensors": "0.8.0",
+    "segmentation-models-pytorch": "0.6.0",
+    "setuptools": "84.2.1",
+    "shapely": "2.2.0",
+    "six": "1.17.0",
+    "starlette": "1.10.0",
+    "sympy": "1.14.0",
+    "timm": "1.0.30",
+    "torch": "2.14.1+cpu",
+    "torchvision": "0.29.2+cpu",
+    "tqdm": "4.70.1",
+    "truststore": "0.10.5",
+    "typing-extensions": "4.16.0",
+    "typing-inspection": "0.4.4",
+    "tzdata": "2026.6",
+    "uvicorn": "0.38.0",
+    "wheel": "0.48.0"
+  },
+  "current_repository_imports": {
+    "api.main": {
+      "repository_relative_path": "api/main.py",
+      "sha256": "2a90b87e205043cdb5187c812c1dbe11f2d4b533410a33ce2ea7e8f4cd366b1b"
+    },
+    "roof_pipeline.inference_service": {
+      "repository_relative_path": "roof_pipeline/inference_service.py",
+      "sha256": "252b2c0545ba43c468051aff7e1002e72c50ed81702ef4724c7e0aa2fbe93f5f"
+    },
+    "roof_pipeline.predict": {
+      "repository_relative_path": "roof_pipeline/predict.py",
+      "sha256": "982312da3924a0c5fa4ad79276eef1d267f746a689a5bdc81884dabaf4e8d673"
+    }
+  },
+  "owner_windows_lock": {
+    "sha256": "c9a3133c1fb77d5f82df9762886323ad3467629647e805e676ef8cf4e0e08cee",
+    "expected_package_count": 65,
+    "missing": {},
+    "version_mismatches": {},
+    "extra_installed": {
+      "roof-segmentation-workbench": "0.3.0"
+    },
+    "limitation": "Version matching and installed metadata fingerprints do not independently establish original wheel archive hashes"
+  },
+  "installed_cpu_distribution_metadata": {
+    "torch": {
+      "METADATA": "7014c95c3f1064f93f903ff11c3aa2df4af6d08d2ec910c30dff2415bad1c53d",
+      "WHEEL": "29277f1802ee5571ab56d8830266a8cfd72700fa54581410a0a191fe9f27e675",
+      "RECORD": "33d96647d04a4645b5fd1e7fd89fec4b482783c5abe64fe3c9e71052c588f277"
+    },
+    "torchvision": {
+      "METADATA": "ae01f8957c554b0e66e3e71f72389b3a2e5f04495cd5b06b4dd150704955177a",
+      "WHEEL": "c03ebf168ffe85d4a615a9970c6aeb5ee7584129518333a182c9cbfa5c28ba54",
+      "RECORD": "c789e220bb4acb2b1459dce2c3ad266fb35239c759e545c3554afed9b576fb38"
+    }
+  },
+  "same_generated_rgb_comparison": {
+    "rgb_pixels_identical": true,
+    "rgb_decoded_sha256": "9ba02d3143e42ddb2ca10c37fa85b01662d9e8b30371aa3b12851622ea6a3dfc",
+    "encoded_png_sha256_old": "27d688b896818cc4088d57e84e627c51a64240aa9764ef4b2ebe1fe04b44fb5d",
+    "encoded_png_sha256_new": "b35a94e5a716936b2a2e34eacd4d89ec95f15e2b29cd668c7087c420fba6d129",
+    "encoding_note": "Pillow13 encoder changes PNG bytes; decoded RGB pixels are exactly equal",
+    "cpu_profile_probability_max_abs_difference": 0.0,
+    "thresholded_masks_identical": true
+  }
+}
