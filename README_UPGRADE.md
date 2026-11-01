@@ -129,6 +129,13 @@ roof-boundary detail, so 512 is preferred where possible.
 
 ## 3. Final held-out evaluation
 
+For independent sampling/augmentation attribution, use the
+[matched-seed 2×2 factorial study](ablation_study/README.md). It uses uniform
+and hard-example sampling with replacement, fixed-budget final checkpoints,
+three paired seeds, and unchanged original labels. The runner generates
+validation-only contrasts, training curves, and matched prediction overlays.
+The repeatedly inspected WHU test is excluded from this study.
+
 For the matched follow-up experiment using training-only hard examples and
 photometric augmentation, see [the refinement protocol](docs/WHU_REFINEMENT_2026-10-28.md).
 `python -m roof_pipeline.refine` runs both the targeted arm and its extra-training

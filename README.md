@@ -8,6 +8,10 @@ For the paired-label training pipeline, dataset leakage checks, and held-out eva
 see [the training upgrade guide](README_UPGRADE.md). Its synthetic fixtures verify
 the code workflow; they do not establish roof segmentation accuracy.
 
+The [factorial training ablation](ablation_study/README.md) isolates hard-example
+sampling and photometric augmentation across four configurations and three seeds,
+using unchanged official WHU partitions and validation-only effect estimates.
+
 ## Features
 
 - **Address to Satellite**: Enter any address to fetch Google Maps satellite imagery

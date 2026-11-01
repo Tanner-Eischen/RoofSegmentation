@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "study": "WHU 2x2 matched-seed training ablation",
+  "research_question": "Separate the effects of hard-example weighting and robust photometric augmentation in aerial building segmentation.",
+  "study_type": "exploratory_factorial",
+  "model": "unet-resnet34",
+  "dataset": "official geographically partitioned WHU aerial buildings",
+  "split_policy": "use existing official train and validation partitions; previously inspected test not reused for selection",
+  "arms": [
+    {"id": "a0b0_uniform_standard", "hard_sampling": false, "photometric": "standard"},
+    {"id": "a1b0_hard_standard", "hard_sampling": true, "photometric": "standard"},
+    {"id": "a0b1_uniform_robust", "hard_sampling": false, "photometric": "robust"},
+    {"id": "a1b1_hard_robust", "hard_sampling": true, "photometric": "robust"}
+  ],
+  "seeds": [42, 1337, 2026],
+  "fixed": {"epochs": 20, "image_size": 512, "batch_size": 4, "optimizer": "AdamW", "lr": 0.0001, "weight_decay": 0.0001, "threshold": 0.5, "loss": "BCE + soft Dice", "sampling_replacement": true},
+  "primary_metric": "global pixel IoU at fixed 20-epoch final.pt and threshold 0.5 on WHU validation",
+  "planned_run_count": 12,
+  "result_status": "not_executed"
+}

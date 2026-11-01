@@ -125,6 +125,41 @@ def bce_dice_loss(logits, labels, pos_weight: float = 1.0):
     return bce + (1 - dice).mean()
 
 
+class ObservedWeightedRandomSampler(WeightedRandomSampler):
+    """Record actual epoch coverage without changing the weighted RNG sequence."""
+
+    def __iter__(self):
+        indices = list(super().__iter__())
+        self.unique_samples = len(set(indices))
+        return iter(indices)
+
+
+def training_sampler(args, train_ds, dataset_sha, generator):
+    """Keep legacy shuffling by default; match replacement in factorial arms."""
+    report = getattr(args, "sampling_report", None)
+    uniform = bool(getattr(args, "uniform_replacement", False))
+    if uniform and report is not None:
+        raise ValueError(
+            "--uniform-replacement cannot be combined with --sampling-report"
+        )
+    if uniform:
+        weights = torch.ones(len(train_ds), dtype=torch.double)
+    elif report is not None:
+        from .hard_examples import load_sampling_weights
+
+        weights = load_sampling_weights(report, train_ds.rows, dataset_sha)
+        if (
+            json.loads(Path(report).read_text(encoding="utf-8"))["image_size"]
+            != args.size
+        ):
+            raise ValueError("Sampling report image size differs from training")
+    else:
+        return None
+    return ObservedWeightedRandomSampler(
+        weights, len(train_ds), replacement=True, generator=generator
+    )
+
+
 def train(args):
     boundary_weight = getattr(args, "boundary_weight", 0.0)
     boundary_radius = getattr(args, "boundary_radius", 1)
@@ -177,19 +212,8 @@ def train(args):
         "persistent_workers": args.workers > 0,
     }
     sampling_report = getattr(args, "sampling_report", None)
-    sampler = None
-    if sampling_report is not None:
-        from .hard_examples import load_sampling_weights
-
-        weights = load_sampling_weights(sampling_report, train_ds.rows, dataset_sha)
-        if (
-            json.loads(Path(sampling_report).read_text(encoding="utf-8"))["image_size"]
-            != args.size
-        ):
-            raise ValueError("Sampling report image size differs from training")
-        sampler = WeightedRandomSampler(
-            weights, len(train_ds), replacement=True, generator=generator
-        )
+    uniform_replacement = bool(getattr(args, "uniform_replacement", False))
+    sampler = training_sampler(args, train_ds, dataset_sha, generator)
     train_loader = DataLoader(
         train_ds, shuffle=sampler is None, sampler=sampler, **common
     )
@@ -223,6 +247,7 @@ def train(args):
         "boundary_weight": boundary_weight,
         "boundary_radius": boundary_radius,
         "boundary_target": BOUNDARY_TARGET if boundary_weight > 0 else None,
+        "uniform_replacement": uniform_replacement,
         "sampling_report_sha256": hashlib.sha256(
             Path(sampling_report).read_bytes()
         ).hexdigest()
@@ -330,6 +355,10 @@ def train(args):
         current = val_metrics["iou"]
         entry = {
             "epoch": epoch,
+            "train_draws": n,
+            "unique_train_samples": sampler.unique_samples
+            if sampler is not None
+            else len(train_ds),
             "train_loss": total / max(1, n),
             "segmentation_loss": segmentation_total / max(1, n),
             "boundary_loss": boundary_total / max(1, n),
@@ -488,6 +517,11 @@ def parse_args():
         "--sampling-report",
         type=Path,
         help="Train-only hard-example probabilities from roof_pipeline.hard_examples",
+    )
+    p.add_argument(
+        "--uniform-replacement",
+        action="store_true",
+        help="Uniform with-replacement control to match hard-example sampler's replacement policy",
     )
     p.add_argument("--photometric", choices=["standard", "robust"], default="standard")
     p.add_argument(
