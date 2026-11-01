@@ -2,36 +2,22 @@ import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Layout from './components/Layout'
 import Dashboard from './pages/Dashboard'
-import Compare from './pages/Compare'
-import Batch from './pages/Batch'
-import BatchResults from './pages/BatchResults'
 import { checkDemoMode } from './api'
 
 export default function App() {
   const [demoMode, setDemoMode] = useState(false)
-  const [checkingApi, setCheckingApi] = useState(true)
-
+  const [apiError, setApiError] = useState('')
   useEffect(() => {
-    checkDemoMode().then((isDemo) => {
-      setDemoMode(isDemo)
-      setCheckingApi(false)
-    })
+    checkDemoMode().then(setDemoMode).catch((error) => setApiError(error.message || 'API unavailable'))
   }, [])
-
   return (
     <BrowserRouter>
-      {demoMode && !checkingApi && (
-        <div className="bg-amber-600 text-slate-950 text-center py-2 text-sm font-medium">
-          <span className="material-symbols-outlined text-sm align-middle mr-1">info</span>
-          Demo Mode - Using sample data. Configure GOOGLE_MAPS_API_KEY for live satellite imagery.
-        </div>
-      )}
+      {demoMode && <div role="status" className="bg-amber-600 text-slate-950 text-center py-2">Sample mode is enabled. Model inference is unavailable in this mode.</div>}
+      {apiError && <div role="alert" className="bg-red-900 text-white text-center py-2">Model API unavailable: {apiError}. No prediction has been generated.</div>}
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Dashboard />} />
-          <Route path="compare" element={<Compare />} />
-          <Route path="batch" element={<Batch />} />
-          <Route path="batch/:jobId/results" element={<BatchResults />} />
+          <Route path="*" element={<p className="p-6">This release supports local image uploads. Return to the home page.</p>} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -1,0 +1,35 @@
+{
+  "arguments": {
+    "data": "data/whu_official_prepared",
+    "run": "<local path omitted>",
+    "arch": "unet-resnet34",
+    "pretrained": true,
+    "epochs": 40,
+    "batch_size": 4,
+    "size": 512,
+    "workers": 4,
+    "lr": 0.0003,
+    "weight_decay": 0.0001,
+    "pos_weight": 1.0,
+    "device": "cuda",
+    "seed": 42,
+    "patience": 40,
+    "min_delta": 0.0001,
+    "no_amp": false
+  },
+  "config": {
+    "arch": "unet-resnet34",
+    "image_size": 512,
+    "normalization": "imagenet_rgb_v1",
+    "seed": 42,
+    "pretrained_encoder": true,
+    "dataset_path": "data/whu_official_prepared",
+    "dataset_manifest_sha256": "d879dfa6d5a399ee5f7539a0c3e446db659d69d9f3fe55901fe015d0095edfe0",
+    "dataset_content_sha256": "538ac8569dcfd817b8557bc23ed18977de5dbba8d4b19719c82ab5ee4d1a308d"
+  },
+  "python": "3.10.11",
+  "torch": "2.5.1+cu121",
+  "numpy": "2.2.6",
+  "cuda_runtime": "12.1",
+  "device": "NVIDIA GeForce RTX 4060 Laptop GPU"
+}

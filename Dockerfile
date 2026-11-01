@@ -1,6 +1,6 @@
 # Multi-stage build for Roof Detection app
 # Stage 1: Build frontend
-FROM node:20-alpine AS frontend-builder
+FROM node:22.20.0-alpine AS frontend-builder
 
 WORKDIR /app/app
 COPY app/package*.json ./
@@ -9,37 +9,40 @@ COPY app/ ./
 RUN npm run build
 
 # Stage 2: Python backend with frontend static files
-FROM python:3.11-slim
+FROM python:3.12-slim-bookworm
 
 WORKDIR /app
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libgl1-mesa-glx \
-    libglib2.0-0 \
+    libexpat1 \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+COPY requirements-release-linux.lock ./
+RUN pip install --no-cache-dir --require-hashes -r requirements-release-linux.lock
 
 # Copy backend code
 COPY api/ ./api/
-COPY geocode_satellite.py ./
-COPY inference.py ./
+COPY roof_pipeline/ ./roof_pipeline/
 
 # Copy built frontend from stage 1
 COPY --from=frontend-builder /app/app/dist ./app/dist
 
 # Create models directory
-RUN mkdir -p models
+RUN mkdir -p models && useradd --create-home --uid 10001 roof
 
 # Environment variables
 ENV MODEL_PATH=/app/models/best.pt
+ENV ROOF_MODEL_RELEASE=/app/models/best.release.json
 ENV PYTHONUNBUFFERED=1
+ENV ROOF_CPU_THREADS=2
+ENV ROOF_DEMO_MODE=false
+USER roof
 
 # Expose port
 EXPOSE 8000
+HEALTHCHECK --interval=30s --timeout=15s --start-period=30s --retries=3 CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health/ready', timeout=10)"
 
 # Run the server
 CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]

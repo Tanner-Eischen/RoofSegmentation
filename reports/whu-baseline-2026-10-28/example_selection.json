@@ -1,0 +1,17 @@
+{
+  "policy": "4 lowest-IoU positive tiles, 4 highest-IoU positive tiles, 4 remaining random tiles (seed 42), selected after final test",
+  "samples": [
+    "whu_test_000085",
+    "whu_test_000103",
+    "whu_test_000138",
+    "whu_test_000143",
+    "whu_test_002280",
+    "whu_test_000810",
+    "whu_test_002271",
+    "whu_test_002284",
+    "whu_test_000460",
+    "whu_test_000104",
+    "whu_test_001131",
+    "whu_test_001008"
+  ]
+}

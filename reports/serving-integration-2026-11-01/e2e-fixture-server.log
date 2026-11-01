@@ -1,0 +1,9 @@
+INFO:     Started server process [41720]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:60356 (Press CTRL+C to quit)
+INFO:     127.0.0.1:51633 - "GET /api/health/ready HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51633 - "POST /api/inference HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51633 - "POST /api/inference HTTP/1.1" 400 Bad Request
+INFO:     127.0.0.1:51633 - "POST /api/batch HTTP/1.1" 503 Service Unavailable
+INFO:     127.0.0.1:51633 - "GET /api/satellite/image HTTP/1.1" 503 Service Unavailable

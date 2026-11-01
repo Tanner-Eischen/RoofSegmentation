@@ -1,20 +1,19 @@
-version: '3.8'
-
 services:
   roof-detection:
     build: .
     ports:
-      - "8000:8000"
+      - "127.0.0.1:8000:8000"
     environment:
-      - GOOGLE_MAPS_API_KEY=${GOOGLE_MAPS_API_KEY:-}
-      - MODEL_PATH=/app/models/best.pt
+      MODEL_PATH: /app/models/best.pt
+      ROOF_MODEL_RELEASE: /app/models/best.release.json
+      ROOF_DEMO_MODE: "false"
+      ROOF_CPU_THREADS: "2"
     volumes:
-      # Mount models directory for easy model updates
       - ./models:/app/models:ro
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health/ready', timeout=10)"]
       interval: 30s
-      timeout: 10s
+      timeout: 15s
       retries: 3
       start_period: 40s

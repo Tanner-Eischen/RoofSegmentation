@@ -1,73 +1,34 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-
-// Mock fetch globally
-const mockFetch = vi.fn()
-globalThis.fetch = mockFetch
-
-// Mock canvas for demo mode
-HTMLCanvasElement.prototype.getContext = vi.fn(() => ({
-  fillRect: vi.fn(),
-  beginPath: vi.fn(),
-  moveTo: vi.fn(),
-  lineTo: vi.fn(),
-  closePath: vi.fn(),
-  fill: vi.fn(),
-}))
-HTMLCanvasElement.prototype.toDataURL = vi.fn(() => 'data:image/png;base64,mockBase64Data')
-
-// Reset module cache between tests
-beforeEach(() => {
-  vi.resetModules()
-  mockFetch.mockReset()
-})
-
-describe('API client', () => {
-  it('geocode returns coordinates in demo mode', async () => {
-    // Force demo mode by making fetch fail
-    mockFetch.mockRejectedValueOnce(new Error('Network error'))
-
-    const { geocode, checkDemoMode } = await import('../api')
-
-    // First call to checkDemoMode will fail and set demo mode
-    await checkDemoMode()
-
-    const result = await geocode('123 Test St')
-
-    // In demo mode, should return mock coordinates
-    expect(result.lat).toBeDefined()
-    expect(result.lng).toBeDefined()
-    expect(result.formatted_address).toBeDefined()
-  })
-
-  it('runInferenceFromBlob returns mask and confidence in demo mode', async () => {
-    // Force demo mode
-    mockFetch.mockRejectedValueOnce(new Error('Network error'))
-
-    const { runInferenceFromBlob, checkDemoMode } = await import('../api')
-
-    // Initialize demo mode
-    await checkDemoMode()
-
-    const blob = new Blob(['test'], { type: 'image/png' })
-    const result = await runInferenceFromBlob(blob)
-
-    expect(result.mask_base64).toBeDefined()
-    expect(result.confidence).toBeDefined()
-    expect(result.roof_area_px).toBeDefined()
-    expect(typeof result.confidence).toBe('number')
-    expect(result.confidence).toBeGreaterThanOrEqual(0)
-    expect(result.confidence).toBeLessThanOrEqual(100)
-  })
-
-  it('getDemoSamples returns sample data', async () => {
-    const { getDemoSamples } = await import('../api')
-
-    const samples = getDemoSamples()
-
-    expect(Array.isArray(samples)).toBe(true)
-    expect(samples.length).toBeGreaterThan(0)
-    expect(samples[0]).toHaveProperty('address')
-    expect(samples[0]).toHaveProperty('confidence')
-    expect(samples[0]).toHaveProperty('roof_area_px')
-  })
-})
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+const mockFetch = vi.fn();
+beforeEach(() => { vi.resetModules(); vi.stubEnv('VITE_DEMO_MODE', 'false'); vi.stubGlobal('fetch', mockFetch); mockFetch.mockReset(); });
+afterEach(() => { vi.unstubAllEnvs(); vi.unstubAllGlobals(); });
+describe('API failure boundaries', () => {
+  it('propagates outages without enabling demo or synthesizing predictions', async () => {
+    mockFetch.mockRejectedValue(new Error('Network unavailable'));
+    const api = await import('../api');
+    await expect(api.checkDemoMode()).rejects.toThrow('Network unavailable');
+    expect(api.isDemoMode()).toBe(false);
+    await expect(api.runInference(new File(['x'], 'x.png'))).rejects.toThrow('Network unavailable');
+  });
+  it('requires explicit demo and rejects inference without fetching', async () => {
+    vi.stubEnv('VITE_DEMO_MODE', 'true');
+    const api = await import('../api');
+    expect(await api.checkDemoMode()).toBe(true);
+    await expect(api.runInference(new File(['x'], 'x.png'))).rejects.toThrow('Sample mode does not run inference');
+    expect(mockFetch).not.toHaveBeenCalled();
+  });
+  it('propagates readiness and inference errors', async () => {
+    mockFetch.mockResolvedValue({ ok:false, status:503, json:async () => ({ detail:'Checkpoint unavailable' }) });
+    const api = await import('../api');
+    await expect(api.checkDemoMode()).rejects.toThrow('Checkpoint unavailable');
+    await expect(api.runInference(new File(['x'], 'x.png'))).rejects.toThrow('Checkpoint unavailable');
+  });
+  it('sends real upload bytes through multipart', async () => {
+    mockFetch.mockResolvedValue({ ok:true, json:async () => ({ mode:'real', roof_area_px:10 }) });
+    const api = await import('../api');
+    const file = new File(['actual bytes'], 'roof.png', { type:'image/png' });
+    expect((await api.runInference(file)).mode).toBe('real');
+    expect(mockFetch.mock.calls[0][0]).toBe('/api/inference');
+    expect(mockFetch.mock.calls[0][1].body.get('file').name).toBe('roof.png');
+  });
+});

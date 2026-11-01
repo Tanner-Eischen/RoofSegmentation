@@ -1,0 +1,73 @@
+{
+  "verified_at_utc": "2026-11-01T05:16:45.764294+00:00",
+  "checks": {
+    "per_image_aggregate": {
+      "samples": 2416,
+      "confusion_counts": {
+        "tp": 66222657,
+        "fp": 3752381,
+        "fn": 4255685,
+        "tn": 559109181
+      },
+      "metrics": {
+        "iou": 0.8921192509468081,
+        "dice": 0.942984170263471,
+        "precision": 0.9463754346228437,
+        "recall": 0.9396171237966977,
+        "f1": 0.942984170263471,
+        "pixel_accuracy": 0.9873558164432349
+      }
+    },
+    "checkpoint_sha256": "2c5757995dafaa206abac4e22e384cdef78b4d93ab9026975050307ac2d9c7c5",
+    "dataset_manifest_sha256": "d879dfa6d5a399ee5f7539a0c3e446db659d69d9f3fe55901fe015d0095edfe0",
+    "dataset_content_status": "full original image/mask content hash recomputed and matched",
+    "source_snapshot_members_verified": 15,
+    "source_snapshot_sha256": "072ec0fa29faa5c8e06e53c7d65a9546885bcb346446eb1b69db5177cb8504a9",
+    "epoch_history_count": 40
+  },
+  "original_artifacts": {
+    "test_metrics.json": {
+      "original_run_relative_path": "test/test_metrics.json",
+      "original_sha256": "146e6f3099ed0c566025247b9267b0cd00884417b94709c78d2bdac38227a3f0"
+    },
+    "training_summary.json": {
+      "original_run_relative_path": "training_summary.json",
+      "original_sha256": "20d57799499a010f0495c05f7af6c9cc60f79ca3836dbb1f483687b6e8c58969"
+    },
+    "history.json": {
+      "original_run_relative_path": "history.json",
+      "original_sha256": "9e68094cd2bc89f093ee33fa840575bbea103abefcc336dfe62d4521a8293429"
+    },
+    "experiment.json": {
+      "original_run_relative_path": "experiment.json",
+      "original_sha256": "5e729141d812b28b8e464d0afefa9481101048b36c2b98c508bd7265d71f7202"
+    },
+    "source_manifest.json": {
+      "original_run_relative_path": "source_manifest.json",
+      "original_sha256": "1d035345ce99dea2268f69f39b95b4de390a7dacdbc4976db6f3f83e29d2882b"
+    },
+    "environment_versions.json": {
+      "original_run_relative_path": "environment_versions.json",
+      "original_sha256": "320935e6fb7afcf5a271c099f248eb4514260bb58c6f693a206b798a22406ffb"
+    },
+    "example_selection.json": {
+      "original_run_relative_path": "figures/example_selection.json",
+      "original_sha256": "bbad0f3716024f9f34c3766a44548df9ddd38206066bafa9c257d56d87a5e3ff"
+    },
+    "test_per_image.csv": {
+      "original_run_relative_path": "test/test_per_image.csv",
+      "original_sha256": "49e5acd010ade2daa0dff86fc3c2f5ba05614bb1e43bbcd37db80339b19a6721"
+    },
+    "learning_curve.png": {
+      "original_run_relative_path": "figures/learning_curve.png",
+      "original_sha256": "b814bd25e079d4ffa4cc846c9fe3a0fdd29c7e1aa28327f62b14e109a1b8a0e9"
+    }
+  },
+  "not_run": [
+    "new model inference",
+    "new training",
+    "browser verification",
+    "container verification",
+    "remote publication"
+  ]
+}

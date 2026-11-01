@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "project_id": "building-segmentation",
+  "release_id": "whu-baseline-2026-10-28",
+  "source_revision": "68f906e39d5bb259cb57532bdbaaa9769ec6c0b4",
+  "source_worktree_dirty": true,
+  "tested_revision": null,
+  "tested_source_identity": "source_manifest.json",
+  "evidence_source_revision": "4cf6fa12c635610d1b2832e0e0b5aa96329b4561",
+  "contribution": "Paired-data training, content-bound evaluation, validation calibration and WHU baseline analysis.",
+  "status": "local_evidence_packet_verified_not_published",
+  "source_url": "https://github.com/Tanner-Eischen/RoofSegmentation",
+  "evidence_urls": {
+    "report": "https://github.com/Tanner-Eischen/RoofSegmentation/blob/4cf6fa12c635610d1b2832e0e0b5aa96329b4561/docs/WHU_BASELINE_2026-10-28.md"
+  },
+  "packet_path": "reports/whu-baseline-2026-10-28/",
+  "published_packet_url": null,
+  "checks": {
+    "runtime": "original GPU run recorded; no new inference",
+    "metrics": "independently_artifact_checked",
+    "browser": "not_run",
+    "model_sha256": "2c5757995dafaa206abac4e22e384cdef78b4d93ab9026975050307ac2d9c7c5",
+    "dataset_content": "full original image/mask content hash recomputed and matched"
+  },
+  "headline_results": [
+    {
+      "metric": "global_pixel_iou",
+      "value": 0.8921192509468081,
+      "unit": "fraction",
+      "denominator": "TP + FP + FN = 74,230,723 pixels",
+      "samples": 2416,
+      "scope": "Official WHU test partition, 512 x 512 tiles",
+      "selection_protocol": "Validation-selected epoch 32, threshold 0.50",
+      "evidence": [
+        "test_metrics.json",
+        "test_per_image.csv"
+      ]
+    }
+  ],
+  "limitations": [
+    "WHU binary building extent; no roof material, damage, instance or Minnesota validation.",
+    "Original test used frozen validation threshold; later test reuse makes follow-up comparisons development work.",
+    "Training source was dirty on its recorded base commit; per-file hashes identify the exact snapshot.",
+    "Metrics were recomputed from original rows; inference and training were not rerun for this packet.",
+    "Imagery redistribution rights are unconfirmed; no imagery, masks or qualitative image panels are included.",
+    "Legacy address demo is not verified against this checkpoint."
+  ],
+  "assets": [
+    {
+      "path": "learning_curve.png",
+      "sha256": "b814bd25e079d4ffa4cc846c9fe3a0fdd29c7e1aa28327f62b14e109a1b8a0e9",
+      "attribution": "Tanner Eischen; original-run training/validation metric plot; no source imagery"
+    }
+  ],
+  "access": {
+    "source": "public",
+    "packet": "local_pending_publication",
+    "imagery": "excluded_pending_rights_review",
+    "weights": "local_not_copied"
+  },
+  "last_verified_at": "2026-11-01T05:16:45.764294+00:00"
+}

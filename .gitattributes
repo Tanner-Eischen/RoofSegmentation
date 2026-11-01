@@ -1,0 +1,2 @@
+# Evidence manifests bind exact bytes; Git newline conversion must preserve them.
+reports/** -text whitespace=trailing-space,space-before-tab,cr-at-eol

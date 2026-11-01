@@ -1,0 +1,21 @@
+{
+  "base_commit": "68f906e39d5bb259cb57532bdbaaa9769ec6c0b4",
+  "worktree_dirty": true,
+  "sha256": {
+    "requirements-roof-pipeline.txt": "80a84393ff535e927e3ef788222cf08eefa5c452d5b95a22eca5c0773bc489bc",
+    "roof_pipeline\\__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "roof_pipeline\\common.py": "09818f6dbd6c3425d14096e64bd72b85d2ba1e24d25988eb6bd460a105adae89",
+    "roof_pipeline\\dataset.py": "a0e0ec6c396a30c74938045acc08f94350714ba60c6687844aae2395704b35ee",
+    "roof_pipeline\\evaluate.py": "2eff7d05a46af6e43171db74563e66eff7a4cc54b46258616ca1b2a07f74af64",
+    "roof_pipeline\\metrics.py": "82736d8629aef153ac57fb6e5a5823427500eb0d8c88a47e3063ff8d4971ab18",
+    "roof_pipeline\\models.py": "6d855f8b99017c37c1aa2437e88c02ad400d36ccb2a1efe736dc56babc86290e",
+    "roof_pipeline\\predict.py": "982312da3924a0c5fa4ad79276eef1d267f746a689a5bdc81884dabaf4e8d673",
+    "roof_pipeline\\prepare.py": "0be7ba209fb721f3cc349e8a4bb5ba574e269c08fbd7ea78404be694226b0322",
+    "roof_pipeline\\train.py": "065750c83f76a18e0329f541b1eb18cf97e682e8f6ba8ac95808d4b8ee5a78d7",
+    "scripts\\download_whu.py": "5faf464397c54a645ffb23152c3a4db75b6808a906cfae5bddb38d345941886d",
+    "scripts\\fetch_remote_weights.py": "040d0f256239dc32b731721648700944121ed5d7efbebae967a7a5350959c4fa",
+    "scripts\\make_smoke_dataset.py": "dd2ee54cd34a6df832ee05b0e8d24670c9079c323f2961cfe5af1631165666d6",
+    "scripts\\prepare_airs.py": "4ee77d3b3b66b4ec68dd82ca8f2e9e34ebcd1380111de18a76f565222fbb7dbe",
+    "scripts\\prepare_airs_tiled.py": "c7e788cf88856c1012115aeaa91a5d2fe17b38b93d6b19cf0d370bfe5904547b"
+  }
+}

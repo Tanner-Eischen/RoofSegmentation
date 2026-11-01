@@ -1,0 +1,14 @@
+{
+  "status": "passed",
+  "scope": "Actual temporary Tiny checkpoint HTTP server supporting authored E2E source; no browser executed",
+  "readiness_http_status": 200,
+  "inference_http_status": 200,
+  "input_dimensions": [
+    43,
+    29
+  ],
+  "invalid_image_status": 400,
+  "remote_batch_status": 503,
+  "satellite_status": 503,
+  "browser_assertions": "authored_not_run"
+}

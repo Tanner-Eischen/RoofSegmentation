@@ -11,8 +11,7 @@ export default function Layout() {
           </Link>
           <nav className="hidden md:flex gap-6">
             <Link to="/" className="text-slate-400 hover:text-white text-sm font-medium">Dashboard</Link>
-            <Link to="/compare" className="text-slate-400 hover:text-white text-sm font-medium">Compare</Link>
-            <Link to="/batch" className="text-slate-400 hover:text-white text-sm font-medium">Batch</Link>
+            <span className="text-slate-500 text-sm">Local image upload</span>
           </nav>
         </div>
         <div className="flex items-center gap-2">

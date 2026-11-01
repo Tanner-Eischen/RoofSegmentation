@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "project_id": "building-segmentation",
+  "release_id": "serving-integration-2026-11-01",
+  "source_revision": "4cf6fa12c635610d1b2832e0e0b5aa96329b4561",
+  "source_worktree_dirty": true,
+  "tested_revision": null,
+  "tested_source_identity": "final-real-cpu-proof/proof.json#/source_sha256",
+  "contribution": "Adopted existing real CPU service and local-upload app; added hash-bound model releases, exact probability artifacts and shared CLI/HTTP identity/parity checks.",
+  "status": "local_single_input_cpu_integration_verified_not_published",
+  "source_url": "https://github.com/Tanner-Eischen/RoofSegmentation",
+  "published_packet_url": null,
+  "packet_path": "reports/serving-integration-2026-11-01/",
+  "checks": {
+    "runtime": "real baseline checkpoint via CPU CLI and loopback HTTP; generated non-square fixture",
+    "browser": "not_run_user_prohibited",
+    "container": "not_run_engine_unavailable",
+    "deployment": "not_run",
+    "targeted_python_tests": 45,
+    "frontend_unit_tests": 8,
+    "frontend_lint_build": "passed",
+    "compose_config": "passed",
+    "e2e_test_contracts": "authored_not_run; actual temporary Tiny-checkpoint backend separately HTTP-checked",
+    "e2e_source_syntax": "esbuild TypeScript transpilation passed; no browser execution or typecheck claim"
+  },
+  "headline_results": [],
+  "numerical_integration_checks": {
+    "evidence": "final-real-cpu-proof/proof.json",
+    "evidence_sha256": "9813bb85b8a006a2260225c10ba2032c71499baf7b88411fcf360400ca9f9e7e",
+    "cli_api_max_abs_difference": 0.0,
+    "independent_forward_max_abs_difference": 9.313225746154785e-10,
+    "unit": "probability fraction",
+    "tolerance_absolute": 1e-06,
+    "denominator": "one generated 97x131 RGB fixture, 12707 valid pixels",
+    "thresholded_masks_identical": true,
+    "accuracy_claim": false,
+    "foreground_pixels": 0
+  },
+  "model_release_sha256": "54832764edf43ccdfba1243bbfc3f8ad73ac97f58dd6665b9bb071b77248b9b0",
+  "limitations": [
+    "Integration is one generated fixture; no new model quality or geographic performance measurement.",
+    "CPU float32 PNG/JPEG/WebP image-space serving only; physical area is unavailable.",
+    "No new container, browser, deployment or full-dataset result; old container evidence belongs to older source.",
+    "Current source is uncommitted and unpublished; original RS-01 scientific packet remains separate and unchanged.",
+    "Mean foreground probability is uncalibrated; simplified external contours omit holes and tiny components."
+  ],
+  "assets": [
+    {
+      "path": "final-real-cpu-proof/generated-fixture.png",
+      "sha256": "27d688b896818cc4088d57e84e627c51a64240aa9764ef4b2ebe1fe04b44fb5d",
+      "attribution": "Generated numerical RGB fixture; no dataset imagery"
+    }
+  ],
+  "access": {
+    "source": "public_baseline",
+    "current_source": "local_pending_publication",
+    "weights": "local_not_copied",
+    "imagery": "no_dataset_imagery"
+  },
+  "verification_date": "2026-11-01"
+}

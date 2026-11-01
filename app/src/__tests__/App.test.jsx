@@ -1,20 +1,19 @@
-import { render, screen } from '@testing-library/react'
-import { describe, it, expect, vi } from 'vitest'
-
-// Mock the api module before importing App
-vi.mock('../api', () => ({
-  checkDemoMode: () => Promise.resolve(true),
-  isDemoMode: () => true,
-}))
-
-describe('App', () => {
-  it('renders without crashing', async () => {
-    // Import App after mocks are set up
-    const { default: App } = await import('../App')
-
-    // App already contains BrowserRouter, so render directly
-    const { container } = render(<App />)
-    expect(container).toBeTruthy()
-    expect(await screen.findByText(/Demo Mode - Using sample data/i)).toBeInTheDocument()
-  })
-})
+import { render, screen, cleanup } from '@testing-library/react';
+import { describe, it, expect, vi, afterEach } from 'vitest';
+const check = vi.fn();
+vi.mock('../api', () => ({ checkDemoMode:()=>check(), runInference:vi.fn() }));
+import App from '../App';
+afterEach(cleanup);
+describe('App state', () => {
+  it('shows an explicit sample mode', async () => {
+    check.mockResolvedValue(true);
+    render(<App />);
+    expect(await screen.findByRole('status')).toHaveTextContent('Model inference is unavailable');
+  });
+  it('keeps API outages visible', async () => {
+    check.mockRejectedValue(new Error('No model'));
+    render(<App />);
+    expect(await screen.findByRole('alert')).toHaveTextContent('No prediction has been generated');
+    expect(screen.queryByRole('status')).not.toBeInTheDocument();
+  });
+});

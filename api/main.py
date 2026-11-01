@@ -1,245 +1,261 @@
-"""
-FastAPI backend: geocode, satellite, inference, batch.
-Set MODEL_PATH and GOOGLE_MAPS_API_KEY in env.
-"""
+"""Bounded local-upload FastAPI application. Run: uvicorn api.main:app."""
 
-# Load .env file if it exists
-from dotenv import load_dotenv
-load_dotenv()
+from __future__ import annotations
 
+import asyncio
 import base64
-import csv
-import io
+import math
 import os
-import time
-import uuid
+from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
 
+import torch
 from fastapi import FastAPI, File, HTTPException, UploadFile
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse, Response
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
-from geocode_satellite import geocode, satellite_tile_url, fetch_satellite_image_bytes
-from inference import image_bytes_to_mask_and_polygons, load_model
-
-MODEL_PATH = os.environ.get(
-    "MODEL_PATH",
-    str(Path(__file__).resolve().parent.parent / "models" / "cleaned-dataset" / "best.pt"),
-)
-# Allow directory so we can point to model dir and auto-pick best.pt
-if os.path.isdir(MODEL_PATH):
-    MODEL_PATH = str(Path(MODEL_PATH) / "best.pt")
-
-# Check for built frontend (Docker deployment)
-FRONTEND_DIST = Path(__file__).resolve().parent.parent / "app" / "dist"
-API_ROUTE_PREFIX = "api/"
-
-app = FastAPI(title="Roof Detection API")
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:8000"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+from .inference import (
+    ImageTooLarge,
+    InferenceBusy,
+    InvalidImage,
+    ModelService,
+    ModelUnavailable,
 )
 
 
-# ---------- In-memory batch jobs ----------
-BatchJob = dict[str, Any]
-batch_jobs: dict[str, BatchJob] = {}
+def _flag(name, default=False):
+    value = os.environ.get(name, str(default)).lower()
+    if value not in {"true", "false"}:
+        raise ValueError(f"{name} must be true or false")
+    return value == "true"
 
 
-def ensure_model_loaded():
-    try:
-        load_model(MODEL_PATH)
-    except FileNotFoundError as e:
-        raise HTTPException(status_code=503, detail=f"Model not found: {e}")
+@dataclass(frozen=True)
+class Settings:
+    model_path: str
+    model_release: str | None = None
+    demo_mode: bool = False
+    max_upload_bytes: int = 8_000_000
+    max_pixels: int = 4_194_304
+    max_batch_images: int = 4
+    inference_timeout: float = 60.0
+    cpu_threads: int = 2
+
+    def __post_init__(self):
+        for name in (
+            "max_upload_bytes",
+            "max_pixels",
+            "max_batch_images",
+            "cpu_threads",
+        ):
+            if type(getattr(self, name)) is not int or getattr(self, name) <= 0:
+                raise ValueError(f"{name} must be a positive integer")
+        if (
+            not 1 <= self.cpu_threads <= 4
+            or not math.isfinite(self.inference_timeout)
+            or not 0 < self.inference_timeout <= 300
+        ):
+            raise ValueError("cpu_threads must be 1..4 and timeout must be (0,300]")
+        if self.max_batch_images > 8:
+            raise ValueError("At most eight images per batch")
+
+    @classmethod
+    def from_env(cls):
+        return cls(
+            model_path=os.environ.get("MODEL_PATH", "models/roof_pipeline/best.pt"),
+            model_release=os.environ.get("ROOF_MODEL_RELEASE"),
+            demo_mode=_flag("ROOF_DEMO_MODE"),
+            max_upload_bytes=int(os.environ.get("ROOF_MAX_UPLOAD_BYTES", "8000000")),
+            max_pixels=int(os.environ.get("ROOF_MAX_PIXELS", "4194304")),
+            max_batch_images=int(os.environ.get("ROOF_MAX_BATCH_IMAGES", "4")),
+            cpu_threads=int(os.environ.get("ROOF_CPU_THREADS", "2")),
+            inference_timeout=float(os.environ.get("ROOF_INFERENCE_TIMEOUT", "60")),
+        )
 
 
-# ---------- Routes ----------
+class RequestLimit:
+    """Bound body bytes before multipart parsing, including chunked uploads."""
 
+    def __init__(self, app, max_bytes):
+        self.app, self.max_bytes = app, max_bytes
 
-@app.get("/api/geocode")
-def api_geocode(address: str):
-    """Return { lat, lng, formatted_address } for address."""
-    result = geocode(address)
-    if result is None:
-        raise HTTPException(status_code=404, detail="Geocode failed or no API key")
-    return result
+    async def __call__(self, scope, receive, send):
+        if scope["type"] != "http" or scope["method"] not in {"POST", "PUT", "PATCH"}:
+            return await self.app(scope, receive, send)
+        body = bytearray()
+        while True:
+            event = await receive()
+            if event["type"] == "http.disconnect":
+                return
+            part = event.get("body", b"")
+            if len(body) + len(part) > self.max_bytes:
+                return await JSONResponse(
+                    {"detail": "Request exceeds byte limit"}, status_code=413
+                )(scope, receive, send)
+            body.extend(part)
+            if not event.get("more_body", False):
+                break
+        delivered = False
 
+        async def replay():
+            nonlocal delivered
+            if not delivered:
+                delivered = True
+                return {"type": "http.request", "body": bytes(body), "more_body": False}
+            return await receive()
 
-@app.get("/api/satellite")
-def api_satellite(lat: float, lng: float, zoom: int = 20, width: int = 640, height: int = 640):
-    """Return { url } for satellite tile image (img src)."""
-    url = satellite_tile_url(lat, lng, zoom=zoom, width=width, height=height)
-    if url is None:
-        raise HTTPException(status_code=503, detail="Satellite URL not available (check API key)")
-    return {"url": url}
-
-
-@app.get("/api/satellite/image")
-def api_satellite_image(lat: float, lng: float, zoom: int = 20, width: int = 640, height: int = 640):
-    """Proxy satellite image bytes (e.g. for inference). Returns PNG bytes."""
-    data = fetch_satellite_image_bytes(lat, lng, zoom=zoom, width=width, height=height)
-    if data is None:
-        raise HTTPException(status_code=503, detail="Could not fetch satellite image")
-    return Response(content=data, media_type="image/png")
-
-
-@app.post("/api/inference")
-async def api_inference(file: UploadFile = File(...)):
-    """
-    Upload an image file; returns mask (base64 PNG), polygons, roof_area_px, confidence.
-    """
-    ensure_model_loaded()
-    content = await file.read()
-    try:
-        mask_bytes, polygons, roof_area_px, confidence = image_bytes_to_mask_and_polygons(content, MODEL_PATH)
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
-    mask_b64 = base64.b64encode(mask_bytes).decode("utf-8")
-    return {
-        "mask_base64": mask_b64,
-        "polygons": polygons,
-        "roof_area_px": roof_area_px,
-        "confidence": round(confidence, 1),
-    }
+        return await self.app(scope, replay, send)
 
 
 class BatchRequest(BaseModel):
-    addresses: list[str]
+    addresses: list[str] = Field(min_length=1, max_length=8)
 
 
-@app.post("/api/batch")
-async def api_batch_create(body: BatchRequest):
-    """Queue a batch job. Returns job_id. Processing runs in background."""
-    job_id = str(uuid.uuid4())
-    batch_jobs[job_id] = {
-        "job_id": job_id,
-        "status": "queued",
-        "addresses": body.addresses,
-        "results": [],
-        "created_at": time.time(),
-        "total": len(body.addresses),
-        "done": 0,
-    }
-    # Start background processing (simple sequential for MVP)
-    import asyncio
-    asyncio.create_task(process_batch_job(job_id))
-    return {"job_id": job_id, "status": "queued"}
+def create_app(settings: Settings | None = None):
+    settings = settings or Settings.from_env()
+    torch.set_num_threads(settings.cpu_threads)
+    application = FastAPI(title="Roof Segmentation Local Upload API", version="0.3.1")
+    application.add_middleware(
+        RequestLimit,
+        max_bytes=settings.max_upload_bytes * settings.max_batch_images + 65_536,
+    )
+    service = ModelService(
+        settings.model_path,
+        release_manifest=settings.model_release,
+        max_bytes=settings.max_upload_bytes,
+        max_pixels=settings.max_pixels,
+    )
+    application.state.model_service = service
+    application.state.settings = settings
 
+    @application.get("/api/health")
+    @application.get("/api/health/live")
+    def health():
+        return {
+            "status": "ok",
+            "mode": "demo" if settings.demo_mode else "real",
+            "model_loaded": service.loaded,
+        }
 
-async def process_batch_job(job_id: str):
-    job = batch_jobs.get(job_id)
-    if not job or job["status"] != "queued":
-        return
-    job["status"] = "processing"
-    try:
-        ensure_model_loaded()  # Uses cached model
-    except HTTPException:
-        job["status"] = "failed"
-        job["results"] = [{"error": "Model not found", "status": "failed"}]
-        return
-    results = []
-    for addr in job["addresses"]:
+    @application.get("/api/ready")
+    @application.get("/api/health/ready")
+    def ready():
+        if settings.demo_mode:
+            return JSONResponse(
+                {
+                    "status": "not_ready",
+                    "mode": "demo",
+                    "detail": "Demo mode does not run inference",
+                },
+                status_code=503,
+            )
         try:
-            geo = geocode(addr)
-            if not geo:
-                results.append({"address": addr, "status": "failed", "error": "Geocode failed"})
-                continue
-            img_bytes = fetch_satellite_image_bytes(geo["lat"], geo["lng"], zoom=20, width=640, height=640)
-            if not img_bytes:
-                results.append({"address": addr, "status": "failed", "error": "No satellite image"})
-                continue
-            mask_bytes, polygons, area, confidence = image_bytes_to_mask_and_polygons(img_bytes, MODEL_PATH)
-            mask_b64 = base64.b64encode(mask_bytes).decode("utf-8")
-            results.append({
-                "address": addr,
-                "formatted_address": geo.get("formatted_address", addr),
-                "status": "complete",
-                "mask_base64": mask_b64,
-                "polygons": polygons,
-                "roof_area_px": area,
-                "confidence": round(confidence, 1),
-            })
-        except Exception as e:
-            results.append({"address": addr, "status": "failed", "error": str(e)})
-        job["done"] = len(results)
-        job["results"] = results
-    job["status"] = "complete"
+            _, metadata = service.load()
+            return {"status": "ready", "mode": "real", "model": metadata}
+        except ModelUnavailable:
+            return JSONResponse(
+                {
+                    "status": "not_ready",
+                    "mode": "real",
+                    "detail": "Configured checkpoint or model release is missing or invalid",
+                },
+                status_code=503,
+            )
+
+    async def infer(file):
+        try:
+            if settings.demo_mode:
+                raise HTTPException(
+                    503, "Demo mode does not run inference; configure a real checkpoint"
+                )
+            content = await file.read(settings.max_upload_bytes + 1)
+        finally:
+            await file.close()
+        try:
+            result = await asyncio.wait_for(
+                asyncio.to_thread(service.predict, content),
+                timeout=settings.inference_timeout,
+            )
+            result["mask_base64"] = base64.b64encode(result.pop("mask_png")).decode(
+                "ascii"
+            )
+            result["probability_base64"] = base64.b64encode(
+                result.pop("probability_npy")
+            ).decode("ascii")
+            return result
+        except ImageTooLarge as exc:
+            raise HTTPException(413, str(exc)) from exc
+        except InvalidImage as exc:
+            raise HTTPException(400, str(exc)) from exc
+        except (ModelUnavailable, InferenceBusy) as exc:
+            raise HTTPException(503, str(exc)) from exc
+        except TimeoutError as exc:
+            raise HTTPException(
+                504, "Inference timed out; active work may still be finishing"
+            ) from exc
+        except Exception as exc:
+            raise HTTPException(500, "Inference failed") from exc
+
+    @application.post("/api/inference")
+    async def inference(file: UploadFile = File(...)):
+        return await infer(file)
+
+    @application.post("/api/inference/batch")
+    async def image_batch(files: list[UploadFile] = File(...)):
+        try:
+            if not 1 <= len(files) <= settings.max_batch_images:
+                raise HTTPException(
+                    413, f"Batch must contain 1..{settings.max_batch_images} images"
+                )
+            results = [await infer(file) for file in files]
+        finally:
+            for file in files:
+                await file.close()
+        return {
+            "status": "complete",
+            "mode": "real",
+            "count": len(results),
+            "results": results,
+        }
+
+    def remote_unavailable():
+        raise HTTPException(
+            503,
+            "Remote imagery/address batches are unavailable in this local-upload release",
+        )
+
+    for route in (
+        "/api/geocode",
+        "/api/satellite",
+        "/api/satellite/image",
+        "/api/batch/{job_id}",
+    ):
+        application.get(route)(remote_unavailable)
+
+    @application.post("/api/batch")
+    def address_batch(body: BatchRequest):
+        remote_unavailable()
+
+    @application.post("/api/batch/upload")
+    def address_csv():
+        remote_unavailable()
+
+    frontend = Path(__file__).resolve().parents[1] / "app" / "dist"
+    if (frontend / "assets").is_dir():
+        application.mount(
+            "/assets", StaticFiles(directory=frontend / "assets"), name="assets"
+        )
+
+    @application.get("/{path:path}")
+    def static_page(path: str):
+        if path == "api" or path.startswith("api/"):
+            raise HTTPException(404, "Unknown API route")
+        if (frontend / "index.html").is_file():
+            return FileResponse(frontend / "index.html")
+        return JSONResponse({"detail": "Frontend build unavailable"}, status_code=404)
+
+    return application
 
 
-@app.get("/api/batch/{job_id}")
-def api_batch_status(job_id: str):
-    """Return job status and results when complete."""
-    job = batch_jobs.get(job_id)
-    if not job:
-        raise HTTPException(status_code=404, detail="Job not found")
-    return job
-
-
-# ---------- CSV batch: accept file upload ----------
-
-
-@app.post("/api/batch/upload")
-async def api_batch_upload_csv(file: UploadFile = File(...)):
-    """
-    Upload CSV with address column (header: address or Address).
-    Returns job_id.
-    """
-    content = await file.read()
-    try:
-        text = content.decode("utf-8")
-    except Exception:
-        raise HTTPException(status_code=400, detail="Invalid UTF-8")
-    reader = csv.DictReader(io.StringIO(text))
-    addresses = []
-    for row in reader:
-        addr = row.get("address") or row.get("Address") or row.get("address_1") or ""
-        addr = addr.strip()
-        if addr:
-            addresses.append(addr)
-    if not addresses:
-        raise HTTPException(status_code=400, detail="No addresses found in CSV")
-    return await api_batch_create(BatchRequest(addresses=addresses))
-
-
-@app.get("/api/health")
-def health():
-    try:
-        load_model(MODEL_PATH)
-        return {"status": "ok", "model_loaded": True}
-    except FileNotFoundError:
-        return {"status": "ok", "model_loaded": False}
-
-
-# ---------- Static file serving for frontend (Docker deployment) ----------
-
-# Mount assets directory if built frontend exists
-ASSETS_DIR = FRONTEND_DIST / "assets"
-if ASSETS_DIR.exists():
-    app.mount("/assets", StaticFiles(directory=str(ASSETS_DIR)), name="assets")
-
-
-@app.get("/")
-async def serve_frontend():
-    """Serve the frontend index.html for root path."""
-    if FRONTEND_DIST.exists():
-        return FileResponse(str(FRONTEND_DIST / "index.html"))
-    return {"message": "Roof Detection API. Frontend not built - run from app/ directory in dev mode."}
-
-
-@app.get("/{path:path}")
-async def serve_frontend_routes(path: str):
-    """Serve frontend for client-side routing (SPA)."""
-    # Don't intercept API routes
-    if path.startswith(API_ROUTE_PREFIX):
-        raise HTTPException(status_code=404, detail="Not found")
-
-    # Serve index.html for all other routes (SPA client-side routing)
-    if FRONTEND_DIST.exists():
-        return FileResponse(str(FRONTEND_DIST / "index.html"))
-    raise HTTPException(status_code=404, detail="Frontend not built")
+app = create_app()

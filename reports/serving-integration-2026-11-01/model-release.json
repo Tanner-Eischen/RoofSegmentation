@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "model_id": "roof-pipeline-2c5757995dafaa20",
+  "artifact_format": "roof_pipeline_state_dict_v1",
+  "weights_sha256": "2c5757995dafaa206abac4e22e384cdef78b4d93ab9026975050307ac2d9c7c5",
+  "architecture": "unet-resnet34",
+  "input_channels": 3,
+  "image_size": 512,
+  "normalization": "imagenet_rgb_v1",
+  "threshold": 0.5,
+  "aspp_rates": null,
+  "boundary_supervision": false,
+  "training_dataset_content_sha256": "538ac8569dcfd817b8557bc23ed18977de5dbba8d4b19719c82ab5ee4d1a308d",
+  "training_dataset_manifest_sha256": "d879dfa6d5a399ee5f7539a0c3e446db659d69d9f3fe55901fe015d0095edfe0",
+  "training_source": {
+    "base_revision": "68f906e39d5bb259cb57532bdbaaa9769ec6c0b4",
+    "worktree_dirty": true,
+    "manifest_sha256": "1d035345ce99dea2268f69f39b95b4de390a7dacdbc4976db6f3f83e29d2882b",
+    "file_sha256": {
+      "requirements-roof-pipeline.txt": "80a84393ff535e927e3ef788222cf08eefa5c452d5b95a22eca5c0773bc489bc",
+      "roof_pipeline\\__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "roof_pipeline\\common.py": "09818f6dbd6c3425d14096e64bd72b85d2ba1e24d25988eb6bd460a105adae89",
+      "roof_pipeline\\dataset.py": "a0e0ec6c396a30c74938045acc08f94350714ba60c6687844aae2395704b35ee",
+      "roof_pipeline\\evaluate.py": "2eff7d05a46af6e43171db74563e66eff7a4cc54b46258616ca1b2a07f74af64",
+      "roof_pipeline\\metrics.py": "82736d8629aef153ac57fb6e5a5823427500eb0d8c88a47e3063ff8d4971ab18",
+      "roof_pipeline\\models.py": "6d855f8b99017c37c1aa2437e88c02ad400d36ccb2a1efe736dc56babc86290e",
+      "roof_pipeline\\predict.py": "982312da3924a0c5fa4ad79276eef1d267f746a689a5bdc81884dabaf4e8d673",
+      "roof_pipeline\\prepare.py": "0be7ba209fb721f3cc349e8a4bb5ba574e269c08fbd7ea78404be694226b0322",
+      "roof_pipeline\\train.py": "065750c83f76a18e0329f541b1eb18cf97e682e8f6ba8ac95808d4b8ee5a78d7",
+      "scripts\\download_whu.py": "5faf464397c54a645ffb23152c3a4db75b6808a906cfae5bddb38d345941886d",
+      "scripts\\fetch_remote_weights.py": "040d0f256239dc32b731721648700944121ed5d7efbebae967a7a5350959c4fa",
+      "scripts\\make_smoke_dataset.py": "dd2ee54cd34a6df832ee05b0e8d24670c9079c323f2961cfe5af1631165666d6",
+      "scripts\\prepare_airs.py": "4ee77d3b3b66b4ec68dd82ca8f2e9e34ebcd1380111de18a76f565222fbb7dbe",
+      "scripts\\prepare_airs_tiled.py": "c7e788cf88856c1012115aeaa91a5d2fe17b38b93d6b19cf0d370bfe5904547b"
+    }
+  },
+  "preprocessing_version": "imagenet-rgb-edgepad-tiled-v1",
+  "overlap": 64,
+  "image_policy": "No full-image resize; edge padding; weighted probability blending before thresholding",
+  "alpha_policy": "Pillow RGB conversion discards alpha without compositing; grayscale repeats into RGB",
+  "gsd_policy": "Native image pixels; GSD is not inferred or validated",
+  "label_definition": "binary building extent",
+  "limitations": [
+    "Image-space outputs only; no material, damage, instance or physical-area claim.",
+    "Preparation verifies metadata and artifact identity, not model accuracy or serving readiness."
+  ]
+}
