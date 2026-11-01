@@ -188,6 +188,9 @@ def create_app(settings: Settings | None = None):
             result["probability_base64"] = base64.b64encode(
                 result.pop("probability_npy")
             ).decode("ascii")
+            result["probability_preview_base64"] = base64.b64encode(
+                result.pop("probability_preview_png")
+            ).decode("ascii")
             return result
         except ImageTooLarge as exc:
             raise HTTPException(413, str(exc)) from exc

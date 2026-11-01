@@ -76,6 +76,16 @@ def test_non_square_cli_api_probability_and_artifact_parity(release, tmp_path, m
         hashlib.sha256(api_probability_bytes).hexdigest()
         == api["artifacts"]["probability"]["sha256"]
     )
+    preview_bytes = base64.b64decode(api["probability_preview_base64"])
+    preview = np.array(Image.open(io.BytesIO(preview_bytes)))
+    np.testing.assert_array_equal(
+        preview, np.rint(api_probability * 255).astype(np.uint8)
+    )
+    assert preview_bytes == (tmp_path / "cli/probability.png").read_bytes()
+    assert (
+        hashlib.sha256(preview_bytes).hexdigest()
+        == api["artifacts"]["probability_preview"]["sha256"]
+    )
 
 
 @pytest.mark.parametrize(

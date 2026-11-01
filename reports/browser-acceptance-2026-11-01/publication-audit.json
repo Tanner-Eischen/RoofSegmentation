@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "scan_scope": "Fetched all refs/tags; vendor-default Gitleaks full git history --all, redact100, ignore-gitleaks-allow, empty.ignore; private raw JSON retained outside tracked packet",
+  "gitleaks_version": "8.30.1",
+  "vendor_config_sha256": "e163e53b9e7e8a8511e77271e2b323ed057759542a6d988258afe3a1fa329caf",
+  "findings": 0,
+  "audited_commits_before_this_commit": 16,
+  "audited_blobs_before_this_commit": 405,
+  "large_objects": [
+    {
+      "oid": "74fc3ec19a1bbc6fb7f898fc89019caa8cbbe910",
+      "bytes": 1068055,
+      "path": "v3_filelist.txt"
+    }
+  ],
+  "model_weights_or_whu_image_label_archives_in_git_history": false,
+  "current_tree_removed_unused_google_assets": [
+    {
+      "path": "api/satellite_test.png",
+      "historical_blob": "0f808b09562f4c4e3539a340e7a83d8a2a44b9e4"
+    },
+    {
+      "path": "docs/dashboard.png",
+      "historical_blob": "5e8503e075a0300eaff4256f44419abaff68b7e1"
+    }
+  ],
+  "history_rewritten": false,
+  "history_note": "Legacy imagery remains in existing public history per root coordination; removal is current-tree cleanup, not a legal-rights determination.",
+  "synthetic_example_provenance": "siteA/B/C Labelme inputs exactly match decoded RGB of synthetic_train/val/test_000 from generated smoke_data; remaining batch.png is application UI only, no aerial image",
+  "new_packet_assets": "Own app screenshots with generated numerical input and model-derived outputs only; no source satellite imagery, labels, model weights or raw private traces."
+}

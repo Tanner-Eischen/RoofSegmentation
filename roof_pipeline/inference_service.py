@@ -204,10 +204,17 @@ class ModelService:
                 binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
             )
             polygons = [c.reshape(-1, 2).tolist() for c in contours if len(c) >= 3]
-            mask_stream, probability_stream = io.BytesIO(), io.BytesIO()
+            mask_stream, probability_stream, preview_stream = (
+                io.BytesIO(),
+                io.BytesIO(),
+                io.BytesIO(),
+            )
             Image.fromarray(binary * 255).save(mask_stream, format="PNG")
             np.save(
                 probability_stream, probability.astype(np.float32), allow_pickle=False
+            )
+            Image.fromarray(np.rint(probability * 255).astype(np.uint8)).save(
+                preview_stream, format="PNG"
             )
             mask_bytes, probability_bytes = (
                 mask_stream.getvalue(),
@@ -229,11 +236,19 @@ class ModelService:
                     "format": "numpy_float32_no_pickle",
                     "bytes": len(probability_bytes),
                 },
+                "probability_preview": {
+                    "filename": run_id + "-probability.png",
+                    "sha256": hashlib.sha256(preview_stream.getvalue()).hexdigest(),
+                    "media_type": "image/png",
+                    "bytes": len(preview_stream.getvalue()),
+                    "display_mapping": "linear probability 0..1 to uint8 0..255; no auto-scaling",
+                },
             }
             return {
                 "run_id": run_id,
                 "mask_png": mask_bytes,
                 "probability_npy": probability_bytes,
+                "probability_preview_png": preview_stream.getvalue(),
                 "input_sha256": hashlib.sha256(content).hexdigest(),
                 "polygons": polygons,
                 "roof_area_px": int(binary.sum()),
@@ -273,8 +288,10 @@ def predict_file(checkpoint, release_manifest, image, out, *, cpu_threads=2):
     out.mkdir(parents=True)
     (out / "mask.png").write_bytes(result.pop("mask_png"))
     (out / "probability.npy").write_bytes(result.pop("probability_npy"))
+    (out / "probability.png").write_bytes(result.pop("probability_preview_png"))
     result["artifacts"]["mask"]["path"] = "mask.png"
     result["artifacts"]["probability"]["path"] = "probability.npy"
+    result["artifacts"]["probability_preview"]["path"] = "probability.png"
     (out / "prediction_manifest.json").write_text(
         json.dumps(result, indent=2) + "\n", encoding="utf-8"
     )

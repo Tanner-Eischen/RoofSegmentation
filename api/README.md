@@ -19,7 +19,9 @@ No `.env` file is read implicitly. Export the variables before startup.
   HTTP 503 if unavailable. `supported_profile_ready` separately reports whether
   installed package versions match the declared platform lock and Python 3.12.
 - `POST /api/inference`: PNG/JPEG/WebP multipart file. Returns real mask and
-  float32 probability artifacts, hashes, run/input/model identities and dimensions.
+  float32 probability artifacts, a linear 8-bit probability preview, hashes,
+  run/input/model identities and dimensions. The preview is not auto-scaled;
+  the exact float32 array remains the numerical artifact.
 - `POST /api/inference/batch`: bounded experimental image batch, not an address job.
 - Address/geocode/satellite/address-batch routes return unavailable, never fake data.
 

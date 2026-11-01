@@ -71,8 +71,17 @@ real CLI/HTTP parity, readiness, missing-weight and overload controls at 1 GiB /
 two CPUs. The [original multistage Dockerfile gate](reports/original-multistage-2026-11-01/README.md)
 also passed a full dependency/frontend build and real serving/static-byte checks.
 Its exact base/image identifiers are recorded separately from the cached
-derivative. Browser interaction and deployment remain unverified. Nothing was
-pushed or published.
+derivative. The [real-model browser acceptance](reports/browser-acceptance-2026-11-01/README.md)
+now verifies upload, visible mask/linear probability preview, three download
+hashes, genuine zero foreground, failure/recovery, keyboard and mobile layouts.
+The five separate Tiny-backed browser tests also pass. Deployment remains a
+separate release step; this local evidence does not establish model quality.
+
+![Actual registered model UI on generated numerical input](reports/browser-acceptance-2026-11-01/screenshots/desktop-real-result.png)
+
+This screenshot demonstrates the real serving/UI path with generated test input,
+not segmentation performance on aerial imagery. Historical accuracy retains its
+original dataset, model and runtime provenance.
 
 The [dependency advisory follow-up](reports/dependency-audit-2026-11-01/README.md)
 records narrow Router/Vite/parser fixes, early image-format rejection, fresh

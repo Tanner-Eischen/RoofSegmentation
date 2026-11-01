@@ -1,0 +1,126 @@
+{
+  "scope": "Real registered local checkpoint and generated numerical fixture; no geographic/accuracy claim",
+  "playwright": "1.58.2",
+  "browser": "145.0.7632.6",
+  "checkpoint_sha256": "2c5757995dafaa206abac4e22e384cdef78b4d93ab9026975050307ac2d9c7c5",
+  "screenshots": [
+    "desktop-empty.png",
+    "desktop-real-result.png",
+    "result-720.png",
+    "result-720-details.png",
+    "result-390.png",
+    "result-390-details.png",
+    "result-320.png",
+    "result-320-details.png",
+    "invalid-upload.png",
+    "oversize-upload.png",
+    "backend-transport-failure.png",
+    "backend-recovered-real-result.png",
+    "keyboard-file-focus.png",
+    "reduced-motion-real-result.png"
+  ],
+  "layouts": [
+    {
+      "width": 720,
+      "page_overflow": 0,
+      "content_overflow": 0
+    },
+    {
+      "width": 390,
+      "page_overflow": 0,
+      "content_overflow": 0
+    },
+    {
+      "width": 320,
+      "page_overflow": 0,
+      "content_overflow": 0
+    }
+  ],
+  "downloads": [
+    {
+      "kind": "mask",
+      "bytes": 92,
+      "sha256": "93fa7b7cf95d6f9e8dabdc32b9aaf9ee3a4d87cf50ada7d5cbc463c134a5e834",
+      "matches_displayed_run": true
+    },
+    {
+      "kind": "probability",
+      "bytes": 50956,
+      "sha256": "1546a78fe1b06dfc755f965c891359cf18a34de99fe983d89a2cb0dc7637b9a6",
+      "matches_displayed_run": true
+    },
+    {
+      "kind": "probability_preview",
+      "bytes": 171,
+      "sha256": "bffb3377420058b93bdca00a6899d1db97faf941efce9bba56ebb2640c526f6e",
+      "matches_displayed_run": true
+    }
+  ],
+  "injected_transport_failure": true,
+  "model_release_sha256": "54832764edf43ccdfba1243bbfc3f8ad73ac97f58dd6665b9bb071b77248b9b0",
+  "runtime": {
+    "profile_id": "cpu-python312-linux-v1",
+    "profile_matches": true,
+    "profile_lock_sha256": "830162adc9f86b81af6c77cab386d2dc0c936134ec178347d98b3c8bbcba4aac",
+    "locked_package_count": 64,
+    "version_mismatches": {},
+    "python": "3.12.16",
+    "platform": "linux",
+    "source_build_sha256": "b5fa72e4ee650dff7a832d4e03e0dda884e93d911e96a5ebeebd7e4c690eba5e",
+    "source_files_complete": true
+  },
+  "index_sha256": "03d48ba4c2031e67607430a804ded64563ba353e5feaf688cb7e064a5e7fb5e7",
+  "frontend_assets": [
+    {
+      "route": "/assets/index-Dkxb9F_y.js",
+      "sha256": "efe59e03ec9fb0755f8dff6e8cf8c577994dee1efbface9a19338f79525d7070"
+    },
+    {
+      "route": "/assets/index-MoBij6gz.css",
+      "sha256": "83ccfe1305e82c0192d987300c16af2ab80cdbd454a6927b2ba2f05e95548d32"
+    }
+  ],
+  "enabled_button_text_contrast": 4.894893450341866,
+  "actual_result": {
+    "run_id": "83ab332a-63ac-4afe-a058-e3ec2e859b67",
+    "input_sha256": "b35a94e5a716936b2a2e34eacd4d89ec95f15e2b29cd668c7087c420fba6d129",
+    "width": 131,
+    "height": 97,
+    "foreground_pixels": 0,
+    "artifacts": {
+      "mask": {
+        "filename": "83ab332a-63ac-4afe-a058-e3ec2e859b67-mask.png",
+        "sha256": "93fa7b7cf95d6f9e8dabdc32b9aaf9ee3a4d87cf50ada7d5cbc463c134a5e834",
+        "media_type": "image/png",
+        "bytes": 92
+      },
+      "probability": {
+        "filename": "83ab332a-63ac-4afe-a058-e3ec2e859b67-probability.npy",
+        "sha256": "1546a78fe1b06dfc755f965c891359cf18a34de99fe983d89a2cb0dc7637b9a6",
+        "media_type": "application/octet-stream",
+        "format": "numpy_float32_no_pickle",
+        "bytes": 50956
+      },
+      "probability_preview": {
+        "filename": "83ab332a-63ac-4afe-a058-e3ec2e859b67-probability.png",
+        "sha256": "bffb3377420058b93bdca00a6899d1db97faf941efce9bba56ebb2640c526f6e",
+        "media_type": "image/png",
+        "bytes": 171,
+        "display_mapping": "linear probability 0..1 to uint8 0..255; no auto-scaling"
+      }
+    },
+    "zero_foreground_valid": true
+  },
+  "superseded_result_cleared": true,
+  "pending_input_locked": true,
+  "keyboard_first_focus": "Roof Detection",
+  "keyboard_analysis_completed": true,
+  "failure_count": 0,
+  "status": "passed",
+  "real_model_browser_tests_passed": 1,
+  "tiny_model_e2e_tests_passed": 5,
+  "frontend_unit_tests_passed": 10,
+  "backend_pipeline_tests_passed": 48,
+  "manual_visual_review": "Desktop1440,half720,mobile390/320,details,focus,invalid/oversize,outage/recovery screenshots inspected",
+  "payload_preservation": "Exact bytes from displayed-run DOM download links; hashes independently match actual Playwright downloads and API artifact records"
+}

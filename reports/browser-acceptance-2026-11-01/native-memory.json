@@ -1,0 +1,21 @@
+{
+  "memory_peak_bytes": 1073741824,
+  "memory_limit_bytes": 1073741824,
+  "cpus": 2,
+  "events": {
+    "low": 0,
+    "high": 0,
+    "max": 1259,
+    "oom": 0,
+    "oom_kill": 0,
+    "oom_group_kill": 0
+  },
+  "note": "Peak is cgroup-limited; no uncapped demand/headroom inference",
+  "stop_state": {
+    "running": false,
+    "oom_killed": false,
+    "exit_code": 0
+  },
+  "tested_512_mib": false,
+  "reason_512_not_tested": "No existing Roof free-host target; only Mars has a512MiB host"
+}

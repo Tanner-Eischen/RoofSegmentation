@@ -1,0 +1,22 @@
+{
+  "image_id": "sha256:9208f26ecca92cadd36922875560efc2711183247bedfbd6c77e9055ba58a8b6",
+  "created": "2026-11-01T04:43:09.26110296-06:00",
+  "dockerfile": "original multistage; normal dependency-layer cache",
+  "transport": "Browser Windows127-only proxy to own private WSL interface; request/response bodies unchanged, no success mocking",
+  "registered_checkpoint_sha256": "2c5757995dafaa206abac4e22e384cdef78b4d93ab9026975050307ac2d9c7c5",
+  "registered_release_sha256": "54832764edf43ccdfba1243bbfc3f8ad73ac97f58dd6665b9bb071b77248b9b0",
+  "source_worktree_dirty_at_capture": true,
+  "base_revision": "003aab5cd05801c9170ed97b80840064a33588d0",
+  "tested_revision": null,
+  "source_sha256": {
+    "api/main.py": "fe0b7fc23d05f35795b649a0328a8f2481b979d223eb051247ca5548dbf467ea",
+    "roof_pipeline/inference_service.py": "4d5396cd00c826617f39a6cc802fa37c2959255f805130acde092e28903af5ce",
+    "app/index.html": "8165b49832aeca269f4debb1be8a915460bfb1e2da3ccd35af1c2127cb4721b3",
+    "app/src/App.jsx": "7743da753483d02373a91aea78fb158ec85467a3f8061feb66ed807771fc1522",
+    "app/src/pages/Dashboard.jsx": "c0ff00daeaa817e604a56e089aea80262e463823bd6ad62c0d5f34b7be20a69c",
+    "app/src/components/Layout.jsx": "123bc5f38a0a4ced21cd1952a17f0b83823bdb74d9947d2e27066696f8ceae9b",
+    "app/playwright.real-model.config.ts": "ce181648910087b114de065b493e53df29d39c2d48eb1bece154f3b54349c98d",
+    "app/e2e-real-model/acceptance.spec.ts": "4567efa95a9ca3664098a1afabfe0cc0f0c3f6990a0a37d8b5bf75428b4af633"
+  },
+  "proxy_helper_sha256": "5708e97ed33ca019a7c6d701262623526ad9131dc97ce06310c875b2e0a58553"
+}
