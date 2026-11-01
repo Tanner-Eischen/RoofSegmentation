@@ -162,3 +162,24 @@ def test_probability_parity_detects_injected_channel_mismatch(
     actual = np.load(io.BytesIO(changed["probability_npy"]), allow_pickle=False)
     with pytest.raises(AssertionError):
         np.testing.assert_allclose(actual, expected, rtol=0, atol=1e-6)
+
+
+def test_unsupported_image_plugin_cannot_parse_upload_headers(monkeypatch):
+    """Reject before plugin dispatch, rather than after parsing a foreign header."""
+    Image.init()
+    parsed = []
+
+    def foreign_plugin(*args, **kwargs):
+        parsed.append(True)
+        raise RuntimeError("Unsupported image header was parsed")
+
+    monkeypatch.setitem(
+        Image.OPEN,
+        "XBM",
+        (foreign_plugin, lambda prefix: prefix.startswith(b"#define")),
+    )
+    with pytest.raises(inference_service.InvalidImage):
+        inference_service.decode_image(
+            b"#define hostile_header", max_bytes=1024, max_pixels=1024
+        )
+    assert parsed == []

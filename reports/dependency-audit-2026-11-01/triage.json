@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "project_id": "building-segmentation",
+  "release_id": "dependency-followup-2026-11-01",
+  "base_revision": "e0de06c67173d6c767b63f658da6259a722b61bf",
+  "source_worktree_dirty_at_capture": true,
+  "tested_revision": null,
+  "changes": [
+    "Four same-major frontend lockfile records",
+    "python-multipart 0.0.20 to 0.0.32 in local serving overlay/pin",
+    "Restrict Pillow decoder plugin dispatch before header parsing"
+  ],
+  "scientific_profile_unchanged": [
+    "torch",
+    "numpy",
+    "Pillow",
+    "weights",
+    "normalization",
+    "threshold",
+    "training data/labels"
+  ],
+  "audits": {
+    "npm_runtime": {
+      "before_affected_records": 2,
+      "after_affected_records": 0
+    },
+    "npm_all": {
+      "before_affected_records": 27,
+      "after_affected_records": 25,
+      "remaining_scope": "development/tooling"
+    },
+    "python_serving": {
+      "packages": 42,
+      "before_affected_packages": 12,
+      "after_affected_packages": 11,
+      "before_raw_entries": 128,
+      "after_raw_entries": 116,
+      "before_alias_groups": 90,
+      "after_alias_groups": 84
+    },
+    "linux_lock": {
+      "records": 64,
+      "recognized": 62,
+      "known_matches": 0,
+      "skipped": [
+        "torch 2.14.1+cpu",
+        "torchvision 0.29.2+cpu"
+      ]
+    },
+    "cpu_upstream_supplement": {
+      "recognized_public_versions": 2,
+      "known_matches": 0,
+      "exact_cpu_wheel_audit": false
+    },
+    "not_safety_certification": true
+  },
+  "verification": {
+    "python_tests_passed": 46,
+    "frontend_tests_passed": 8,
+    "ruff": "passed",
+    "eslint": "passed",
+    "build": "passed",
+    "pip_check": "passed",
+    "model_parity": "real-cpu-parity-after/proof.json",
+    "browser": "not_run",
+    "container": "not_run_engine_unavailable"
+  },
+  "versions": {
+    "torch": "2.9.0",
+    "torchvision": "0.24.0",
+    "numpy": "2.2.6",
+    "Pillow": "11.3.0",
+    "segmentation-models-pytorch": "0.6.0",
+    "fastapi": "0.121.0",
+    "starlette": "0.49.3",
+    "httpx": "0.28.1",
+    "python-multipart": "0.0.32",
+    "uvicorn": "0.38.0"
+  },
+  "source_sha256": {
+    "api/tests/test_serving_parity.py": "5bd72df14655582dd215e0401b648557d1f75436f3eccf00a3c6ee37d5a275ab",
+    "roof_pipeline/inference_service.py": "252b2c0545ba43c468051aff7e1002e72c50ed81702ef4724c7e0aa2fbe93f5f",
+    "requirements-serving.txt": "2e9e2be820f2f1920016d43ee52ec02e62fe44314a67d6779431e059993b6f94",
+    "app/package-lock.json": "a7082b751ad393923642522c56b2a337ed333d5abc142d3837a114d52bc940ee"
+  },
+  "proof_sha256": "7daa34ca167a5c817e43543a3d65176716131ea0112e61b4ead7675181aaed5b",
+  "limits": [
+    "No new accuracy or geographic measurement",
+    "Remaining advisory matches require isolated core-runtime and development-tool migration",
+    "Historical packets are unchanged; no new commit is relabeled as tested",
+    "Docker unavailable; browser and deployment not run"
+  ]
+}

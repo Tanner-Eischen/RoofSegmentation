@@ -45,7 +45,9 @@ def decode_image(content: bytes, *, max_bytes: int, max_pixels: int) -> np.ndarr
     try:
         with warnings.catch_warnings():
             warnings.simplefilter("error", Image.DecompressionBombWarning)
-            with Image.open(io.BytesIO(content)) as image:
+            with Image.open(
+                io.BytesIO(content), formats=("PNG", "JPEG", "WEBP")
+            ) as image:
                 if image.format not in {"PNG", "JPEG", "WEBP"}:
                     raise InvalidImage("Supported formats are PNG, JPEG and WebP")
                 if getattr(image, "n_frames", 1) != 1:

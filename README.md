@@ -67,6 +67,11 @@ not a new accuracy result. API/serving/pipeline regression tests, frontend unit
 checks, lint and build passed. Browser interaction and a new container run remain
 unverified; the Docker engine was unavailable. Nothing was published or deployed.
 
+The [dependency advisory follow-up](reports/dependency-audit-2026-11-01/README.md)
+records narrow Router/Vite/parser fixes, early image-format rejection, fresh
+serving parity and remaining runtime/tooling migration work. These checks do not
+replace the original accuracy evidence or establish a vulnerability-free release.
+
 ## Container and legacy reproduction
 
 The Dockerfile uses package-relative copy paths, the retained Linux CPU hash lock,

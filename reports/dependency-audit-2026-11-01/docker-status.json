@@ -1,0 +1,7 @@
+{
+  "checked_date": "2026-11-01",
+  "available": false,
+  "observation": "Docker Desktop Linux engine named pipe unavailable",
+  "image_build": "not_run",
+  "service_start": "not_attempted; no UI fallback"
+}

@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "checkpoint_sha256": "2c5757995dafaa206abac4e22e384cdef78b4d93ab9026975050307ac2d9c7c5",
+  "model_release_sha256": "54832764edf43ccdfba1243bbfc3f8ad73ac97f58dd6665b9bb071b77248b9b0",
+  "input_sha256": "27d688b896818cc4088d57e84e627c51a64240aa9764ef4b2ebe1fe04b44fb5d",
+  "input_shape": [
+    97,
+    131,
+    3
+  ],
+  "input_kind": "generated numerical fixture; no source imagery",
+  "scope": "Single-input float32 CPU integration; no model accuracy or geographic performance measurement",
+  "cli_api_probability_max_abs_diff": 0.0,
+  "independent_forward_probability_max_abs_diff": 9.313225746154785e-10,
+  "tolerance_abs": 1e-06,
+  "thresholded_masks_identical": true,
+  "probability_artifact_sha256": "e2c5f95ff0a05341bd21780f8c0ab332c01a84708f2c7458a19dd330c0f261b4",
+  "mask_artifact_sha256": "93fa7b7cf95d6f9e8dabdc32b9aaf9ee3a4d87cf50ada7d5cbc463c134a5e834",
+  "pixel_coverage": 0.0,
+  "valid_pixel_count": 12707,
+  "checks": {
+    "hash_bound_model_release": true,
+    "corrupt_upload_rejected": true,
+    "unavailable_imagery_is_failure": true,
+    "artifact_hashes_match": true
+  },
+  "cpu_threads": 2,
+  "runtime_versions": {
+    "torch": "2.9.0",
+    "numpy": "2.2.6",
+    "Pillow": "11.3.0",
+    "segmentation-models-pytorch": "0.6.0",
+    "fastapi": "0.121.0",
+    "httpx": "0.28.1"
+  },
+  "source_sha256": {
+    "api/main.py": "2a90b87e205043cdb5187c812c1dbe11f2d4b533410a33ce2ea7e8f4cd366b1b",
+    "roof_pipeline/inference_service.py": "252b2c0545ba43c468051aff7e1002e72c50ed81702ef4724c7e0aa2fbe93f5f",
+    "roof_pipeline/release.py": "0c5970d110d0cf319cc0d21c4961c9f463ca5704e54346f2e965513f780f4a24",
+    "roof_pipeline/models.py": "a8e6858236397f27ecfc8d62495a12eed69535a0d9853404684fae046e6b5198",
+    "roof_pipeline/dataset.py": "fd507b806ffc7872951684bc15924131cf4f32b1460c3472afc3ee43b664d552",
+    "roof_pipeline/predict.py": "982312da3924a0c5fa4ad79276eef1d267f746a689a5bdc81884dabaf4e8d673",
+    "scripts/verify_serving_parity.py": "4cb665751fc4f912d31c919076971edfe74931af6f77a1f90424d2f6b7c5423f"
+  },
+  "not_run": [
+    "browser",
+    "container",
+    "deployment",
+    "training",
+    "dataset-wide evaluation"
+  ]
+}
