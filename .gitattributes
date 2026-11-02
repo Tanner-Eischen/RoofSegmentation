@@ -5,3 +5,6 @@ requirements-serving-windows.lock -text whitespace=trailing-space,space-before-t
 requirements-release-linux.lock -text whitespace=trailing-space,space-before-tab,cr-at-eol
 # Captured logs retain tool-emitted whitespace; packet checksums bind exact bytes.
 reports/**/*.log -whitespace
+# Factorial result and figure checksums bind exact published bytes across checkouts.
+docs/results/whu_factorial_2026-10-31/** -text whitespace=trailing-space,space-before-tab,cr-at-eol
+docs/figures/whu_factorial_2026-10-31/*.png -text

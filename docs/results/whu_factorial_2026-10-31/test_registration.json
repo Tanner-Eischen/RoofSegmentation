@@ -1,0 +1,176 @@
+{
+  "study": "post_study_descriptive_test_benchmark",
+  "registered_utc": "2026-11-02T08:52:52.209721+00:00",
+  "decision_date_local": "2026-11-02",
+  "timezone": "America/Chicago",
+  "reason": "User requested publishing completed factorial results and considering test inference; evaluate every frozen endpoint without selecting a test winner",
+  "relationship_to_primary_study": "Separate post-study descriptive addendum; original preregistration and validation outputs remain unchanged",
+  "confirmatory": false,
+  "previous_test_exposure": "WHU test inspected in prior project development",
+  "original_registration_sha256": "1666a443c21ccea08f6ca6570282bfc8aa4819e54e3a807241523a5ffad39372",
+  "source_snapshot_sha256": "add988d54f23b5b6bdaa1ae9b2b9c790fd50f8ea8f27082ab947cabdec440b94",
+  "frozen_source_sha256": {
+    "ablation_study/experiment_plan.json": "90c1eebc17c206df1d8227f57efbcf4e883c8679436094318be8a1dc2b74ab04",
+    "ablation_study/scripts/analyze_factorial.py": "411e8b687df54fc16993ead7964045bd803bea608239023500663c48e53de44a",
+    "ablation_study/scripts/install_sampler_control.py": "ae7a2216f8cbd7ac981548fd942d4f2f32bc44b86eb10b8aa2765c08b849345f",
+    "ablation_study/scripts/plot_factorial.py": "2c03f26b10aafc09d072f339a9bd2d339596699dc17b1c274462474b60c01560",
+    "ablation_study/scripts/run_factorial.py": "19e77ff11ed0d0ee4a1f740e75e627172e0bf6ab4e4fe122994284aec28a3582",
+    "roof_pipeline/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "roof_pipeline/adjudication.py": "7773d41d296c81610c6b14112ecc0d5a280377718a13b9e67fb71e1fec65af11",
+    "roof_pipeline/annotation_audit.py": "a87b5fa2c8ed8aa423bde7c481d106fb03feafb26c7b949825bab413da065b39",
+    "roof_pipeline/boundary.py": "42033013bfe5bb643a6b36376b8c3a54e92addb2ffb756ded1b91b9d68f02808",
+    "roof_pipeline/boundary_experiment.py": "5a361fe5da93eb84e84ce3b9225d3423a506ae1ebde57906c48bb8b7179bd82e",
+    "roof_pipeline/common.py": "09818f6dbd6c3425d14096e64bd72b85d2ba1e24d25988eb6bd460a105adae89",
+    "roof_pipeline/correction_experiment.py": "2d913210298e929e5b003896727d647c7aafd2c0448b53e190ff9a0a72c971b8",
+    "roof_pipeline/correction_overlay.py": "6a1c29bd910a100ebea7c618c7b7363e7f1224db0712133653eb0c674ab424cb",
+    "roof_pipeline/dataset.py": "fd507b806ffc7872951684bc15924131cf4f32b1460c3472afc3ee43b664d552",
+    "roof_pipeline/evaluate.py": "2eff7d05a46af6e43171db74563e66eff7a4cc54b46258616ca1b2a07f74af64",
+    "roof_pipeline/hard_examples.py": "57bee396b3e0774193145bcfa42a355e47af94b85353675aa819d3a3627c8763",
+    "roof_pipeline/metrics.py": "82736d8629aef153ac57fb6e5a5823427500eb0d8c88a47e3063ff8d4971ab18",
+    "roof_pipeline/models.py": "a8e6858236397f27ecfc8d62495a12eed69535a0d9853404684fae046e6b5198",
+    "roof_pipeline/predict.py": "982312da3924a0c5fa4ad79276eef1d267f746a689a5bdc81884dabaf4e8d673",
+    "roof_pipeline/prepare.py": "0be7ba209fb721f3cc349e8a4bb5ba574e269c08fbd7ea78404be694226b0322",
+    "roof_pipeline/refine.py": "d238123f310d27e7d5a16d8feff93cd789f3fa140be0de7a525d306034dfc3d8",
+    "roof_pipeline/review_score.py": "35f27b4632fda26d06553f1b6b173e7c59e2b32b86252f03d6ae2035e0926209",
+    "roof_pipeline/train.py": "38aa1a193fdab81f8c5723ce993d27aed3aa5aa5ec9405b78e5bed1dfb4bfe05"
+  },
+  "dataset": "data/whu_official_prepared",
+  "dataset_content_sha256": "538ac8569dcfd817b8557bc23ed18977de5dbba8d4b19719c82ab5ee4d1a308d",
+  "dataset_manifest_sha256": "d879dfa6d5a399ee5f7539a0c3e446db659d69d9f3fe55901fe015d0095edfe0",
+  "split": "test",
+  "samples": 2416,
+  "test_ids_sha256": "779ecec8e19e4472e6d132747493be898968e6478ceb305b90a5ff1bc2235f06",
+  "threshold": 0.5,
+  "final_epoch": 20,
+  "device": "NVIDIA GeForce RTX 4060 Laptop GPU",
+  "batch_size": 4,
+  "environment": {
+    "OMP_NUM_THREADS": "4",
+    "MKL_NUM_THREADS": "4",
+    "CUBLAS_WORKSPACE_CONFIG": ":4096:8"
+  },
+  "library_versions": {
+    "torch": "2.5.1+cu121",
+    "numpy": "2.2.6",
+    "Pillow": "11.3.0"
+  },
+  "helper_sha256": "7f9ca48c0cc531cce5231a0a8232eb34ef801eb51c81bf457cfac08469523341",
+  "checkpoints": [
+    {
+      "order": 1,
+      "seed": 42,
+      "arm": "a0b0_uniform_standard",
+      "checkpoint": "runs/whu_factorial_2026-10-31/runs/a0b0_uniform_standard_seed42/final.pt",
+      "checkpoint_sha256": "5b139b816c4b7c65b55bb3c3b745041c2ad981e6482f76d6b1614fdecd3d0caf",
+      "epoch": 20,
+      "threshold": 0.5
+    },
+    {
+      "order": 2,
+      "seed": 42,
+      "arm": "a1b0_hard_standard",
+      "checkpoint": "runs/whu_factorial_2026-10-31/runs/a1b0_hard_standard_seed42/final.pt",
+      "checkpoint_sha256": "593bcfe0e3e6538c4de47e74c729feea4cfa68e5af4f78f536452001bc38d976",
+      "epoch": 20,
+      "threshold": 0.5
+    },
+    {
+      "order": 3,
+      "seed": 42,
+      "arm": "a0b1_uniform_robust",
+      "checkpoint": "runs/whu_factorial_2026-10-31/runs/a0b1_uniform_robust_seed42/final.pt",
+      "checkpoint_sha256": "42a56da6da43099a089295b4c6b63beab2b4abc2fdaf6cb9f033e893ee6f89f2",
+      "epoch": 20,
+      "threshold": 0.5
+    },
+    {
+      "order": 4,
+      "seed": 42,
+      "arm": "a1b1_hard_robust",
+      "checkpoint": "runs/whu_factorial_2026-10-31/runs/a1b1_hard_robust_seed42/final.pt",
+      "checkpoint_sha256": "c2a87e6ea126d92aead3951cb1d4e854a95a5447cdce6efb3409d265f1f86bb1",
+      "epoch": 20,
+      "threshold": 0.5
+    },
+    {
+      "order": 5,
+      "seed": 1337,
+      "arm": "a0b0_uniform_standard",
+      "checkpoint": "runs/whu_factorial_2026-10-31/runs/a0b0_uniform_standard_seed1337/final.pt",
+      "checkpoint_sha256": "061c48447b95ddc450974404cd461330395ef60e135bfcbfa8b8454a7207b29a",
+      "epoch": 20,
+      "threshold": 0.5
+    },
+    {
+      "order": 6,
+      "seed": 1337,
+      "arm": "a1b0_hard_standard",
+      "checkpoint": "runs/whu_factorial_2026-10-31/runs/a1b0_hard_standard_seed1337/final.pt",
+      "checkpoint_sha256": "def6912ac787e2dd1d1aabeaee6c82662109ab52011be5e9c9c64134734909d5",
+      "epoch": 20,
+      "threshold": 0.5
+    },
+    {
+      "order": 7,
+      "seed": 1337,
+      "arm": "a0b1_uniform_robust",
+      "checkpoint": "runs/whu_factorial_2026-10-31/runs/a0b1_uniform_robust_seed1337/final.pt",
+      "checkpoint_sha256": "d68c032bce3e2b09654c3b84862405112c55ae870b12029ad740c0da802069b1",
+      "epoch": 20,
+      "threshold": 0.5
+    },
+    {
+      "order": 8,
+      "seed": 1337,
+      "arm": "a1b1_hard_robust",
+      "checkpoint": "runs/whu_factorial_2026-10-31/runs/a1b1_hard_robust_seed1337/final.pt",
+      "checkpoint_sha256": "4c163631c4c62c20204bee7b0400f1637cbf4d61f8c28d86f746646b3cccb86f",
+      "epoch": 20,
+      "threshold": 0.5
+    },
+    {
+      "order": 9,
+      "seed": 2026,
+      "arm": "a0b0_uniform_standard",
+      "checkpoint": "runs/whu_factorial_2026-10-31/runs/a0b0_uniform_standard_seed2026/final.pt",
+      "checkpoint_sha256": "1152bde5a031ceecf23ccfab00dc4b048ff9946abd46465b460079747fb812c6",
+      "epoch": 20,
+      "threshold": 0.5
+    },
+    {
+      "order": 10,
+      "seed": 2026,
+      "arm": "a1b0_hard_standard",
+      "checkpoint": "runs/whu_factorial_2026-10-31/runs/a1b0_hard_standard_seed2026/final.pt",
+      "checkpoint_sha256": "42a8fb4f445ee62fed9f740b50a6febb58d691293e8805b30f1ac352eca6a857",
+      "epoch": 20,
+      "threshold": 0.5
+    },
+    {
+      "order": 11,
+      "seed": 2026,
+      "arm": "a0b1_uniform_robust",
+      "checkpoint": "runs/whu_factorial_2026-10-31/runs/a0b1_uniform_robust_seed2026/final.pt",
+      "checkpoint_sha256": "7aababb97c96cb2cabb78f99252f0df773c7e627598366a3d509f8cd7858cba4",
+      "epoch": 20,
+      "threshold": 0.5
+    },
+    {
+      "order": 12,
+      "seed": 2026,
+      "arm": "a1b1_hard_robust",
+      "checkpoint": "runs/whu_factorial_2026-10-31/runs/a1b1_hard_robust_seed2026/final.pt",
+      "checkpoint_sha256": "e35a7107e5089333c5e3237bee0b146251644081c1b627956cf061847d106cef",
+      "epoch": 20,
+      "threshold": 0.5
+    }
+  ],
+  "prohibitions": [
+    "no retraining",
+    "no threshold sweep",
+    "no TTA",
+    "no selection using test",
+    "no source or label changes",
+    "report all 12 endpoints"
+  ]
+}

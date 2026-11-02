@@ -37,6 +37,22 @@ python scripts/export_portfolio_evidence.py --verify reports/whu-baseline-2026-1
 python scripts/export_portfolio_evidence.py --out reports/whu-baseline-copy --verify-data-content
 ```
 
+## Completed factorial ablation
+
+The [sampling × augmentation study](docs/WHU_FACTORIAL_2026-10-31.md) completed
+12 matched runs across three seeds, with unchanged official WHU partitions,
+uniform/hard sampling both with replacement, and fixed 20-epoch endpoints.
+Hard-example sampling's estimated validation main effect was **+0.207 IoU
+percentage points**; stronger photometric augmentation averaged **−0.003 points**.
+The best arm mean was 0.916248, only 0.022 percentage points above the frozen
+starting model. These are small exploratory effects, not evidence of geographic
+transfer. The report embeds all learning curves, matched prediction overlays,
+and links the [full-precision result packet](docs/results/whu_factorial_2026-10-31/README.md).
+The separate, fixed-threshold test follow-up evaluated all 12 endpoints on the
+previously inspected WHU test. Every endpoint scored below the historical
+baseline; the hard/standard arm's test mean was **0.882539** versus **0.892119**
+for that baseline. These descriptive results did not change model selection.
+
 ## Local image inference
 
 The application now supports local PNG/JPEG/WebP upload through a shared CPU

@@ -1,0 +1,18 @@
+{
+  "captured_utc": "2026-11-02T08:55:35.394060+00:00",
+  "artifacts": {
+    "analysis/arms_summary.csv": "2eede63d390ec7b37437aca5797885ab246e070e642e44ad83b825a6f93da321",
+    "analysis/contrasts_by_seed.csv": "94e4a94c32c6525638678a7cbc24eea6abfa561637693930895b78ab4330d653",
+    "analysis/contrasts_summary.csv": "d1c5ebae9ee3ab4c0b6fe3ef46ee5d171373be00e765b7038f6c7a6b23f12510",
+    "analysis/report.md": "7d62c17231bb26e865f4ed67579b7a091c69bc05080d2d6da3cd22b2d464d1a6",
+    "analysis/runs.csv": "a698cfbac6ba0e46a9bb301903b5495d8550f8e147bedc7f2c4bba6c7c888928",
+    "analysis/figures/figure_manifest.json": "deb8727921c363a0068a634e853c833f82d4127dd5076e1ed66c666eebaf2da7",
+    "analysis/figures/learning_curves.png": "8512f899f4699a3cdac4a08c2cf2043ab08b146dae21b03413fe2ddf349ae0be",
+    "analysis/figures/qualitative_seed42.png": "8b38cc76b055e2dfb4430bfa080619a5fa6334453c3dbae393db26c634038120",
+    "analysis/figures/qualitative_seed42_checkpoints.json": "9504566be7ce35dcc72382056f41b89f6b68147401a22c540b1d26dded0ddc47",
+    "analysis/figures/qualitative_seed42_selection.json": "fa27ff2177f8d173ea88b014b79a0d4fbafc272d526af20c41332fe64994cd3b",
+    "registration.json": "1666a443c21ccea08f6ca6570282bfc8aa4819e54e3a807241523a5ffad39372",
+    "continuation_provenance.json": "70892135db12e24f429b458ae4db67e9a8dc28c2f01534c6c4c192c3663104de",
+    "workflow_status.json": "b16b31bb5afb57a1c4a8cd079ee179dff0250170132c10a48667f0db01920290"
+  }
+}

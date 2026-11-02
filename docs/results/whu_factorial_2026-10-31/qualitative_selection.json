@@ -1,0 +1,14 @@
+{
+  "split": "val",
+  "seed": 42,
+  "selection": "seeded random sample of sorted validation sample IDs; independent of scores",
+  "sample_ids": [
+    "whu_val_000228",
+    "whu_val_000051",
+    "whu_val_000563",
+    "whu_val_000501"
+  ],
+  "study_registration_sha256": "1666a443c21ccea08f6ca6570282bfc8aa4819e54e3a807241523a5ffad39372",
+  "dataset_content_sha256": "538ac8569dcfd817b8557bc23ed18977de5dbba8d4b19719c82ab5ee4d1a308d",
+  "threshold": 0.5
+}

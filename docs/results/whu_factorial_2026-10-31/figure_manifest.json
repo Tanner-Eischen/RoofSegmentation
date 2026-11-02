@@ -1,0 +1,10 @@
+{
+  "study_registration_sha256": "1666a443c21ccea08f6ca6570282bfc8aa4819e54e3a807241523a5ffad39372",
+  "device": "cuda",
+  "qualitative_seed": 42,
+  "artifacts": {
+    "learning_curves.png": "8512f899f4699a3cdac4a08c2cf2043ab08b146dae21b03413fe2ddf349ae0be",
+    "qualitative_seed42.png": "8b38cc76b055e2dfb4430bfa080619a5fa6334453c3dbae393db26c634038120"
+  },
+  "note": "Validation-only descriptive diagnostics; no test inference or parameter selection."
+}

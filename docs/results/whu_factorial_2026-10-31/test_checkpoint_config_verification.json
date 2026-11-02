@@ -1,0 +1,101 @@
+{
+  "verified_runs": 12,
+  "records": [
+    {
+      "arm": "a0b0_uniform_standard",
+      "seed": 42,
+      "all_summary_config_fields_match_final_checkpoint_except_selected_epoch": true,
+      "factors_match_registration": true,
+      "original_masks_only": true,
+      "fixed_endpoint_and_threshold_verified": true
+    },
+    {
+      "arm": "a1b0_hard_standard",
+      "seed": 42,
+      "all_summary_config_fields_match_final_checkpoint_except_selected_epoch": true,
+      "factors_match_registration": true,
+      "original_masks_only": true,
+      "fixed_endpoint_and_threshold_verified": true
+    },
+    {
+      "arm": "a0b1_uniform_robust",
+      "seed": 42,
+      "all_summary_config_fields_match_final_checkpoint_except_selected_epoch": true,
+      "factors_match_registration": true,
+      "original_masks_only": true,
+      "fixed_endpoint_and_threshold_verified": true
+    },
+    {
+      "arm": "a1b1_hard_robust",
+      "seed": 42,
+      "all_summary_config_fields_match_final_checkpoint_except_selected_epoch": true,
+      "factors_match_registration": true,
+      "original_masks_only": true,
+      "fixed_endpoint_and_threshold_verified": true
+    },
+    {
+      "arm": "a0b0_uniform_standard",
+      "seed": 1337,
+      "all_summary_config_fields_match_final_checkpoint_except_selected_epoch": true,
+      "factors_match_registration": true,
+      "original_masks_only": true,
+      "fixed_endpoint_and_threshold_verified": true
+    },
+    {
+      "arm": "a1b0_hard_standard",
+      "seed": 1337,
+      "all_summary_config_fields_match_final_checkpoint_except_selected_epoch": true,
+      "factors_match_registration": true,
+      "original_masks_only": true,
+      "fixed_endpoint_and_threshold_verified": true
+    },
+    {
+      "arm": "a0b1_uniform_robust",
+      "seed": 1337,
+      "all_summary_config_fields_match_final_checkpoint_except_selected_epoch": true,
+      "factors_match_registration": true,
+      "original_masks_only": true,
+      "fixed_endpoint_and_threshold_verified": true
+    },
+    {
+      "arm": "a1b1_hard_robust",
+      "seed": 1337,
+      "all_summary_config_fields_match_final_checkpoint_except_selected_epoch": true,
+      "factors_match_registration": true,
+      "original_masks_only": true,
+      "fixed_endpoint_and_threshold_verified": true
+    },
+    {
+      "arm": "a0b0_uniform_standard",
+      "seed": 2026,
+      "all_summary_config_fields_match_final_checkpoint_except_selected_epoch": true,
+      "factors_match_registration": true,
+      "original_masks_only": true,
+      "fixed_endpoint_and_threshold_verified": true
+    },
+    {
+      "arm": "a1b0_hard_standard",
+      "seed": 2026,
+      "all_summary_config_fields_match_final_checkpoint_except_selected_epoch": true,
+      "factors_match_registration": true,
+      "original_masks_only": true,
+      "fixed_endpoint_and_threshold_verified": true
+    },
+    {
+      "arm": "a0b1_uniform_robust",
+      "seed": 2026,
+      "all_summary_config_fields_match_final_checkpoint_except_selected_epoch": true,
+      "factors_match_registration": true,
+      "original_masks_only": true,
+      "fixed_endpoint_and_threshold_verified": true
+    },
+    {
+      "arm": "a1b1_hard_robust",
+      "seed": 2026,
+      "all_summary_config_fields_match_final_checkpoint_except_selected_epoch": true,
+      "factors_match_registration": true,
+      "original_masks_only": true,
+      "fixed_endpoint_and_threshold_verified": true
+    }
+  ]
+}

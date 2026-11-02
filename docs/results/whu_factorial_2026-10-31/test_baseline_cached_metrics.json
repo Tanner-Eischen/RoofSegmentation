@@ -1,0 +1,22 @@
+{
+  "split": "test",
+  "checkpoint": "runs/whu_r34_official_2026-10-28/best.pt",
+  "samples": 2416,
+  "threshold_frozen_from_validation": 0.5,
+  "aggregate": {
+    "iou": 0.8921192509468081,
+    "dice": 0.942984170263471,
+    "precision": 0.9463754346228437,
+    "recall": 0.9396171237966977,
+    "f1": 0.9429841702634711,
+    "pixel_accuracy": 0.9873558164432349,
+    "tp": 66222657.0,
+    "fp": 3752381.0,
+    "fn": 4255685.0,
+    "tn": 559109181.0
+  },
+  "dataset_content_sha256": "538ac8569dcfd817b8557bc23ed18977de5dbba8d4b19719c82ab5ee4d1a308d",
+  "checkpoint_sha256": "2c5757995dafaa206abac4e22e384cdef78b4d93ab9026975050307ac2d9c7c5",
+  "note": "No threshold sweep or checkpoint selection was performed on test",
+  "reuse_note": "Verified historical cached test result; no new baseline inference. Context only: epoch-32 selected original baseline differs from 20-epoch fine-tuning endpoints."
+}

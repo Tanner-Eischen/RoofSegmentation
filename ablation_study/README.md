@@ -1,6 +1,12 @@
 # RoofSegmentation: 2×2 training ablation study
 
-**Status:** Integrated experiment runner and analysis. Real study status and measurements live under the chosen `runs/` output root; see `workflow_status.json`. No accuracy result is implied by integration or smoke tests.
+**Status:** All 12 real WHU runs completed on November 1, 2026. See the
+[results, learning curves, and matched predictions](../docs/WHU_FACTORIAL_2026-10-31.md)
+and [portable evidence packet](../docs/results/whu_factorial_2026-10-31/README.md).
+The original protocol remains validation-only; any later test inference is a
+separate descriptive follow-up on a previously inspected benchmark.
+The original protocol and experiment-plan files are preserved as design records;
+the linked report is the completion record.
 
 **Target repository:** [Tanner-Eischen/RoofSegmentation](https://github.com/Tanner-Eischen/RoofSegmentation), specifically the newer `roof_pipeline` training and evaluation modules. Do **not** run this study through the older `train_v2.py`/`evaluate.py` scripts; those are a different checkpoint pipeline.
 
