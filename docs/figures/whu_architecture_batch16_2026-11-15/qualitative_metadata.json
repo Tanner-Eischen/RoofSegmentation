@@ -1,0 +1,246 @@
+{
+  "split": "val",
+  "sample_ids": [
+    "whu_val_000228",
+    "whu_val_000051",
+    "whu_val_000563",
+    "whu_val_000501"
+  ],
+  "selection_seed": 42,
+  "examples": 4,
+  "training_seed": 42,
+  "selection_policy": "seeded random sample of sorted validation IDs, frozen before model loading or prediction",
+  "plan_sha256": "b0e70250124819dd0488dc9976ac33cb9d7b21fa03cb8e4b6bb91051eef63a5d",
+  "comparison_sha256": "2ac002a81f3f066ff37001cfde98f639647ea3b7cfb409b1caf67a8a23172bd1",
+  "dataset_content_sha256": "538ac8569dcfd817b8557bc23ed18977de5dbba8d4b19719c82ab5ee4d1a308d",
+  "threshold": 0.5,
+  "checkpoint_sha256": {
+    "unet-resnet34": "33e6a68709ad8225b24b9b43f439fe837ca22b7134f5660b2cb375c0784817bc",
+    "unetplusplus-resnet34": "c1bffbcb9da36d3e91e0a0a2a1d421c049b4bd660a127021ae6f2751b2b690d6",
+    "segformer-b0": "ef4e392f08117eb3a03ce6e0a20df579001772d75db6c03921d2e8c1de3d7664"
+  },
+  "device": "cpu",
+  "torch": "2.5.1+cu121",
+  "inference_dtype": "float32; no autocast",
+  "measurements": [
+    {
+      "architecture": "unet-resnet34",
+      "sample_id": "whu_val_000228",
+      "counts": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "tn": 262144
+      },
+      "server_counts": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "tn": 262144
+      },
+      "server_counts_match": true,
+      "server_csv_sha256": "e078314394d428d78c4c5f8d2f5976227294cfb610adb158985a699d31d256d9"
+    },
+    {
+      "architecture": "unet-resnet34",
+      "sample_id": "whu_val_000051",
+      "counts": {
+        "tp": 15523,
+        "fp": 753,
+        "fn": 2477,
+        "tn": 243391
+      },
+      "server_counts": {
+        "tp": 15523,
+        "fp": 753,
+        "fn": 2477,
+        "tn": 243391
+      },
+      "server_counts_match": true,
+      "server_csv_sha256": "e078314394d428d78c4c5f8d2f5976227294cfb610adb158985a699d31d256d9"
+    },
+    {
+      "architecture": "unet-resnet34",
+      "sample_id": "whu_val_000563",
+      "counts": {
+        "tp": 37023,
+        "fp": 2538,
+        "fn": 3999,
+        "tn": 218584
+      },
+      "server_counts": {
+        "tp": 37027,
+        "fp": 2539,
+        "fn": 3995,
+        "tn": 218583
+      },
+      "server_counts_match": false,
+      "server_csv_sha256": "e078314394d428d78c4c5f8d2f5976227294cfb610adb158985a699d31d256d9"
+    },
+    {
+      "architecture": "unet-resnet34",
+      "sample_id": "whu_val_000501",
+      "counts": {
+        "tp": 61121,
+        "fp": 4262,
+        "fn": 5850,
+        "tn": 190911
+      },
+      "server_counts": {
+        "tp": 61121,
+        "fp": 4261,
+        "fn": 5850,
+        "tn": 190912
+      },
+      "server_counts_match": false,
+      "server_csv_sha256": "e078314394d428d78c4c5f8d2f5976227294cfb610adb158985a699d31d256d9"
+    },
+    {
+      "architecture": "unetplusplus-resnet34",
+      "sample_id": "whu_val_000228",
+      "counts": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "tn": 262144
+      },
+      "server_counts": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "tn": 262144
+      },
+      "server_counts_match": true,
+      "server_csv_sha256": "e6eeb71bef41aed5acb14c7512d19210ba43359e4c85cf61313146e353db2aa0"
+    },
+    {
+      "architecture": "unetplusplus-resnet34",
+      "sample_id": "whu_val_000051",
+      "counts": {
+        "tp": 17535,
+        "fp": 859,
+        "fn": 465,
+        "tn": 243285
+      },
+      "server_counts": {
+        "tp": 17536,
+        "fp": 859,
+        "fn": 464,
+        "tn": 243285
+      },
+      "server_counts_match": false,
+      "server_csv_sha256": "e6eeb71bef41aed5acb14c7512d19210ba43359e4c85cf61313146e353db2aa0"
+    },
+    {
+      "architecture": "unetplusplus-resnet34",
+      "sample_id": "whu_val_000563",
+      "counts": {
+        "tp": 38943,
+        "fp": 2906,
+        "fn": 2079,
+        "tn": 218216
+      },
+      "server_counts": {
+        "tp": 38943,
+        "fp": 2911,
+        "fn": 2079,
+        "tn": 218211
+      },
+      "server_counts_match": false,
+      "server_csv_sha256": "e6eeb71bef41aed5acb14c7512d19210ba43359e4c85cf61313146e353db2aa0"
+    },
+    {
+      "architecture": "unetplusplus-resnet34",
+      "sample_id": "whu_val_000501",
+      "counts": {
+        "tp": 61406,
+        "fp": 4365,
+        "fn": 5565,
+        "tn": 190808
+      },
+      "server_counts": {
+        "tp": 61407,
+        "fp": 4365,
+        "fn": 5564,
+        "tn": 190808
+      },
+      "server_counts_match": false,
+      "server_csv_sha256": "e6eeb71bef41aed5acb14c7512d19210ba43359e4c85cf61313146e353db2aa0"
+    },
+    {
+      "architecture": "segformer-b0",
+      "sample_id": "whu_val_000228",
+      "counts": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "tn": 262144
+      },
+      "server_counts": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "tn": 262144
+      },
+      "server_counts_match": true,
+      "server_csv_sha256": "5eed038556bb714abd7f62ea8fc78011f9d58751a01092c7b3fc6acc173b3c13"
+    },
+    {
+      "architecture": "segformer-b0",
+      "sample_id": "whu_val_000051",
+      "counts": {
+        "tp": 8874,
+        "fp": 773,
+        "fn": 9126,
+        "tn": 243371
+      },
+      "server_counts": {
+        "tp": 8876,
+        "fp": 773,
+        "fn": 9124,
+        "tn": 243371
+      },
+      "server_counts_match": false,
+      "server_csv_sha256": "5eed038556bb714abd7f62ea8fc78011f9d58751a01092c7b3fc6acc173b3c13"
+    },
+    {
+      "architecture": "segformer-b0",
+      "sample_id": "whu_val_000563",
+      "counts": {
+        "tp": 37885,
+        "fp": 2050,
+        "fn": 3137,
+        "tn": 219072
+      },
+      "server_counts": {
+        "tp": 37885,
+        "fp": 2049,
+        "fn": 3137,
+        "tn": 219073
+      },
+      "server_counts_match": false,
+      "server_csv_sha256": "5eed038556bb714abd7f62ea8fc78011f9d58751a01092c7b3fc6acc173b3c13"
+    },
+    {
+      "architecture": "segformer-b0",
+      "sample_id": "whu_val_000501",
+      "counts": {
+        "tp": 60376,
+        "fp": 4705,
+        "fn": 6595,
+        "tn": 190468
+      },
+      "server_counts": {
+        "tp": 60375,
+        "fp": 4704,
+        "fn": 6596,
+        "tn": 190469
+      },
+      "server_counts_match": false,
+      "server_csv_sha256": "5eed038556bb714abd7f62ea8fc78011f9d58751a01092c7b3fc6acc173b3c13"
+    }
+  ],
+  "test_inference": false,
+  "count_comparison_note": "CPU and server CUDA/batched kernels can differ at threshold-adjacent pixels; exact-count agreement and mismatches are retained explicitly.",
+  "interpretation": "Descriptive random validation examples, not independent geographic confirmation or model selection."
+}

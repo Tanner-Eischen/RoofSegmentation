@@ -107,8 +107,13 @@ endpoint comparisons; `best.pt` remains the validation-selected checkpoint.
 python -m roof_pipeline.train --data data/whu_prepared --run runs/whu_unet_r34 --arch unet-resnet34 --pretrained --epochs 40 --batch-size 4 --size 512 --workers 0 --seed 42
 ```
 
-Model options: `unet-resnet34`, `unetplusplus-efficientnet-b0`,
-`deeplabv3plus-resnet34`, and `tiny` (tiny is only for smoke tests).
+Model options: `unet-resnet34`, `unetplusplus-resnet34`, `segformer-b0`,
+`unetplusplus-efficientnet-b0`, `deeplabv3plus-resnet34`, and `tiny` (tiny is only
+for smoke tests). The [controlled three-model comparison](docs/WHU_ARCHITECTURE_COMPARISON_2026-11-14.md)
+completed all three 40-epoch, batch-16 runs on shared WHU partitions with
+validation-best checkpoints. Its report includes measured GPU timing, complete
+learning curves and validation-only predictions. New comparison architectures
+use segmentation-models-pytorch 0.5.x.
 Optional U-Net auxiliary edge supervision uses `--boundary-weight 0.2
 --boundary-radius 1`, retaining binary building inference. See the
 [matched boundary pilot and annotation review](docs/WHU_BOUNDARY_2026-10-29.md)

@@ -2,13 +2,30 @@
 
 from __future__ import annotations
 
+import hashlib
 import inspect
+import json
 
 import torch
 import torch.nn.functional as F
 from torch import nn
 
 DEFAULT_ASPP_RATES = (12, 24, 36)
+
+
+def encoder_fingerprint(model: nn.Module) -> str:
+    """Bind initialized encoder tensors, including names, dtypes and shapes."""
+    encoder = getattr(model, "encoder", None)
+    if encoder is None:
+        raise ValueError("Model does not expose an encoder to fingerprint")
+    digest = hashlib.sha256()
+    for name, tensor in sorted(encoder.state_dict().items()):
+        value = tensor.detach().cpu().contiguous()
+        digest.update(name.encode("utf-8"))
+        digest.update(str(value.dtype).encode("utf-8"))
+        digest.update(json.dumps(list(value.shape)).encode("utf-8"))
+        digest.update(value.numpy().tobytes())
+    return digest.hexdigest()
 
 
 def validate_aspp_rates(arch: str, aspp_rates) -> tuple[int, int, int] | None:
@@ -156,19 +173,32 @@ def create_model(
         ) from exc
     weights = "imagenet" if pretrained else None
     configs = {
-        "unet-resnet34": (smp.Unet, "resnet34"),
-        "unetplusplus-efficientnet-b0": (smp.UnetPlusPlus, "efficientnet-b0"),
-        "deeplabv3plus-resnet34": (smp.DeepLabV3Plus, "resnet34"),
+        "unet-resnet34": ("Unet", "resnet34"),
+        "unetplusplus-resnet34": ("UnetPlusPlus", "resnet34"),
+        "unetplusplus-efficientnet-b0": ("UnetPlusPlus", "efficientnet-b0"),
+        "deeplabv3plus-resnet34": ("DeepLabV3Plus", "resnet34"),
+        "segformer-b0": ("Segformer", "mit_b0"),
     }
     if arch not in configs:
         raise ValueError(f"Unknown model {arch!r}: choose tiny or {list(configs)}")
-    cls, encoder = configs[arch]
+    constructor, encoder = configs[arch]
+    cls = getattr(smp, constructor, None)
+    if cls is None:
+        raise ImportError(
+            f"Installed segmentation-models-pytorch does not provide {constructor}; "
+            "SegFormer-B0 support is validated with version 0.5.0."
+        )
     decoder_options = {"decoder_atrous_rates": rates} if rates is not None else {}
+    if arch == "segformer-b0":
+        # Pin the decoder/output geometry as part of this architecture's checkpoint
+        # contract instead of relying on defaults in future SMP versions.
+        decoder_options.update(decoder_segmentation_channels=256, upsampling=4)
     model = cls(
         encoder_name=encoder,
         encoder_weights=weights,
         in_channels=3,
         classes=1,
+        activation=None,
         **decoder_options,
     )
     return BoundaryUNet(model) if boundary_supervision else model

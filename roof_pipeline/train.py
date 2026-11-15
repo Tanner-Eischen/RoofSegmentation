@@ -30,6 +30,7 @@ from .models import (
     DEFAULT_ASPP_RATES,
     BoundaryUNet,
     create_model,
+    encoder_fingerprint,
     load_model,
     validate_aspp_rates,
 )
@@ -219,6 +220,23 @@ def train(args):
     )
     val_loader = DataLoader(val_ds, shuffle=False, **common)
     model, initialization = initialize_model(args, dev, dataset_sha)
+    encoder_sha = None
+    if (
+        args.pretrained
+        and getattr(args, "init_checkpoint", None) is None
+        and hasattr(model, "encoder")
+    ):
+        encoder_sha = encoder_fingerprint(model)
+    expected_encoder_sha = getattr(args, "expected_encoder_sha256", None)
+    if expected_encoder_sha is not None:
+        if encoder_sha is None:
+            raise ValueError(
+                "Expected encoder SHA requires a fresh pretrained model with an encoder"
+            )
+        if expected_encoder_sha != encoder_sha:
+            raise ValueError(
+                "Pretrained encoder initialization SHA differs from expected"
+            )
     opt = torch.optim.AdamW(
         model.parameters(), lr=args.lr, weight_decay=args.weight_decay
     )
@@ -234,6 +252,7 @@ def train(args):
         "normalization": "imagenet_rgb_v1",
         "seed": args.seed,
         "pretrained_encoder": args.pretrained,
+        "encoder_initialization_sha256": encoder_sha,
         "aspp_rates": list(args.aspp_rates)
         if getattr(args, "aspp_rates", None) is not None
         else None,
@@ -482,8 +501,10 @@ def parse_args():
         choices=[
             "tiny",
             "unet-resnet34",
+            "unetplusplus-resnet34",
             "unetplusplus-efficientnet-b0",
             "deeplabv3plus-resnet34",
+            "segformer-b0",
         ],
     )
     p.add_argument(
@@ -512,6 +533,10 @@ def parse_args():
         "--init-checkpoint",
         type=Path,
         help="Warm-start matching full model weights; restart optimizer",
+    )
+    p.add_argument(
+        "--expected-encoder-sha256",
+        help="Require the exact initialized ImageNet encoder tensors recorded during comparison setup",
     )
     p.add_argument(
         "--sampling-report",

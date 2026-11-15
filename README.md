@@ -53,6 +53,13 @@ previously inspected WHU test. Every endpoint scored below the historical
 baseline; the hard/standard arm's test mean was **0.882539** versus **0.892119**
 for that baseline. These descriptive results did not change model selection.
 
+The [completed architecture comparison](docs/WHU_ARCHITECTURE_COMPARISON_2026-11-14.md)
+trained U-Net/ResNet-34, U-Net++/ResNet-34, and SegFormer-B0 for 40 epochs each
+with batch 16 and seed 42 on the same WHU splits. Validation-best building IoU
+at threshold 0.50 was **0.913608**, **0.917648**, and **0.903176**, respectively.
+The report includes verified checkpoint identities, learning curves and seeded
+validation predictions. This single-seed pilot performed no new test inference.
+
 ## Local image inference
 
 The application now supports local PNG/JPEG/WebP upload through a shared CPU

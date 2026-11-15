@@ -1,0 +1,22 @@
+{
+  "split": "val",
+  "sample_ids": [
+    "whu_val_000228",
+    "whu_val_000051",
+    "whu_val_000563",
+    "whu_val_000501"
+  ],
+  "selection_seed": 42,
+  "examples": 4,
+  "training_seed": 42,
+  "selection_policy": "seeded random sample of sorted validation IDs, frozen before model loading or prediction",
+  "plan_sha256": "b0e70250124819dd0488dc9976ac33cb9d7b21fa03cb8e4b6bb91051eef63a5d",
+  "comparison_sha256": "2ac002a81f3f066ff37001cfde98f639647ea3b7cfb409b1caf67a8a23172bd1",
+  "dataset_content_sha256": "538ac8569dcfd817b8557bc23ed18977de5dbba8d4b19719c82ab5ee4d1a308d",
+  "threshold": 0.5,
+  "checkpoint_sha256": {
+    "unet-resnet34": "33e6a68709ad8225b24b9b43f439fe837ca22b7134f5660b2cb375c0784817bc",
+    "unetplusplus-resnet34": "c1bffbcb9da36d3e91e0a0a2a1d421c049b4bd660a127021ae6f2751b2b690d6",
+    "segformer-b0": "ef4e392f08117eb3a03ce6e0a20df579001772d75db6c03921d2e8c1de3d7664"
+  }
+}

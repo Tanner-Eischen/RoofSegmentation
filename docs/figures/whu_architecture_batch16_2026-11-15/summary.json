@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "study": "WHU three-architecture exploratory pilot",
+  "results_root": "C:\\Users\\tanne\\Documents\\Codex\\2026-10-28\\cl\\outputs\\RoofSegmentation\\runs\\runpod_results_batch16_2026-11-15\\results",
+  "seeds_per_architecture": 1,
+  "seed": 42,
+  "epochs": 40,
+  "batch_size": 16,
+  "image_size": 512,
+  "test_inference": false,
+  "dataset": {
+    "path": "/workspace/roof-comparison/data/whu_official_prepared",
+    "manifest_sha256": "d879dfa6d5a399ee5f7539a0c3e446db659d69d9f3fe55901fe015d0095edfe0",
+    "content_sha256": "538ac8569dcfd817b8557bc23ed18977de5dbba8d4b19719c82ab5ee4d1a308d",
+    "split_counts": {
+      "train": 4736,
+      "val": 1036,
+      "test": 2416
+    }
+  },
+  "source_json_sha256": {
+    "plan.json": "b0e70250124819dd0488dc9976ac33cb9d7b21fa03cb8e4b6bb91051eef63a5d",
+    "comparison.json": "2ac002a81f3f066ff37001cfde98f639647ea3b7cfb409b1caf67a8a23172bd1",
+    "runtime_estimate.json": "ee3b3d3bf9f9e19d6388f69ac4d109186c24b6946efaee18a96c484f50f533f7",
+    "runs/unet-resnet34_seed42/history.json": "fac6152b2a995066031f6f60fabc2a5efa28d3377b9fe311308feea5f2ea754d",
+    "runs/unet-resnet34_seed42/training_summary.json": "01bcf38074a6b64e83ea58a9b91ea1a61e46838ed9be31bf8c313bd166b39855",
+    "runs/unet-resnet34_seed42/experiment.json": "949d8f65422e336d2ec25afa6b10917c19f3a0fdb1f1fcfe4c0b550e75f02530",
+    "runs/unet-resnet34_seed42/validation_best.json": "e553fa90d07f5c4cd4320d29ecdb20cbf57fa7e0ae56508d28b43e131e407e82",
+    "runs/unetplusplus-resnet34_seed42/history.json": "1b01c68021930ceefe9f169e37768244b632bb1432e3bc501c99351e54415d76",
+    "runs/unetplusplus-resnet34_seed42/training_summary.json": "aa20b5e8aaf3bf44096a55554a5a1b8939bbb71db689e2bd08ceb30c916903d8",
+    "runs/unetplusplus-resnet34_seed42/experiment.json": "a843b986d366701fe8313f9463064e364fc1a50d159c5b84c75e5061da578661",
+    "runs/unetplusplus-resnet34_seed42/validation_best.json": "b0fd7a19d1d5edc63b1d6c63300d379ef6520ce8cfb6cd771dfe2cd397dcd81c",
+    "runs/segformer-b0_seed42/history.json": "710d7965d10580de53fc3594ae7ab9382227d3cac82094dfbed82c862c616e40",
+    "runs/segformer-b0_seed42/training_summary.json": "311a533c910982edf09c7725faa02c51c6368bcf0fafcf9a093176db02af1a04",
+    "runs/segformer-b0_seed42/experiment.json": "1df9a47ef0976d8c20b2d033dea4049f52397f5fd9945fff4715cdd89cb77758",
+    "runs/segformer-b0_seed42/validation_best.json": "091c97cb005dc951926bf05001328c143e68b3788db3f025f29b2932bb9cba7e"
+  },
+  "rows": [
+    {
+      "architecture": "unet-resnet34",
+      "seed": 42,
+      "best_epoch": 34,
+      "primary_validation_iou_0p5": 0.9136078302210222,
+      "secondary_validation_threshold": 0.5,
+      "secondary_calibrated_validation_iou": 0.9136078302210222,
+      "recorded_epoch_minutes": 36.62980832940278,
+      "profile_median_train_step_seconds": 0.1492599945049733,
+      "profile_train_images_per_second": 107.19550173550948,
+      "profile_median_validation_step_seconds": 0.06738651799969375,
+      "profile_validation_images_per_second": 237.43621832593746,
+      "checkpoint_sha256": "33e6a68709ad8225b24b9b43f439fe837ca22b7134f5660b2cb375c0784817bc",
+      "primary_delta_vs_unet_iou_percentage_points": 0.0
+    },
+    {
+      "architecture": "unetplusplus-resnet34",
+      "seed": 42,
+      "best_epoch": 40,
+      "primary_validation_iou_0p5": 0.9176478729372158,
+      "secondary_validation_threshold": 0.5,
+      "secondary_calibrated_validation_iou": 0.9176478729372158,
+      "recorded_epoch_minutes": 74.10816726993458,
+      "profile_median_train_step_seconds": 0.3299248970579356,
+      "profile_train_images_per_second": 48.49588540506648,
+      "profile_median_validation_step_seconds": 0.16988473664969206,
+      "profile_validation_images_per_second": 94.18150397461856,
+      "checkpoint_sha256": "c1bffbcb9da36d3e91e0a0a2a1d421c049b4bd660a127021ae6f2751b2b690d6",
+      "primary_delta_vs_unet_iou_percentage_points": 0.4040042716193626
+    },
+    {
+      "architecture": "segformer-b0",
+      "seed": 42,
+      "best_epoch": 37,
+      "primary_validation_iou_0p5": 0.9031755984825305,
+      "secondary_validation_threshold": 0.5,
+      "secondary_calibrated_validation_iou": 0.9031755984825305,
+      "recorded_epoch_minutes": 113.8743571391562,
+      "profile_median_train_step_seconds": 0.5418750278186053,
+      "profile_train_images_per_second": 29.527103443777925,
+      "profile_median_validation_step_seconds": 0.100320486119017,
+      "profile_validation_images_per_second": 159.48886034122793,
+      "checkpoint_sha256": "ef4e392f08117eb3a03ce6e0a20df579001772d75db6c03921d2e8c1de3d7664",
+      "primary_delta_vs_unet_iou_percentage_points": -1.0432231738491726
+    }
+  ],
+  "profile_device": "NVIDIA GeForce RTX 3090",
+  "timing_note": "Recorded epoch times include training and per-epoch validation and exclude startup audits, final calibration and checkpoint reassessment. Early U-Net training overlapped a subsequently cancelled batch-32 probe, so actual epoch times are not a clean speed comparison. Use the separate batch-16 runtime profile for throughput; short-probe rates are not end-to-end training rates.",
+  "limitations": [
+    "One seed per architecture (n=1, seed 42): seed variability and confidence intervals are not estimable.",
+    "Validation-selected exploratory results on existing WHU geography; no new test inference or independent geographic confirmation.",
+    "The primary score is global validation IoU at threshold 0.50; calibration is a secondary result on the same selected checkpoint and validation data.",
+    "Architecture packages differ in encoder family, capacity and initialization; these comparisons do not isolate attention or any individual architectural mechanism.",
+    "WHU masks describe binary building extent, not roof material, damage, pitch or individual roof instances.",
+    "This utility verifies JSON consistency only; checkpoint tensors, dataset contents and remote execution must be verified separately by the training pipeline."
+  ]
+}
