@@ -28,7 +28,8 @@ U-Net++ had the highest validation point estimate under this common recipe.
 There is one seed per model, so these results do not establish seed-level
 significance or an architecture's best achievable performance. U-Net and
 U-Net++ share identical starting encoder tensors; SegFormer also changes the
-encoder family and capacity. No new test inference was performed.
+encoder family and capacity. The training and validation phase performed no
+test inference.
 
 Validation-only threshold calibration selected 0.50 for all three models, so
 the secondary calibrated scores equal their primary scores.
@@ -78,6 +79,58 @@ To reproduce the post-training analysis from a verified extracted result root:
 ```powershell
 python scripts/analyze_architecture_comparison.py --results <result-root> --out <figure-directory>
 python scripts/qualitative_architecture_comparison.py --results <result-root> --data data/whu_official_prepared --out <figure-directory> --examples 4 --seed 42
+```
+
+## November 16 test follow-up
+
+A separately authorized post-study follow-up evaluated all three original
+validation-best checkpoints on the same **2,416 official WHU test tiles**.
+Selected epochs **34 / 40 / 37**, checkpoint SHA256s and threshold **0.50**
+were frozen before inference. Training used the unchanged **4,736 / 1,036 /
+2,416** publisher partitions; this follow-up retained every image and label.
+
+| Model | Selected epoch | Validation IoU @ 0.50 | Test IoU @ 0.50 | Test Dice | Test precision | Test recall |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| U-Net / ResNet-34 | 34 | 0.913608 | 0.890162 | 0.941890 | 0.943658 | 0.940128 |
+| U-Net++ / ResNet-34 | 40 | 0.917648 | 0.884568 | 0.938749 | 0.933765 | 0.943786 |
+| SegFormer-B0 | 37 | 0.903176 | 0.881707 | 0.937135 | 0.939521 | 0.934761 |
+
+U-Net has the highest test point estimate in this follow-up, while U-Net++
+remains the architecture selected by validation. These test results leave that
+original selection intact. The WHU test had already informed project development;
+this is descriptive reuse of a previously inspected split, with one seed per
+model, rather than pristine holdout evidence or independent geographic
+confirmation.
+
+Test inference ran locally on the **RTX 4060 Laptop GPU**, batch **4**, float32
+with autocast disabled. The original RTX 3090 validation assessments above
+remain unchanged. Each model covered the exact 2,416 registered test IDs once;
+per-image TP/FP/FN/TN totals reconcile with every reported aggregate metric.
+All **95 original training/validation artifacts**, selected checkpoints and the
+dataset content fingerprint were verified unchanged after evaluation. The
+packet's `inference_seconds` field measures evaluation wall time, including
+checkpoint loading, full-dataset integrity checks, data loading and scoring.
+
+![Validation and reused-test IoU for the frozen validation-best checkpoints](results/whu_architecture_test_2026-11-16/comparison.png)
+
+[Portable result packet](results/whu_architecture_test_2026-11-16/README.md) ·
+[Full-precision comparison JSON](results/whu_architecture_test_2026-11-16/comparison.json) ·
+[Comparison CSV](results/whu_architecture_test_2026-11-16/comparison.csv) ·
+[SVG comparison](results/whu_architecture_test_2026-11-16/comparison.svg) ·
+[Packet checksums](results/whu_architecture_test_2026-11-16/checksums.json).
+
+Per-image test counts:
+[U-Net](results/whu_architecture_test_2026-11-16/unet-resnet34_per_image.csv) ·
+[U-Net++](results/whu_architecture_test_2026-11-16/unetplusplus-resnet34_per_image.csv) ·
+[SegFormer-B0](results/whu_architecture_test_2026-11-16/segformer-b0_per_image.csv).
+The [frozen follow-up registration](results/whu_architecture_test_2026-11-16/registration.json)
+records the exact original checkpoint SHA256s, validation selection, dataset
+identity, test-ID fingerprint and inference environment.
+
+To reproduce this descriptive evaluation in fresh output directories:
+
+```powershell
+.\.venv-gpu\Scripts\python.exe scripts/evaluate_architecture_test.py --results <verified-batch16-result-root> --data data/whu_official_prepared --out runs/whu_architecture_test_reproduction --packet docs/results/whu_architecture_test_reproduction --device cuda --batch-size 4
 ```
 
 ## Models and common controls
@@ -142,8 +195,9 @@ initialization hash, dataset identity, per-image counts and aggregate scores are
 checked. Validation-only calibration over 0.15–0.85 in steps of 0.05 is reported
 as a **secondary** result using that same selected checkpoint.
 
-The runner performs no test inference. The existing WHU test has already
-informed development, and one seed does not estimate training variability or
+The architecture-comparison runner performs no test inference; the separately
+authorized November 16 evaluation is documented above. The existing WHU test has
+already informed development, and one seed does not estimate training variability or
 independent geographic generalization. This is an architecture pilot under a
 common recipe, not a claim that each architecture has been individually tuned
 to its best attainable score.
@@ -280,7 +334,7 @@ Core experiment and analysis tests use the GPU Python environment; API tests use
 the separate supported Python 3.12 serving environment. The training environment
 uses Python 3.10 and is not the supported API-serving profile.
 
-Final local gates passed: **316 core tests**, **18 ablation tests plus 13
+Training-completion local gates passed: **316 core tests**, **18 ablation tests plus 13
 subtests**, and **41 API tests** in the supported serving environment. Ruff lint
 passed. The full GPU-environment pytest invocation also exercised the API tests;
 its two failures were the existing Python-3.12 serving-profile requirement and

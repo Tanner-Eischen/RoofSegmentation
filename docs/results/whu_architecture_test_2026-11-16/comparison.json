@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "registered_utc": "2026-11-16T11:08:53.180680+00:00",
+  "purpose": "Explicitly authorized descriptive post-study test comparison",
+  "checkpoint_selection": "Original validation-best at 0.50, earliest tie; unchanged",
+  "validation_selected_architecture": "unetplusplus-resnet34",
+  "split": "test",
+  "samples": 2416,
+  "test_ids_sha256": "779ecec8e19e4472e6d132747493be898968e6478ceb305b90a5ff1bc2235f06",
+  "dataset": {
+    "manifest_sha256": "d879dfa6d5a399ee5f7539a0c3e446db659d69d9f3fe55901fe015d0095edfe0",
+    "content_sha256": "538ac8569dcfd817b8557bc23ed18977de5dbba8d4b19719c82ab5ee4d1a308d",
+    "split_counts": {
+      "train": 4736,
+      "val": 1036,
+      "test": 2416
+    }
+  },
+  "threshold": 0.5,
+  "inference_batch_size": 4,
+  "training_batch_size": 16,
+  "training_seed": 42,
+  "epochs_each": 40,
+  "device": "cuda",
+  "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+  "precision": "float32, no autocast",
+  "environment": {
+    "python": "3.10.11",
+    "torch": "2.5.1+cu121",
+    "numpy": "2.2.6",
+    "Pillow": "11.3.0",
+    "segmentation-models-pytorch": "0.5.0"
+  },
+  "training_comparison_sha256": "2ac002a81f3f066ff37001cfde98f639647ea3b7cfb409b1caf67a8a23172bd1",
+  "test_use_note": "The official WHU test has already informed project development. This is a reused-test descriptive follow-up, not pristine holdout evidence or independent geographic confirmation.",
+  "test_selection_used": false,
+  "registered_checkpoints": [
+    {
+      "architecture": "unet-resnet34",
+      "seed": 42,
+      "best_epoch": 34,
+      "checkpoint_sha256": "33e6a68709ad8225b24b9b43f439fe837ca22b7134f5660b2cb375c0784817bc",
+      "primary_validation_iou_0p5": 0.9136078302210222
+    },
+    {
+      "architecture": "unetplusplus-resnet34",
+      "seed": 42,
+      "best_epoch": 40,
+      "checkpoint_sha256": "c1bffbcb9da36d3e91e0a0a2a1d421c049b4bd660a127021ae6f2751b2b690d6",
+      "primary_validation_iou_0p5": 0.9176478729372158
+    },
+    {
+      "architecture": "segformer-b0",
+      "seed": 42,
+      "best_epoch": 37,
+      "checkpoint_sha256": "ef4e392f08117eb3a03ce6e0a20df579001772d75db6c03921d2e8c1de3d7664",
+      "primary_validation_iou_0p5": 0.9031755984825305
+    }
+  ],
+  "completed_utc": "2026-11-16T11:20:03.748617+00:00",
+  "models": [
+    {
+      "architecture": "unet-resnet34",
+      "seed": 42,
+      "best_epoch": 34,
+      "checkpoint_sha256": "33e6a68709ad8225b24b9b43f439fe837ca22b7134f5660b2cb375c0784817bc",
+      "samples": 2416,
+      "threshold": 0.5,
+      "validation_iou": 0.9136078302210222,
+      "test": {
+        "iou": 0.8901619285879484,
+        "dice": 0.9418895969965354,
+        "precision": 0.9436582899618002,
+        "recall": 0.94012752172859,
+        "f1": 0.9418895969965354,
+        "pixel_accuracy": 0.9870910928738827,
+        "tp": 66258629,
+        "fp": 3956013,
+        "fn": 4219713,
+        "tn": 558905549
+      },
+      "test_minus_validation_iou_pp": -2.3445901633073807,
+      "inference_seconds": 155.92200000000594
+    },
+    {
+      "architecture": "unetplusplus-resnet34",
+      "seed": 42,
+      "best_epoch": 40,
+      "checkpoint_sha256": "c1bffbcb9da36d3e91e0a0a2a1d421c049b4bd660a127021ae6f2751b2b690d6",
+      "samples": 2416,
+      "threshold": 0.5,
+      "validation_iou": 0.9176478729372158,
+      "test": {
+        "iou": 0.8845676036851633,
+        "dice": 0.938748604141812,
+        "precision": 0.933765147489936,
+        "recall": 0.9437855391093054,
+        "f1": 0.9387486041418122,
+        "pixel_accuracy": 0.9862946911363413,
+        "tp": 66516440,
+        "fp": 4718217,
+        "fn": 3961902,
+        "tn": 558143345
+      },
+      "test_minus_validation_iou_pp": -3.308026925205254,
+      "inference_seconds": 271.64100000000326
+    },
+    {
+      "architecture": "segformer-b0",
+      "seed": 42,
+      "best_epoch": 37,
+      "checkpoint_sha256": "ef4e392f08117eb3a03ce6e0a20df579001772d75db6c03921d2e8c1de3d7664",
+      "samples": 2416,
+      "threshold": 0.5,
+      "validation_iou": 0.9031755984825305,
+      "test": {
+        "iou": 0.881707070409796,
+        "dice": 0.9371353110957689,
+        "precision": 0.9395212335517853,
+        "recall": 0.9347614760858024,
+        "f1": 0.9371353110957689,
+        "pixel_accuracy": 0.9860442205770126,
+        "tp": 65880439,
+        "fp": 4240849,
+        "fn": 4597903,
+        "tn": 558620713
+      },
+      "test_minus_validation_iou_pp": -2.146852807273447,
+      "inference_seconds": 215.34399999999732
+    }
+  ],
+  "original_artifacts_unchanged": true,
+  "per_image_counts_verified": true
+}

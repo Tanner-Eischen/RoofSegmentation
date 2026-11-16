@@ -1,0 +1,25 @@
+{
+  "split": "test",
+  "checkpoint": "registered-validation-best:ef4e392f08117eb3a03ce6e0a20df579001772d75db6c03921d2e8c1de3d7664",
+  "samples": 2416,
+  "threshold_frozen_from_validation": 0.5,
+  "aggregate": {
+    "iou": 0.881707070409796,
+    "dice": 0.9371353110957689,
+    "precision": 0.9395212335517853,
+    "recall": 0.9347614760858024,
+    "f1": 0.9371353110957689,
+    "pixel_accuracy": 0.9860442205770126,
+    "tp": 65880439.0,
+    "fp": 4240849.0,
+    "fn": 4597903.0,
+    "tn": 558620713.0
+  },
+  "dataset_content_sha256": "538ac8569dcfd817b8557bc23ed18977de5dbba8d4b19719c82ab5ee4d1a308d",
+  "checkpoint_sha256": "ef4e392f08117eb3a03ce6e0a20df579001772d75db6c03921d2e8c1de3d7664",
+  "note": "No threshold sweep or checkpoint selection was performed on test",
+  "architecture": "segformer-b0",
+  "seed": 42,
+  "best_epoch": 37,
+  "elapsed_seconds": 215.34399999999732
+}

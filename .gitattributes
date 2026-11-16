@@ -8,3 +8,5 @@ reports/**/*.log -whitespace
 # Factorial result and figure checksums bind exact published bytes across checkouts.
 docs/results/whu_factorial_2026-10-31/** -text whitespace=trailing-space,space-before-tab,cr-at-eol
 docs/figures/whu_factorial_2026-10-31/*.png -text
+# Architecture test-followup hashes bind the published CSV/JSON bytes.
+docs/results/whu_architecture_test_2026-11-16/** -text whitespace=trailing-space,space-before-tab,cr-at-eol

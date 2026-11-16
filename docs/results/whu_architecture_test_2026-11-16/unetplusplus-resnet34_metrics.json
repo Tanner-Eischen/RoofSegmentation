@@ -1,0 +1,25 @@
+{
+  "split": "test",
+  "checkpoint": "registered-validation-best:c1bffbcb9da36d3e91e0a0a2a1d421c049b4bd660a127021ae6f2751b2b690d6",
+  "samples": 2416,
+  "threshold_frozen_from_validation": 0.5,
+  "aggregate": {
+    "iou": 0.8845676036851633,
+    "dice": 0.938748604141812,
+    "precision": 0.933765147489936,
+    "recall": 0.9437855391093054,
+    "f1": 0.9387486041418122,
+    "pixel_accuracy": 0.9862946911363413,
+    "tp": 66516440.0,
+    "fp": 4718217.0,
+    "fn": 3961902.0,
+    "tn": 558143345.0
+  },
+  "dataset_content_sha256": "538ac8569dcfd817b8557bc23ed18977de5dbba8d4b19719c82ab5ee4d1a308d",
+  "checkpoint_sha256": "c1bffbcb9da36d3e91e0a0a2a1d421c049b4bd660a127021ae6f2751b2b690d6",
+  "note": "No threshold sweep or checkpoint selection was performed on test",
+  "architecture": "unetplusplus-resnet34",
+  "seed": 42,
+  "best_epoch": 40,
+  "elapsed_seconds": 271.64100000000326
+}

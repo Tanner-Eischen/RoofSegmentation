@@ -1,0 +1,14 @@
+{
+  "comparison.csv": "ad329d600472ba72056c9c1733540dd672b1ac9d3f5ab02cdab3fd565b5f3d68",
+  "comparison.json": "27f32646820579a2c2b5f58620bf404cc938067d492c9808f3e23ed07ffba88e",
+  "comparison.png": "a8c248301664a7e9cfc6208fa105d54773040f35831f67247c948266362018ea",
+  "comparison.svg": "aebcf038e7dbaa7c2023adb65d57607d07b19a0d5b41b31677896abc2260ed70",
+  "README.md": "509f8b712cdf546ea0bd47d98e3097ec667d50f59ef2aee128c7cc5e4832c3a0",
+  "registration.json": "a6290227e9238fb93409e9ae4a9e0c43eadd9112c4c67b40cb4af831a196ada2",
+  "segformer-b0_metrics.json": "41a1d683417b875cf83a0833772ac93161c3d84bb1aca37d243291c1fd6493b9",
+  "segformer-b0_per_image.csv": "c23a92160baf1b820afc28281483c72c6fb0960c50ffae6c57cf4bb590ec5818",
+  "unet-resnet34_metrics.json": "16064c3b7f20c064db3d445172b45bf714cedb6a441e6cc29271aeaa1a0aa7ec",
+  "unet-resnet34_per_image.csv": "910e589a5ca6a1f966fb76fc0839bef708b8a9c5518248d2ffe96d531daa1fb7",
+  "unetplusplus-resnet34_metrics.json": "4807857d2c84f63f752203c454afbee1dc252353caf0f1f2bb91d62df3a7d20c",
+  "unetplusplus-resnet34_per_image.csv": "40f00431fc4147077ea644531e654013b89a30e10578d1bab4bcfb13c86b3439"
+}

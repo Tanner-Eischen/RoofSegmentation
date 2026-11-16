@@ -58,7 +58,15 @@ trained U-Net/ResNet-34, U-Net++/ResNet-34, and SegFormer-B0 for 40 epochs each
 with batch 16 and seed 42 on the same WHU splits. Validation-best building IoU
 at threshold 0.50 was **0.913608**, **0.917648**, and **0.903176**, respectively.
 The report includes verified checkpoint identities, learning curves and seeded
-validation predictions. This single-seed pilot performed no new test inference.
+validation predictions. The training and validation phase performed no test
+inference.
+
+A separate November 16 evaluation of the same frozen checkpoints on all 2,416
+previously inspected WHU test tiles yielded IoU **0.890162**, **0.884568**, **0.881707**,
+respectively, at threshold 0.50. U-Net++ remains the original validation-selected
+architecture despite the different test ranking. These are descriptive reused-test
+results; the [portable test packet](docs/results/whu_architecture_test_2026-11-16/README.md)
+contains the comparison, per-image counts and checksums.
 
 ## Local image inference
 

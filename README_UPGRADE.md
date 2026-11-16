@@ -112,8 +112,14 @@ Model options: `unet-resnet34`, `unetplusplus-resnet34`, `segformer-b0`,
 for smoke tests). The [controlled three-model comparison](docs/WHU_ARCHITECTURE_COMPARISON_2026-11-14.md)
 completed all three 40-epoch, batch-16 runs on shared WHU partitions with
 validation-best checkpoints. Its report includes measured GPU timing, complete
-learning curves and validation-only predictions. New comparison architectures
-use segmentation-models-pytorch 0.5.x.
+learning curves and seeded validation predictions. A separately authorized
+[November 16 test follow-up](docs/WHU_ARCHITECTURE_COMPARISON_2026-11-14.md#november-16-test-follow-up)
+evaluated all three frozen validation-best checkpoints at threshold 0.50. Its
+[portable packet](docs/results/whu_architecture_test_2026-11-16/README.md) retains
+full-precision validation/test comparisons and per-image test counts. U-Net++
+remains the original validation-selected architecture; the previously inspected
+WHU test is descriptive reuse. New comparison architectures use
+segmentation-models-pytorch 0.5.x.
 Optional U-Net auxiliary edge supervision uses `--boundary-weight 0.2
 --boundary-radius 1`, retaining binary building inference. See the
 [matched boundary pilot and annotation review](docs/WHU_BOUNDARY_2026-10-29.md)
@@ -139,7 +145,8 @@ For independent sampling/augmentation attribution, use the
 and hard-example sampling with replacement, fixed-budget final checkpoints,
 three paired seeds, and unchanged original labels. The runner generates
 validation-only contrasts, training curves, and matched prediction overlays.
-The repeatedly inspected WHU test is excluded from this study.
+The repeatedly inspected WHU test is excluded from its fitting and
+model-selection phase.
 
 For the matched follow-up experiment using training-only hard examples and
 photometric augmentation, see [the refinement protocol](docs/WHU_REFINEMENT_2026-10-28.md).
@@ -147,7 +154,10 @@ photometric augmentation, see [the refinement protocol](docs/WHU_REFINEMENT_2026
 control, selects using validation, and evaluates the selected model. It preserves
 the original baseline and records whether the measured IoU exceeds 0.95.
 
-Freeze the model and training decisions first. Run once for a final, unbiased test.
+Freeze the model, threshold and training decisions before test inference. A
+previously untouched test split can support a final held-out assessment; this
+project's WHU test has already informed development, so follow-up scores are
+descriptive reuse rather than independent geographic confirmation.
 
 ```powershell
 python -m roof_pipeline.evaluate --data data/whu_prepared --checkpoint runs/whu_unet_r34/best.pt --out runs/whu_unet_r34/test
