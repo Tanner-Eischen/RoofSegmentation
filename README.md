@@ -68,6 +68,14 @@ architecture despite the different test ranking. These are descriptive reused-te
 results; the [portable test packet](docs/results/whu_architecture_test_2026-11-16/README.md)
 contains the comparison, per-image counts and checksums.
 
+The [verified background-error breakdown and agricultural-field examples](docs/WHU_ARCHITECTURE_COMPARISON_2026-11-14.md#background-errors-and-agricultural-field-examples)
+show U-Net++ produced **977,484** false-positive pixels on 685 empty test masks,
+versus **82,495** for U-Net. Two post-hoc extreme examples reproduce exactly;
+they are not representative samples or proof of a texture-specific mechanism.
+The report proposes a train-only hard-background pilot with foreground coverage
+and validation IoU/recall checks. The proposed intervention has not been trained
+or validated.
+
 ## Local image inference
 
 The application now supports local PNG/JPEG/WebP upload through a shared CPU

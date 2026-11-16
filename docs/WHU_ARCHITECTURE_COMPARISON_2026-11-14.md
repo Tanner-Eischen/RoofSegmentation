@@ -133,6 +133,108 @@ To reproduce this descriptive evaluation in fresh output directories:
 .\.venv-gpu\Scripts\python.exe scripts/evaluate_architecture_test.py --results <verified-batch16-result-root> --data data/whu_official_prepared --out runs/whu_architecture_test_reproduction --packet docs/results/whu_architecture_test_reproduction --device cuda --batch-size 4
 ```
 
+### Background errors and agricultural-field examples
+
+The frozen per-image test records contain **685 tiles with no annotated building
+pixels** and **1,731 with buildings**. Summing confusion counts separately gives:
+
+| Model | FP pixels on 685 empty masks | FP share of empty-mask pixels | FP pixels on 1,731 building-containing tiles | IoU on building-containing tiles |
+| --- | ---: | ---: | ---: | ---: |
+| U-Net / ResNet-34 | 82,495 | 0.0459% | 3,873,518 | 0.891150 |
+| U-Net++ / ResNet-34 | 977,484 | 0.5444% | 3,740,733 | 0.896218 |
+| SegFormer-B0 | 104,345 | 0.0581% | 4,136,504 | 0.882940 |
+
+U-Net++ has higher IoU on building-containing tiles, but **894,989 extra
+false-positive pixels on empty masks** relative to U-Net. Its **132,785 fewer
+false positives on building-containing tiles** partially offset that increase,
+leaving **762,204 more false-positive pixels overall**. These are diagnostic
+subgroups; the original primary IoUs still include all 2,416 tiles.
+
+The two images below appear to show agricultural rows and have no annotated
+building pixels. They were selected **post hoc by the largest U-Net++ minus
+U-Net false-positive pixel counts**, with sample-ID tie breaking. They illustrate
+extreme observed errors, not a representative sample or an estimate of how often
+fields fail.
+
+| Test ID | U-Net FP pixels | U-Net++ FP pixels | U-Net++ share of the tile |
+| --- | ---: | ---: | ---: |
+| `whu_test_000046` | 0 | 206,990 | 78.96% |
+| `whu_test_001948` | 0 | 137,340 | 52.39% |
+
+![Post-hoc agricultural-field examples with frozen model error overlays](results/whu_texture_errors_2026-11-16/field_examples.png)
+
+All six selected image/model replays used the original batches of four images
+and the same CUDA float32 configuration, and exactly matched the original
+confusion counts at threshold 0.50.
+Agricultural appearance is a visual interpretation, not an annotated land-cover
+class. These examples document background false positives; a texture-specific
+mechanism has not been established.
+
+[Evidence packet guide](results/whu_texture_errors_2026-11-16/README.md) ·
+[Full error breakdown](results/whu_texture_errors_2026-11-16/analysis.json) ·
+[Per-tile comparison](results/whu_texture_errors_2026-11-16/per_tile_error_comparison.csv) ·
+[Post-hoc selection](results/whu_texture_errors_2026-11-16/selection.json) ·
+[Exact replay checks](results/whu_texture_errors_2026-11-16/replay.json) ·
+[SVG examples](results/whu_texture_errors_2026-11-16/field_examples.svg) ·
+[Packet checksums](results/whu_texture_errors_2026-11-16/checksums.json).
+
+### Proposed response: train-only hard-background pilot
+
+**No remedial training has been run.** The next step is a controlled experiment
+on training backgrounds, keeping the published study, checkpoints and primary
+test results frozen.
+
+1. Audit training/validation imagery and labels for missed buildings and repeated
+   field-like backgrounds. Decoding every source mask found empty-tile counts of
+   **419/4,736 (8.85%)**, **299/1,036 (28.86%)**, **685/2,416 (28.35%)**
+   for train, validation and test, respectively. This suggests checking exposure
+   to entirely negative tiles; it does not establish a root cause or a shortage
+   of background pixels, which also occur inside building-containing tiles.
+   Validation and test have nearly equal empty-tile fractions, so the ranking
+   reversal is not simply a consequence of more empty test tiles. If analogous
+   field textures are absent from training, add independently sourced, verified
+   negative scenes in a new dataset version; oversampling cannot create missing
+   visual coverage. Preserve the publisher's original split assignments.
+2. Estimate the cost of a short paired pilot before fitting. Start both arms
+   from the same frozen U-Net++ checkpoint, with the same budget, optimizer,
+   standard augmentation and replacement rule. Change only the selection of
+   **training** negatives: uniform versus weighting by the frozen model's
+   false-positive area on training background tiles. Keep the empty/foreground
+   tile mixture fixed, cap individual weights and log foreground draws and
+   unique-tile coverage. The existing miner scores all training errors; background-only
+   mining and this mixture guard require a new extension. A separate exposure
+   pilot could change the empty-tile share while keeping within-group sampling
+   uniform and retaining a foreground coverage floor. Keep the inspected test
+   images out of every training/mining pool.
+3. If the short pilot shows promising validation results, preregister a confirmation with **three paired
+   seeds** for that one intervention. Track validation false-positive pixel area
+   on empty masks alongside global IoU and building recall. Require reduced
+   background false positives without worse validation global IoU or recall than
+   the paired control. Keep the primary threshold at 0.50; any secondary
+   calibration uses validation only. The current validation sweeps already chose
+   0.50, so a threshold increase has no demonstrated overall benefit here.
+
+The first read-only mining audit can use the existing command below. It scores
+training images only; it does not fine-tune weights or implement the proposed
+background-only sampler. Review its empty-mask samples by false-positive area
+and inspect the actual imagery and labels before constructing a repair cohort.
+
+```powershell
+.\.venv-gpu\Scripts\python.exe -m roof_pipeline.hard_examples --data data/whu_official_prepared --checkpoint runs/runpod_results_batch16_2026-11-15/results/runs/unetplusplus-resnet34_seed42/best.pt --out runs/texture_repair_audit/train_errors.json --device cuda --batch-size 4 --workers 0
+```
+
+Use standard augmentation in this first pilot. The earlier
+[U-Net factorial study](WHU_FACTORIAL_2026-10-31.md) measured a sampling main effect
+of **+0.207 IoU percentage points** and a robust-photometric effect of **−0.003
+points**, with variable seed effects. That motivates testing, but establishes
+neither a U-Net++ repair nor a benefit from stronger augmentation. Fresh geographic
+data would be needed for independent confirmation of any eventual improvement.
+
+Research context: [online hard-example mining in object detection (2016)](https://arxiv.org/abs/1604.03540),
+[texture/shape-cue research (2019)](https://arxiv.org/abs/1811.12231), and a
+[2025 reassessment of texture-bias claims](https://proceedings.neurips.cc/paper_files/paper/2025/hash/57a9b97477b67936298489e3c1417b0a-Abstract-Conference.html).
+These provide motivation and context, not a diagnosis or a proven segmentation fix.
+
 ## Models and common controls
 
 | CLI architecture | Segmentation model | Encoder initialization | Parameters |

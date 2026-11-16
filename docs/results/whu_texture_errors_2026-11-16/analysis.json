@@ -1,0 +1,340 @@
+{
+  "created_utc": "2026-11-16T13:43:46.805507+00:00",
+  "splits": {
+    "test": {
+      "models": {
+        "unet-resnet34": {
+          "samples": 2416,
+          "overall": {
+            "iou": 0.8901619285879484,
+            "dice": 0.9418895969965354,
+            "precision": 0.9436582899618002,
+            "recall": 0.94012752172859,
+            "f1": 0.9418895969965354,
+            "pixel_accuracy": 0.9870910928738827,
+            "tp": 66258629,
+            "fp": 3956013,
+            "fn": 4219713,
+            "tn": 558905549
+          },
+          "groups": {
+            "empty_gt": {
+              "samples": 685,
+              "pixels": 179568640,
+              "tp": 0,
+              "fp": 82495,
+              "fn": 0,
+              "tn": 179486145,
+              "gt_positive_pixels": 0,
+              "iou": null,
+              "false_positive_pixel_fraction": 0.0004594064977047217,
+              "tiles_with_false_positives": 38
+            },
+            "contains_buildings": {
+              "samples": 1731,
+              "pixels": 453771264,
+              "tp": 66258629,
+              "fp": 3873518,
+              "fn": 4219713,
+              "tn": 379419404,
+              "gt_positive_pixels": 70478342,
+              "iou": 0.8911495825390245,
+              "false_positive_pixel_fraction": 0.008536278753870143,
+              "tiles_with_false_positives": 1689
+            }
+          }
+        },
+        "unetplusplus-resnet34": {
+          "samples": 2416,
+          "overall": {
+            "iou": 0.8845676036851633,
+            "dice": 0.938748604141812,
+            "precision": 0.933765147489936,
+            "recall": 0.9437855391093054,
+            "f1": 0.9387486041418122,
+            "pixel_accuracy": 0.9862946911363413,
+            "tp": 66516440,
+            "fp": 4718217,
+            "fn": 3961902,
+            "tn": 558143345
+          },
+          "groups": {
+            "empty_gt": {
+              "samples": 685,
+              "pixels": 179568640,
+              "tp": 0,
+              "fp": 977484,
+              "fn": 0,
+              "tn": 178591156,
+              "gt_positive_pixels": 0,
+              "iou": null,
+              "false_positive_pixel_fraction": 0.00544351174013458,
+              "tiles_with_false_positives": 48
+            },
+            "contains_buildings": {
+              "samples": 1731,
+              "pixels": 453771264,
+              "tp": 66516440,
+              "fp": 3740733,
+              "fn": 3961902,
+              "tn": 379552189,
+              "gt_positive_pixels": 70478342,
+              "iou": 0.8962175828787949,
+              "false_positive_pixel_fraction": 0.008243653348661584,
+              "tiles_with_false_positives": 1689
+            }
+          }
+        },
+        "segformer-b0": {
+          "samples": 2416,
+          "overall": {
+            "iou": 0.881707070409796,
+            "dice": 0.9371353110957689,
+            "precision": 0.9395212335517853,
+            "recall": 0.9347614760858024,
+            "f1": 0.9371353110957689,
+            "pixel_accuracy": 0.9860442205770126,
+            "tp": 65880439,
+            "fp": 4240849,
+            "fn": 4597903,
+            "tn": 558620713
+          },
+          "groups": {
+            "empty_gt": {
+              "samples": 685,
+              "pixels": 179568640,
+              "tp": 0,
+              "fp": 104345,
+              "fn": 0,
+              "tn": 179464295,
+              "gt_positive_pixels": 0,
+              "iou": null,
+              "false_positive_pixel_fraction": 0.0005810869871264826,
+              "tiles_with_false_positives": 35
+            },
+            "contains_buildings": {
+              "samples": 1731,
+              "pixels": 453771264,
+              "tp": 65880439,
+              "fp": 4136504,
+              "fn": 4597903,
+              "tn": 379156418,
+              "gt_positive_pixels": 70478342,
+              "iou": 0.8829400921098195,
+              "false_positive_pixel_fraction": 0.009115835065307264,
+              "tiles_with_false_positives": 1684
+            }
+          }
+        }
+      }
+    },
+    "val": {
+      "models": {
+        "unet-resnet34": {
+          "samples": 1036,
+          "overall": {
+            "iou": 0.9136078302210222,
+            "dice": 0.9548537749403965,
+            "precision": 0.9562148301811445,
+            "recall": 0.9534965887849013,
+            "f1": 0.9548537749403965,
+            "pixel_accuracy": 0.990081938077124,
+            "tp": 28484718,
+            "fp": 1304318,
+            "fn": 1389241,
+            "tn": 240402907
+          },
+          "groups": {
+            "empty_gt": {
+              "samples": 299,
+              "pixels": 78381056,
+              "tp": 0,
+              "fp": 15286,
+              "fn": 0,
+              "tn": 78365770,
+              "gt_positive_pixels": 0,
+              "iou": null,
+              "false_positive_pixel_fraction": 0.00019502161338576506,
+              "tiles_with_false_positives": 22
+            },
+            "contains_buildings": {
+              "samples": 737,
+              "pixels": 193200128,
+              "tp": 28484718,
+              "fp": 1289032,
+              "fn": 1389241,
+              "tn": 162037137,
+              "gt_positive_pixels": 29873959,
+              "iou": 0.914055971071583,
+              "false_positive_pixel_fraction": 0.00667200386119827,
+              "tiles_with_false_positives": 723
+            }
+          }
+        },
+        "unetplusplus-resnet34": {
+          "samples": 1036,
+          "overall": {
+            "iou": 0.9176478729372158,
+            "dice": 0.9570556574932355,
+            "precision": 0.9575201398961769,
+            "recall": 0.9565916255023313,
+            "f1": 0.9570556574932355,
+            "pixel_accuracy": 0.9905568163367312,
+            "tp": 28577179,
+            "fp": 1267811,
+            "fn": 1296780,
+            "tn": 240439414
+          },
+          "groups": {
+            "empty_gt": {
+              "samples": 299,
+              "pixels": 78381056,
+              "tp": 0,
+              "fp": 22244,
+              "fn": 0,
+              "tn": 78358812,
+              "gt_positive_pixels": 0,
+              "iou": null,
+              "false_positive_pixel_fraction": 0.0002837930634667642,
+              "tiles_with_false_positives": 23
+            },
+            "contains_buildings": {
+              "samples": 737,
+              "pixels": 193200128,
+              "tp": 28577179,
+              "fp": 1245567,
+              "fn": 1296780,
+              "tn": 162080602,
+              "gt_positive_pixels": 29873959,
+              "iou": 0.9183038006427219,
+              "false_positive_pixel_fraction": 0.0064470298901665325,
+              "tiles_with_false_positives": 720
+            }
+          }
+        },
+        "segformer-b0": {
+          "samples": 1036,
+          "overall": {
+            "iou": 0.9031755376084849,
+            "dice": 0.9491247861911971,
+            "precision": 0.9530770626575241,
+            "recall": 0.9452051534247603,
+            "f1": 0.949124786191197,
+            "pixel_accuracy": 0.9888536644718362,
+            "tp": 28237020,
+            "fp": 1390196,
+            "fn": 1636939,
+            "tn": 240317029
+          },
+          "groups": {
+            "empty_gt": {
+              "samples": 299,
+              "pixels": 78381056,
+              "tp": 0,
+              "fp": 10204,
+              "fn": 0,
+              "tn": 78370852,
+              "gt_positive_pixels": 0,
+              "iou": null,
+              "false_positive_pixel_fraction": 0.0001301845180549749,
+              "tiles_with_false_positives": 18
+            },
+            "contains_buildings": {
+              "samples": 737,
+              "pixels": 193200128,
+              "tp": 28237020,
+              "fp": 1379992,
+              "fn": 1636939,
+              "tn": 161946177,
+              "gt_positive_pixels": 29873959,
+              "iou": 0.9034704124288158,
+              "false_positive_pixel_fraction": 0.007142811002692503,
+              "tiles_with_false_positives": 722
+            }
+          }
+        }
+      }
+    }
+  },
+  "source_mask_coverage": {
+    "method": "Decode every source mask with PIL; maximum pixel value == 0; eight CPU threads",
+    "splits": {
+      "train": {
+        "samples": 4736,
+        "empty_gt_tiles": 419,
+        "empty_gt_tile_fraction": 0.08847128378378379
+      },
+      "val": {
+        "samples": 1036,
+        "empty_gt_tiles": 299,
+        "empty_gt_tile_fraction": 0.2886100386100386
+      },
+      "test": {
+        "samples": 2416,
+        "empty_gt_tiles": 685,
+        "empty_gt_tile_fraction": 0.28352649006622516
+      }
+    }
+  },
+  "original_artifacts_unchanged": true,
+  "replay_counts_match": true,
+  "posthoc_selection": "descending U-Net++ minus U-Net FP count; sample-ID ascending tie break",
+  "test_packet_checksums_sha256": "21663acb5d05b0b3b4b38d5675921639c15c53486817795aa125a8baf71fbc53",
+  "protected_artifact_sha256": {
+    "docs\\results\\whu_architecture_test_2026-11-16\\checksums.json": "21663acb5d05b0b3b4b38d5675921639c15c53486817795aa125a8baf71fbc53",
+    "docs\\results\\whu_architecture_test_2026-11-16\\comparison.csv": "ad329d600472ba72056c9c1733540dd672b1ac9d3f5ab02cdab3fd565b5f3d68",
+    "docs\\results\\whu_architecture_test_2026-11-16\\comparison.json": "27f32646820579a2c2b5f58620bf404cc938067d492c9808f3e23ed07ffba88e",
+    "docs\\results\\whu_architecture_test_2026-11-16\\comparison.png": "a8c248301664a7e9cfc6208fa105d54773040f35831f67247c948266362018ea",
+    "docs\\results\\whu_architecture_test_2026-11-16\\comparison.svg": "aebcf038e7dbaa7c2023adb65d57607d07b19a0d5b41b31677896abc2260ed70",
+    "docs\\results\\whu_architecture_test_2026-11-16\\README.md": "509f8b712cdf546ea0bd47d98e3097ec667d50f59ef2aee128c7cc5e4832c3a0",
+    "docs\\results\\whu_architecture_test_2026-11-16\\registration.json": "a6290227e9238fb93409e9ae4a9e0c43eadd9112c4c67b40cb4af831a196ada2",
+    "docs\\results\\whu_architecture_test_2026-11-16\\segformer-b0_metrics.json": "41a1d683417b875cf83a0833772ac93161c3d84bb1aca37d243291c1fd6493b9",
+    "docs\\results\\whu_architecture_test_2026-11-16\\segformer-b0_per_image.csv": "c23a92160baf1b820afc28281483c72c6fb0960c50ffae6c57cf4bb590ec5818",
+    "docs\\results\\whu_architecture_test_2026-11-16\\unet-resnet34_metrics.json": "16064c3b7f20c064db3d445172b45bf714cedb6a441e6cc29271aeaa1a0aa7ec",
+    "docs\\results\\whu_architecture_test_2026-11-16\\unet-resnet34_per_image.csv": "910e589a5ca6a1f966fb76fc0839bef708b8a9c5518248d2ffe96d531daa1fb7",
+    "docs\\results\\whu_architecture_test_2026-11-16\\unetplusplus-resnet34_metrics.json": "4807857d2c84f63f752203c454afbee1dc252353caf0f1f2bb91d62df3a7d20c",
+    "docs\\results\\whu_architecture_test_2026-11-16\\unetplusplus-resnet34_per_image.csv": "40f00431fc4147077ea644531e654013b89a30e10578d1bab4bcfb13c86b3439",
+    "runs\\runpod_results_batch16_2026-11-15\\results\\plan.json": "b0e70250124819dd0488dc9976ac33cb9d7b21fa03cb8e4b6bb91051eef63a5d",
+    "runs\\runpod_results_batch16_2026-11-15\\results\\comparison.json": "2ac002a81f3f066ff37001cfde98f639647ea3b7cfb409b1caf67a8a23172bd1",
+    "runs\\runpod_results_batch16_2026-11-15\\results\\runtime_estimate.json": "ee3b3d3bf9f9e19d6388f69ac4d109186c24b6946efaee18a96c484f50f533f7",
+    "runs\\runpod_results_batch16_2026-11-15\\results\\runs\\unet-resnet34_seed42\\history.json": "fac6152b2a995066031f6f60fabc2a5efa28d3377b9fe311308feea5f2ea754d",
+    "runs\\runpod_results_batch16_2026-11-15\\results\\runs\\unet-resnet34_seed42\\training_summary.json": "01bcf38074a6b64e83ea58a9b91ea1a61e46838ed9be31bf8c313bd166b39855",
+    "runs\\runpod_results_batch16_2026-11-15\\results\\runs\\unet-resnet34_seed42\\experiment.json": "949d8f65422e336d2ec25afa6b10917c19f3a0fdb1f1fcfe4c0b550e75f02530",
+    "runs\\runpod_results_batch16_2026-11-15\\results\\runs\\unet-resnet34_seed42\\validation_best.json": "e553fa90d07f5c4cd4320d29ecdb20cbf57fa7e0ae56508d28b43e131e407e82",
+    "runs\\runpod_results_batch16_2026-11-15\\results\\runs\\unetplusplus-resnet34_seed42\\history.json": "1b01c68021930ceefe9f169e37768244b632bb1432e3bc501c99351e54415d76",
+    "runs\\runpod_results_batch16_2026-11-15\\results\\runs\\unetplusplus-resnet34_seed42\\training_summary.json": "aa20b5e8aaf3bf44096a55554a5a1b8939bbb71db689e2bd08ceb30c916903d8",
+    "runs\\runpod_results_batch16_2026-11-15\\results\\runs\\unetplusplus-resnet34_seed42\\experiment.json": "a843b986d366701fe8313f9463064e364fc1a50d159c5b84c75e5061da578661",
+    "runs\\runpod_results_batch16_2026-11-15\\results\\runs\\unetplusplus-resnet34_seed42\\validation_best.json": "b0fd7a19d1d5edc63b1d6c63300d379ef6520ce8cfb6cd771dfe2cd397dcd81c",
+    "runs\\runpod_results_batch16_2026-11-15\\results\\runs\\segformer-b0_seed42\\history.json": "710d7965d10580de53fc3594ae7ab9382227d3cac82094dfbed82c862c616e40",
+    "runs\\runpod_results_batch16_2026-11-15\\results\\runs\\segformer-b0_seed42\\training_summary.json": "311a533c910982edf09c7725faa02c51c6368bcf0fafcf9a093176db02af1a04",
+    "runs\\runpod_results_batch16_2026-11-15\\results\\runs\\segformer-b0_seed42\\experiment.json": "1df9a47ef0976d8c20b2d033dea4049f52397f5fd9945fff4715cdd89cb77758",
+    "runs\\runpod_results_batch16_2026-11-15\\results\\runs\\segformer-b0_seed42\\validation_best.json": "091c97cb005dc951926bf05001328c143e68b3788db3f025f29b2932bb9cba7e",
+    "runs\\runpod_results_batch16_2026-11-15\\results\\runs\\unet-resnet34_seed42\\best.pt": "33e6a68709ad8225b24b9b43f439fe837ca22b7134f5660b2cb375c0784817bc",
+    "runs\\runpod_results_batch16_2026-11-15\\results\\runs\\unetplusplus-resnet34_seed42\\best.pt": "c1bffbcb9da36d3e91e0a0a2a1d421c049b4bd660a127021ae6f2751b2b690d6",
+    "runs\\runpod_results_batch16_2026-11-15\\results\\runs\\segformer-b0_seed42\\best.pt": "ef4e392f08117eb3a03ce6e0a20df579001772d75db6c03921d2e8c1de3d7664",
+    "runs\\runpod_results_batch16_2026-11-15\\results\\runs\\unet-resnet34_seed42\\validation_primary_0p5_per_image.csv": "e078314394d428d78c4c5f8d2f5976227294cfb610adb158985a699d31d256d9",
+    "runs\\runpod_results_batch16_2026-11-15\\results\\runs\\unetplusplus-resnet34_seed42\\validation_primary_0p5_per_image.csv": "e6eeb71bef41aed5acb14c7512d19210ba43359e4c85cf61313146e353db2aa0",
+    "runs\\runpod_results_batch16_2026-11-15\\results\\runs\\segformer-b0_seed42\\validation_primary_0p5_per_image.csv": "5eed038556bb714abd7f62ea8fc78011f9d58751a01092c7b3fc6acc173b3c13"
+  },
+  "source_sha256": {
+    "scripts\\analyze_texture_errors.py": "ea0fa61319b011e9c729a971103a19598fb415776b442f997f4e6ebca8c3528b",
+    "scripts\\analyze_architecture_comparison.py": "84d0f5c80e9ed188f71b781b79adc8b92d80bc2068dd0f36d1278293d07295fa",
+    "scripts\\evaluate_architecture_test.py": "a9454694aa8077debe0ff30067ff3ca03530b8030c097c361228c699a4debbe2",
+    "roof_pipeline\\models.py": "30d0bfb9a3025f24e9bb639e8fb97735a1bb8751be2410415df8fd1c79081245",
+    "roof_pipeline\\dataset.py": "fd507b806ffc7872951684bc15924131cf4f32b1460c3472afc3ee43b664d552"
+  },
+  "environment": {
+    "python": "3.10.11",
+    "torch": "2.5.1+cu121",
+    "numpy": "2.2.6",
+    "Pillow": "11.3.0",
+    "matplotlib": "3.10.8",
+    "segmentation-models-pytorch": "0.5.0"
+  },
+  "limitations": [
+    "Descriptive post-hoc analysis of the previously inspected test split.",
+    "Selected examples explain large observed errors; they are not representative prevalence estimates.",
+    "Agricultural appearance is visual interpretation, not an annotated land-cover class.",
+    "No training, threshold change, label correction or model selection occurred."
+  ]
+}

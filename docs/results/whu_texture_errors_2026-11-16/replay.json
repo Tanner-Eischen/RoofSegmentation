@@ -1,0 +1,195 @@
+{
+  "device": "cuda",
+  "precision": "float32, no autocast",
+  "threshold": 0.5,
+  "original_batch_size": 4,
+  "all_counts_match": true,
+  "records": [
+    {
+      "architecture": "unet-resnet34",
+      "sample_id": "whu_test_000046",
+      "dataset_index": 46,
+      "original_batch_ids": [
+        "whu_test_000044",
+        "whu_test_000045",
+        "whu_test_000046",
+        "whu_test_000047"
+      ],
+      "checkpoint_sha256": "33e6a68709ad8225b24b9b43f439fe837ca22b7134f5660b2cb375c0784817bc",
+      "official_counts": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "tn": 262144
+      },
+      "replay_counts": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "tn": 262144
+      },
+      "count_deltas": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0
+      },
+      "exact_count_match": true
+    },
+    {
+      "architecture": "unet-resnet34",
+      "sample_id": "whu_test_001948",
+      "dataset_index": 1948,
+      "original_batch_ids": [
+        "whu_test_001948",
+        "whu_test_001949",
+        "whu_test_001950",
+        "whu_test_001951"
+      ],
+      "checkpoint_sha256": "33e6a68709ad8225b24b9b43f439fe837ca22b7134f5660b2cb375c0784817bc",
+      "official_counts": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "tn": 262144
+      },
+      "replay_counts": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "tn": 262144
+      },
+      "count_deltas": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0
+      },
+      "exact_count_match": true
+    },
+    {
+      "architecture": "unetplusplus-resnet34",
+      "sample_id": "whu_test_000046",
+      "dataset_index": 46,
+      "original_batch_ids": [
+        "whu_test_000044",
+        "whu_test_000045",
+        "whu_test_000046",
+        "whu_test_000047"
+      ],
+      "checkpoint_sha256": "c1bffbcb9da36d3e91e0a0a2a1d421c049b4bd660a127021ae6f2751b2b690d6",
+      "official_counts": {
+        "tp": 0,
+        "fp": 206990,
+        "fn": 0,
+        "tn": 55154
+      },
+      "replay_counts": {
+        "tp": 0,
+        "fp": 206990,
+        "fn": 0,
+        "tn": 55154
+      },
+      "count_deltas": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0
+      },
+      "exact_count_match": true
+    },
+    {
+      "architecture": "unetplusplus-resnet34",
+      "sample_id": "whu_test_001948",
+      "dataset_index": 1948,
+      "original_batch_ids": [
+        "whu_test_001948",
+        "whu_test_001949",
+        "whu_test_001950",
+        "whu_test_001951"
+      ],
+      "checkpoint_sha256": "c1bffbcb9da36d3e91e0a0a2a1d421c049b4bd660a127021ae6f2751b2b690d6",
+      "official_counts": {
+        "tp": 0,
+        "fp": 137340,
+        "fn": 0,
+        "tn": 124804
+      },
+      "replay_counts": {
+        "tp": 0,
+        "fp": 137340,
+        "fn": 0,
+        "tn": 124804
+      },
+      "count_deltas": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0
+      },
+      "exact_count_match": true
+    },
+    {
+      "architecture": "segformer-b0",
+      "sample_id": "whu_test_000046",
+      "dataset_index": 46,
+      "original_batch_ids": [
+        "whu_test_000044",
+        "whu_test_000045",
+        "whu_test_000046",
+        "whu_test_000047"
+      ],
+      "checkpoint_sha256": "ef4e392f08117eb3a03ce6e0a20df579001772d75db6c03921d2e8c1de3d7664",
+      "official_counts": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "tn": 262144
+      },
+      "replay_counts": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "tn": 262144
+      },
+      "count_deltas": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0
+      },
+      "exact_count_match": true
+    },
+    {
+      "architecture": "segformer-b0",
+      "sample_id": "whu_test_001948",
+      "dataset_index": 1948,
+      "original_batch_ids": [
+        "whu_test_001948",
+        "whu_test_001949",
+        "whu_test_001950",
+        "whu_test_001951"
+      ],
+      "checkpoint_sha256": "ef4e392f08117eb3a03ce6e0a20df579001772d75db6c03921d2e8c1de3d7664",
+      "official_counts": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "tn": 262144
+      },
+      "replay_counts": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "tn": 262144
+      },
+      "count_deltas": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0
+      },
+      "exact_count_match": true
+    }
+  ]
+}

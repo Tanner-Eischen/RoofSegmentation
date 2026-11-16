@@ -1,0 +1,47 @@
+{
+  "selected_utc": "2026-11-16T13:42:46.900539+00:00",
+  "split": "test",
+  "policy": "descending U-Net++ minus U-Net FP count; sample-ID ascending tie break",
+  "posthoc": true,
+  "representative": false,
+  "training_data": false,
+  "threshold": 0.5,
+  "selected": [
+    {
+      "sample_id": "whu_test_000046",
+      "pixels": 262144,
+      "gt_positive_pixels": 0,
+      "unet-resnet34_tp": 0,
+      "unet-resnet34_fp": 0,
+      "unet-resnet34_fn": 0,
+      "unet-resnet34_tn": 262144,
+      "unetplusplus-resnet34_tp": 0,
+      "unetplusplus-resnet34_fp": 206990,
+      "unetplusplus-resnet34_fn": 0,
+      "unetplusplus-resnet34_tn": 55154,
+      "segformer-b0_tp": 0,
+      "segformer-b0_fp": 0,
+      "segformer-b0_fn": 0,
+      "segformer-b0_tn": 262144,
+      "unetplusplus_minus_unet_fp": 206990
+    },
+    {
+      "sample_id": "whu_test_001948",
+      "pixels": 262144,
+      "gt_positive_pixels": 0,
+      "unet-resnet34_tp": 0,
+      "unet-resnet34_fp": 0,
+      "unet-resnet34_fn": 0,
+      "unet-resnet34_tn": 262144,
+      "unetplusplus-resnet34_tp": 0,
+      "unetplusplus-resnet34_fp": 137340,
+      "unetplusplus-resnet34_fn": 0,
+      "unetplusplus-resnet34_tn": 124804,
+      "segformer-b0_tp": 0,
+      "segformer-b0_fp": 0,
+      "segformer-b0_fn": 0,
+      "segformer-b0_tn": 262144,
+      "unetplusplus_minus_unet_fp": 137340
+    }
+  ]
+}
