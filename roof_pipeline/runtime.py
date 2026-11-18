@@ -18,6 +18,7 @@ BUILD_FILES = (
     "roof_pipeline/models.py",
     "roof_pipeline/dataset.py",
     "roof_pipeline/predict.py",
+    "roof_pipeline/validity.py",
 )
 PROFILES = {
     "win32": ("cpu-python312-windows-v1", "requirements-serving-windows.lock"),

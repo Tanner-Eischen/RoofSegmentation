@@ -10,7 +10,8 @@ import torch
 from PIL import Image, ImageEnhance
 from torch.utils.data import Dataset
 
-from .common import load_binary_mask, read_manifest
+from .common import read_manifest, read_paired_sample
+from .validity import IGNORE_LABEL, resize_rgb_valid
 
 MEAN = np.array([0.485, 0.456, 0.406], dtype=np.float32).reshape(1, 1, 3)
 STD = np.array([0.229, 0.224, 0.225], dtype=np.float32).reshape(1, 1, 3)
@@ -54,24 +55,33 @@ class RoofDataset(Dataset):
 
     def __getitem__(self, index):
         row = self.rows[index]
-        with Image.open(self.root / row["image"]) as raw:
-            image = raw.convert("RGB")
         mask_path = self.mask_overrides.get(row["sample_id"], self.root / row["mask"])
-        mask = Image.fromarray(load_binary_mask(mask_path, image.size))
+        rgb, labels, valid = read_paired_sample(
+            self.root,
+            row,
+            mask_path if row["sample_id"] in self.mask_overrides else None,
+        )
+        image = Image.fromarray(rgb)
+        mask = Image.fromarray(labels)
         if image.size != (self.size, self.size):
-            image = image.resize((self.size, self.size), Image.Resampling.BILINEAR)
+            rgb, valid = resize_rgb_valid(rgb, valid, (self.size, self.size))
+            image = Image.fromarray(rgb)
             mask = mask.resize((self.size, self.size), Image.Resampling.NEAREST)
+        validity = Image.fromarray(valid.astype(np.uint8) * 255)
         if self.augment:
             if random.random() < 0.5:
                 image = image.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
                 mask = mask.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
+                validity = validity.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
             if random.random() < 0.5:
                 image = image.transpose(Image.Transpose.FLIP_TOP_BOTTOM)
                 mask = mask.transpose(Image.Transpose.FLIP_TOP_BOTTOM)
+                validity = validity.transpose(Image.Transpose.FLIP_TOP_BOTTOM)
             rotations = random.randrange(4)
             if rotations:
                 image = image.rotate(90 * rotations, expand=False)
                 mask = mask.rotate(90 * rotations, expand=False)
+                validity = validity.rotate(90 * rotations, expand=False)
             bounds = (0.7, 1.3) if self.photometric == "robust" else (0.85, 1.15)
             if random.random() < 0.65:
                 image = ImageEnhance.Brightness(image).enhance(random.uniform(*bounds))
@@ -79,9 +89,16 @@ class RoofDataset(Dataset):
                 contrast_bounds = (
                     (0.75, 1.25) if self.photometric == "robust" else (0.85, 1.15)
                 )
-                image = ImageEnhance.Contrast(image).enhance(
-                    random.uniform(*contrast_bounds)
-                )
+                factor = random.uniform(*contrast_bounds)
+                keep = np.asarray(validity) > 0
+                if keep.all():
+                    image = ImageEnhance.Contrast(image).enhance(factor)
+                else:
+                    gray = np.asarray(image.convert("L"))
+                    mean = int(gray[keep].mean() + 0.5) if keep.any() else 0
+                    image = Image.blend(
+                        Image.new("RGB", image.size, (mean,) * 3), image, factor
+                    )
             if self.photometric == "robust" and random.random() < 0.5:
                 gamma = random.uniform(0.7, 1.4)
                 table = [round(255 * (value / 255) ** gamma) for value in range(256)]
@@ -89,6 +106,9 @@ class RoofDataset(Dataset):
         x = np.asarray(image, dtype=np.float32) / 255.0
         x = (x - MEAN) / STD
         y = (np.asarray(mask, dtype=np.uint8) > 0).astype(np.float32)
+        valid = np.asarray(validity) > 0
+        x[~valid] = 0
+        y[~valid] = IGNORE_LABEL
         return torch.from_numpy(
             np.ascontiguousarray(np.moveaxis(x, -1, 0))
         ), torch.from_numpy(y.copy()[None, ...])

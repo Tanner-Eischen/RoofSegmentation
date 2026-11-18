@@ -1,0 +1,381 @@
+{
+  "schema_version": 1,
+  "audited_utc": "2026-11-18T08:01:36.306530+00:00",
+  "method": "Original extracted TIFF metadata/masks/alpha/nonfinite audit; archive-member byte identity; importer-equivalent prepared pixel parity; no color heuristics",
+  "label_policy": "Original importer preserves mode-P class indices but uses rendered L for mode1/L. WHU 1-bit WhiteIsZero TIFFs: raw0=white/building, raw1=black/background; PIL mode1 applies this photometric interpretation before normalization.",
+  "source_archive_sha256": "62a4b4ef0fdfc98deee44b29fd0fe949554a928e1e9d38730fc45360668e2892",
+  "dataset_content_sha256": "538ac8569dcfd817b8557bc23ed18977de5dbba8d4b19719c82ab5ee4d1a308d",
+  "prepared_metadata_sha256": "929150f994853bd256ee54ffee1f841ed239d124a3d6b85dffbe48fc58676e7d",
+  "source_provenance_sha256": "bd02c0d42ec89c9e7cce7509c28da84f8cf047975e9601620391a61e176ed674",
+  "source_sidecar_files": 0,
+  "split_summary": {
+    "train": {
+      "pairs": 4736,
+      "pixels": 1241513984,
+      "source_invalid_pixels": 0,
+      "prepared_lost_declared_or_nonfinite_invalid_pixels": 0,
+      "image_declared_invalid_pixels": 0,
+      "label_declared_invalid_pixels": 0,
+      "image_nonfinite_pixels": 0,
+      "label_nonfinite_pixels": 0,
+      "image_alpha_invalid_pixels": 0,
+      "label_alpha_invalid_pixels": 0,
+      "image_rgb_pixel_parity_failures": 0,
+      "normalized_label_pixel_parity_failures": 0,
+      "label_nodata_class_collisions": 0
+    },
+    "val": {
+      "pairs": 1036,
+      "pixels": 271581184,
+      "source_invalid_pixels": 0,
+      "prepared_lost_declared_or_nonfinite_invalid_pixels": 0,
+      "image_declared_invalid_pixels": 0,
+      "label_declared_invalid_pixels": 0,
+      "image_nonfinite_pixels": 0,
+      "label_nonfinite_pixels": 0,
+      "image_alpha_invalid_pixels": 0,
+      "label_alpha_invalid_pixels": 0,
+      "image_rgb_pixel_parity_failures": 0,
+      "normalized_label_pixel_parity_failures": 0,
+      "label_nodata_class_collisions": 0
+    },
+    "test": {
+      "pairs": 2416,
+      "pixels": 633339904,
+      "source_invalid_pixels": 0,
+      "prepared_lost_declared_or_nonfinite_invalid_pixels": 0,
+      "image_declared_invalid_pixels": 0,
+      "label_declared_invalid_pixels": 0,
+      "image_nonfinite_pixels": 0,
+      "label_nonfinite_pixels": 0,
+      "image_alpha_invalid_pixels": 0,
+      "label_alpha_invalid_pixels": 0,
+      "image_rgb_pixel_parity_failures": 0,
+      "normalized_label_pixel_parity_failures": 0,
+      "label_nodata_class_collisions": 0
+    }
+  },
+  "all_source_pairs_match_archive": true,
+  "source_and_prepared_files_unchanged": true,
+  "original_95_training_artifacts_unchanged": true,
+  "original_test_and_texture_packets_unchanged": true,
+  "protected_artifact_sha256": {
+    "runs/runpod_results_batch16_2026-11-15/results/remote_result_manifest.json": "5775d03c3e02b5a32c08fa59b399d0542745d7c8de6a387a67d2cf83e183b8b9",
+    "runs/runpod_results_batch16_2026-11-15/results/batch32_timing_invalidated.json": "595a8f90c1ac72c456acbeccc8aa55340c0e9d80f83930573c5c7632f98673f0",
+    "runs/runpod_results_batch16_2026-11-15/results/batch_protocol_revision.json": "9cdde84e790b35c552c140a29359ea317456750f6dc7c75fc1183647ab31740e",
+    "runs/runpod_results_batch16_2026-11-15/results/comparison.json": "2ac002a81f3f066ff37001cfde98f639647ea3b7cfb409b1caf67a8a23172bd1",
+    "runs/runpod_results_batch16_2026-11-15/results/frozen_source/roof_pipeline/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/runpod_results_batch16_2026-11-15/results/frozen_source/roof_pipeline/__pycache__/__init__.cpython-312.pyc": "cf371feb771eb9e3a0b80baf946518927db10b9a0725bfab3e5d5694c520356a",
+    "runs/runpod_results_batch16_2026-11-15/results/frozen_source/roof_pipeline/__pycache__/adjudication.cpython-312.pyc": "45e10345cf4875b2d61d2cbbd190d042abd98efe0dad5e2d33ffd6b2980af273",
+    "runs/runpod_results_batch16_2026-11-15/results/frozen_source/roof_pipeline/__pycache__/annotation_audit.cpython-312.pyc": "d4881cf2d5f52d01e8a15977330c479bd36f79edb4313027a1261013b8243e3c",
+    "runs/runpod_results_batch16_2026-11-15/results/frozen_source/roof_pipeline/__pycache__/architecture_comparison.cpython-312.pyc": "9dd9dc476cef72efbd1f3919c9051d08ad29327acbf97a6e5b087c4b29d91370",
+    "runs/runpod_results_batch16_2026-11-15/results/frozen_source/roof_pipeline/__pycache__/boundary.cpython-312.pyc": "f52c90a06587c7a413457d99ec1cbc8a2a2ad1e37913a166d192881d4697b813",
+    "runs/runpod_results_batch16_2026-11-15/results/frozen_source/roof_pipeline/__pycache__/common.cpython-312.pyc": "7194f9e67e1e774fae227c905f5c34cefdc0a827c9e7fe4c79d5578093d66a19",
+    "runs/runpod_results_batch16_2026-11-15/results/frozen_source/roof_pipeline/__pycache__/correction_overlay.cpython-312.pyc": "f8b44f80aca0f6f4c34c203f43ab40c7aaab4099650607b64b0abf99692eec17",
+    "runs/runpod_results_batch16_2026-11-15/results/frozen_source/roof_pipeline/__pycache__/dataset.cpython-312.pyc": "678d6be3b01cdf09b2646890b2f7a92cfc59d02f68b8b0880598531217b66163",
+    "runs/runpod_results_batch16_2026-11-15/results/frozen_source/roof_pipeline/__pycache__/metrics.cpython-312.pyc": "9a5e70e52f1ca96820c9607ee7d82ab1e1e2cea1962fd862e27a927276243915",
+    "runs/runpod_results_batch16_2026-11-15/results/frozen_source/roof_pipeline/__pycache__/models.cpython-312.pyc": "7799aeddd712f2de32fcca04a049a90e2dceb40a4ac88c985c32093a4de673bd",
+    "runs/runpod_results_batch16_2026-11-15/results/frozen_source/roof_pipeline/__pycache__/train.cpython-312.pyc": "96ce7717d594bbf3e7de860bde4d1ddc9054b27fb4150e4d5ba05d56811fd90c",
+    "runs/runpod_results_batch16_2026-11-15/results/frozen_source/roof_pipeline/adjudication.py": "7773d41d296c81610c6b14112ecc0d5a280377718a13b9e67fb71e1fec65af11",
+    "runs/runpod_results_batch16_2026-11-15/results/frozen_source/roof_pipeline/annotation_audit.py": "a87b5fa2c8ed8aa423bde7c481d106fb03feafb26c7b949825bab413da065b39",
+    "runs/runpod_results_batch16_2026-11-15/results/frozen_source/roof_pipeline/architecture_comparison.py": "bffe0360466a04cc15695f633bb4185a30732f115b5227667db63502e160682e",
+    "runs/runpod_results_batch16_2026-11-15/results/frozen_source/roof_pipeline/boundary.py": "42033013bfe5bb643a6b36376b8c3a54e92addb2ffb756ded1b91b9d68f02808",
+    "runs/runpod_results_batch16_2026-11-15/results/frozen_source/roof_pipeline/boundary_experiment.py": "5a361fe5da93eb84e84ce3b9225d3423a506ae1ebde57906c48bb8b7179bd82e",
+    "runs/runpod_results_batch16_2026-11-15/results/frozen_source/roof_pipeline/common.py": "09818f6dbd6c3425d14096e64bd72b85d2ba1e24d25988eb6bd460a105adae89",
+    "runs/runpod_results_batch16_2026-11-15/results/frozen_source/roof_pipeline/correction_experiment.py": "2d913210298e929e5b003896727d647c7aafd2c0448b53e190ff9a0a72c971b8",
+    "runs/runpod_results_batch16_2026-11-15/results/frozen_source/roof_pipeline/correction_overlay.py": "6a1c29bd910a100ebea7c618c7b7363e7f1224db0712133653eb0c674ab424cb",
+    "runs/runpod_results_batch16_2026-11-15/results/frozen_source/roof_pipeline/dataset.py": "fd507b806ffc7872951684bc15924131cf4f32b1460c3472afc3ee43b664d552",
+    "runs/runpod_results_batch16_2026-11-15/results/frozen_source/roof_pipeline/evaluate.py": "2eff7d05a46af6e43171db74563e66eff7a4cc54b46258616ca1b2a07f74af64",
+    "runs/runpod_results_batch16_2026-11-15/results/frozen_source/roof_pipeline/hard_examples.py": "57bee396b3e0774193145bcfa42a355e47af94b85353675aa819d3a3627c8763",
+    "runs/runpod_results_batch16_2026-11-15/results/frozen_source/roof_pipeline/inference_service.py": "4d5396cd00c826617f39a6cc802fa37c2959255f805130acde092e28903af5ce",
+    "runs/runpod_results_batch16_2026-11-15/results/frozen_source/roof_pipeline/metrics.py": "82736d8629aef153ac57fb6e5a5823427500eb0d8c88a47e3063ff8d4971ab18",
+    "runs/runpod_results_batch16_2026-11-15/results/frozen_source/roof_pipeline/models.py": "30d0bfb9a3025f24e9bb639e8fb97735a1bb8751be2410415df8fd1c79081245",
+    "runs/runpod_results_batch16_2026-11-15/results/frozen_source/roof_pipeline/predict.py": "982312da3924a0c5fa4ad79276eef1d267f746a689a5bdc81884dabaf4e8d673",
+    "runs/runpod_results_batch16_2026-11-15/results/frozen_source/roof_pipeline/prepare.py": "0be7ba209fb721f3cc349e8a4bb5ba574e269c08fbd7ea78404be694226b0322",
+    "runs/runpod_results_batch16_2026-11-15/results/frozen_source/roof_pipeline/profile_architectures.py": "48a4a26958393a79a620aa48aa01563445bcdc4da9c8c6879bde5b8be02315a0",
+    "runs/runpod_results_batch16_2026-11-15/results/frozen_source/roof_pipeline/refine.py": "d238123f310d27e7d5a16d8feff93cd789f3fa140be0de7a525d306034dfc3d8",
+    "runs/runpod_results_batch16_2026-11-15/results/frozen_source/roof_pipeline/release.py": "0c5970d110d0cf319cc0d21c4961c9f463ca5704e54346f2e965513f780f4a24",
+    "runs/runpod_results_batch16_2026-11-15/results/frozen_source/roof_pipeline/review_score.py": "35f27b4632fda26d06553f1b6b173e7c59e2b32b86252f03d6ae2035e0926209",
+    "runs/runpod_results_batch16_2026-11-15/results/frozen_source/roof_pipeline/runtime.py": "cb8b0eeaadd2048b511ad7f77f9dbe29cfa71afbcd31253859ae3a70b2512ee0",
+    "runs/runpod_results_batch16_2026-11-15/results/frozen_source/roof_pipeline/train.py": "887793464ad9677a576d83163b4794261ae7cc13fc18b681159a08792960fac0",
+    "runs/runpod_results_batch16_2026-11-15/results/operational_handover.json": "eeb4235049e2319c21a3cda0c40d3a400d32fc69048d31a36c1b5a98330b914a",
+    "runs/runpod_results_batch16_2026-11-15/results/plan.json": "b0e70250124819dd0488dc9976ac33cb9d7b21fa03cb8e4b6bb91051eef63a5d",
+    "runs/runpod_results_batch16_2026-11-15/results/remote_budget.json": "595895f9511fa7c38fa3c3b2919bbe74df0fa6cbfb7af9ebec3857b82091ae79",
+    "runs/runpod_results_batch16_2026-11-15/results/remote_derivation.json": "facd361513d591fd50dc90f2328012c9995987152069e0c46be5f83a7664deca",
+    "runs/runpod_results_batch16_2026-11-15/results/remote_profile.log": "9cb83142623481469f60780684253fb0471f5a00b5bfc829ec5e2048f30c22cf",
+    "runs/runpod_results_batch16_2026-11-15/results/remote_status.json": "f4c7684ff1fb82af9150c4e0679fd254ccfaca218da0cc683eada2ee299351b7",
+    "runs/runpod_results_batch16_2026-11-15/results/remote_training.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/runpod_results_batch16_2026-11-15/results/report.md": "d9f6047c1efae9f959aa2e063c02cbe6047b2df6bd090e3b43a9f3216694b277",
+    "runs/runpod_results_batch16_2026-11-15/results/runs/segformer-b0_seed42/best.pt": "ef4e392f08117eb3a03ce6e0a20df579001772d75db6c03921d2e8c1de3d7664",
+    "runs/runpod_results_batch16_2026-11-15/results/runs/segformer-b0_seed42/experiment.json": "1df9a47ef0976d8c20b2d033dea4049f52397f5fd9945fff4715cdd89cb77758",
+    "runs/runpod_results_batch16_2026-11-15/results/runs/segformer-b0_seed42/final.pt": "f7eeb88e2ee99c1ef08797676007bc6ce9c7bf8078f56e98059acc98a41f579f",
+    "runs/runpod_results_batch16_2026-11-15/results/runs/segformer-b0_seed42/history.json": "710d7965d10580de53fc3594ae7ab9382227d3cac82094dfbed82c862c616e40",
+    "runs/runpod_results_batch16_2026-11-15/results/runs/segformer-b0_seed42/progress.json": "250a77abf06aed735ddb3a472dda4fde94733b7fb6b2659e075d8cefbec61e53",
+    "runs/runpod_results_batch16_2026-11-15/results/runs/segformer-b0_seed42/training.log": "ec3e24183bdb7ff2aaa2f3ded5787757d49abc43eba76d7d6730864979c83277",
+    "runs/runpod_results_batch16_2026-11-15/results/runs/segformer-b0_seed42/training_summary.json": "311a533c910982edf09c7725faa02c51c6368bcf0fafcf9a093176db02af1a04",
+    "runs/runpod_results_batch16_2026-11-15/results/runs/segformer-b0_seed42/validation.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/runpod_results_batch16_2026-11-15/results/runs/segformer-b0_seed42/validation_best.json": "091c97cb005dc951926bf05001328c143e68b3788db3f025f29b2932bb9cba7e",
+    "runs/runpod_results_batch16_2026-11-15/results/runs/segformer-b0_seed42/validation_primary_0p5_per_image.csv": "5eed038556bb714abd7f62ea8fc78011f9d58751a01092c7b3fc6acc173b3c13",
+    "runs/runpod_results_batch16_2026-11-15/results/runs/segformer-b0_seed42/validation_secondary_calibrated_per_image.csv": "5eed038556bb714abd7f62ea8fc78011f9d58751a01092c7b3fc6acc173b3c13",
+    "runs/runpod_results_batch16_2026-11-15/results/runs/unet-resnet34_seed42/best.pt": "33e6a68709ad8225b24b9b43f439fe837ca22b7134f5660b2cb375c0784817bc",
+    "runs/runpod_results_batch16_2026-11-15/results/runs/unet-resnet34_seed42/experiment.json": "949d8f65422e336d2ec25afa6b10917c19f3a0fdb1f1fcfe4c0b550e75f02530",
+    "runs/runpod_results_batch16_2026-11-15/results/runs/unet-resnet34_seed42/final.pt": "8a22b943c19ad279d765a457d0ef495d4be310a71fb5df35a1c301e5d27e2099",
+    "runs/runpod_results_batch16_2026-11-15/results/runs/unet-resnet34_seed42/history.json": "fac6152b2a995066031f6f60fabc2a5efa28d3377b9fe311308feea5f2ea754d",
+    "runs/runpod_results_batch16_2026-11-15/results/runs/unet-resnet34_seed42/progress.json": "23d739255a85650872337ea1803d201759c8b9a8e680a111fb878c5f9bbe31d5",
+    "runs/runpod_results_batch16_2026-11-15/results/runs/unet-resnet34_seed42/training.log": "6ce0d5b5b5f5ddbbb3f4d849c057d3f656c7208bc6b0de417fc69fb8f3a4e171",
+    "runs/runpod_results_batch16_2026-11-15/results/runs/unet-resnet34_seed42/training_summary.json": "01bcf38074a6b64e83ea58a9b91ea1a61e46838ed9be31bf8c313bd166b39855",
+    "runs/runpod_results_batch16_2026-11-15/results/runs/unet-resnet34_seed42/validation.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/runpod_results_batch16_2026-11-15/results/runs/unet-resnet34_seed42/validation_best.json": "e553fa90d07f5c4cd4320d29ecdb20cbf57fa7e0ae56508d28b43e131e407e82",
+    "runs/runpod_results_batch16_2026-11-15/results/runs/unet-resnet34_seed42/validation_primary_0p5_per_image.csv": "e078314394d428d78c4c5f8d2f5976227294cfb610adb158985a699d31d256d9",
+    "runs/runpod_results_batch16_2026-11-15/results/runs/unet-resnet34_seed42/validation_secondary_calibrated_per_image.csv": "e078314394d428d78c4c5f8d2f5976227294cfb610adb158985a699d31d256d9",
+    "runs/runpod_results_batch16_2026-11-15/results/runs/unetplusplus-resnet34_seed42/best.pt": "c1bffbcb9da36d3e91e0a0a2a1d421c049b4bd660a127021ae6f2751b2b690d6",
+    "runs/runpod_results_batch16_2026-11-15/results/runs/unetplusplus-resnet34_seed42/experiment.json": "a843b986d366701fe8313f9463064e364fc1a50d159c5b84c75e5061da578661",
+    "runs/runpod_results_batch16_2026-11-15/results/runs/unetplusplus-resnet34_seed42/final.pt": "9f6222098abf1c5cebdd2f787381f4937e4e2f66e827cf23573a40073b4c8ec8",
+    "runs/runpod_results_batch16_2026-11-15/results/runs/unetplusplus-resnet34_seed42/history.json": "1b01c68021930ceefe9f169e37768244b632bb1432e3bc501c99351e54415d76",
+    "runs/runpod_results_batch16_2026-11-15/results/runs/unetplusplus-resnet34_seed42/progress.json": "17e97ee07ab38fdfd5af07fd1460ec630255d80637f3463a2235fbc4ed009a78",
+    "runs/runpod_results_batch16_2026-11-15/results/runs/unetplusplus-resnet34_seed42/training.log": "1b5bc19a246c7fdad97c17a00b213f9f5f18b67d15143f926b8a07015fb5e5f1",
+    "runs/runpod_results_batch16_2026-11-15/results/runs/unetplusplus-resnet34_seed42/training_summary.json": "aa20b5e8aaf3bf44096a55554a5a1b8939bbb71db689e2bd08ceb30c916903d8",
+    "runs/runpod_results_batch16_2026-11-15/results/runs/unetplusplus-resnet34_seed42/validation.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/runpod_results_batch16_2026-11-15/results/runs/unetplusplus-resnet34_seed42/validation_best.json": "b0fd7a19d1d5edc63b1d6c63300d379ef6520ce8cfb6cd771dfe2cd397dcd81c",
+    "runs/runpod_results_batch16_2026-11-15/results/runs/unetplusplus-resnet34_seed42/validation_primary_0p5_per_image.csv": "e6eeb71bef41aed5acb14c7512d19210ba43359e4c85cf61313146e353db2aa0",
+    "runs/runpod_results_batch16_2026-11-15/results/runs/unetplusplus-resnet34_seed42/validation_secondary_calibrated_per_image.csv": "e6eeb71bef41aed5acb14c7512d19210ba43359e4c85cf61313146e353db2aa0",
+    "runs/runpod_results_batch16_2026-11-15/results/runtime_estimate.json": "ee3b3d3bf9f9e19d6388f69ac4d109186c24b6946efaee18a96c484f50f533f7",
+    "runs/runpod_results_batch16_2026-11-15/results/source_snapshot.zip": "2a27255ab2647d9991998d150df6e133b3271fade497be687244be735be2088b",
+    "runs/runpod_results_batch16_2026-11-15/results/status.json": "e36d6bca409c35cb1ffd60afb56437c5cef9f76b2ef88f92749cde7c30d251bd",
+    "runs/runpod_results_batch16_2026-11-15/results/supplemental_batch4_unet/best.pt": "42252303551521d33a6dd506ffbe685d1172c9cff273d25d1940b1b80c60a27f",
+    "runs/runpod_results_batch16_2026-11-15/results/supplemental_batch4_unet/experiment.json": "012b91a3e7ae55210b6a29d14b5c5b90e1eb821cb062951cfb97235180a91cab",
+    "runs/runpod_results_batch16_2026-11-15/results/supplemental_batch4_unet/final.pt": "6beaaa68cf0d83b61d8216e043493899eafe5888685a7bc14bb47fa672743dd9",
+    "runs/runpod_results_batch16_2026-11-15/results/supplemental_batch4_unet/history.json": "05409bddaf34768c6a9df365c1930a1900c13a0477ab18a40268a13ed842f448",
+    "runs/runpod_results_batch16_2026-11-15/results/supplemental_batch4_unet/progress.json": "23d739255a85650872337ea1803d201759c8b9a8e680a111fb878c5f9bbe31d5",
+    "runs/runpod_results_batch16_2026-11-15/results/supplemental_batch4_unet/registered_plan.json": "cc6748490159af4907762e354d62bf6edbac01868d311dd8aac8c381a161c500",
+    "runs/runpod_results_batch16_2026-11-15/results/supplemental_batch4_unet/runtime_estimate.json": "f299128188976f990dcfcfedca6bd7f462156749ddb14a992d1bb92c86dff154",
+    "runs/runpod_results_batch16_2026-11-15/results/supplemental_batch4_unet/training.log": "51335dd09153bf1e06686d24d55852876cf2a3aee09612e9d0305356b555a65b",
+    "runs/runpod_results_batch16_2026-11-15/results/supplemental_batch4_unet/training_summary.json": "53762c2162deb5aa84e24272a7e99c80aa032cd388e29c54297fd04e8e0fbef6",
+    "runs/runpod_results_batch16_2026-11-15/results/supplemental_batch4_unet/validation.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/runpod_results_batch16_2026-11-15/results/supplemental_batch4_unet/validation_best.json": "49913ff657a59d129b39dde5395707bbdf801d8122bd22533c4a7065ed31cc9f",
+    "runs/runpod_results_batch16_2026-11-15/results/supplemental_batch4_unet/validation_primary_0p5_per_image.csv": "221a403f3d0f288d061d01833a17eb1dc1c4cec21614d8225a48320e99f54724",
+    "runs/runpod_results_batch16_2026-11-15/results/supplemental_batch4_unet/validation_secondary_calibrated_per_image.csv": "221a403f3d0f288d061d01833a17eb1dc1c4cec21614d8225a48320e99f54724",
+    "docs/results/whu_architecture_test_2026-11-16/checksums.json": "21663acb5d05b0b3b4b38d5675921639c15c53486817795aa125a8baf71fbc53",
+    "docs/results/whu_architecture_test_2026-11-16/comparison.csv": "ad329d600472ba72056c9c1733540dd672b1ac9d3f5ab02cdab3fd565b5f3d68",
+    "docs/results/whu_architecture_test_2026-11-16/comparison.json": "27f32646820579a2c2b5f58620bf404cc938067d492c9808f3e23ed07ffba88e",
+    "docs/results/whu_architecture_test_2026-11-16/comparison.png": "a8c248301664a7e9cfc6208fa105d54773040f35831f67247c948266362018ea",
+    "docs/results/whu_architecture_test_2026-11-16/comparison.svg": "aebcf038e7dbaa7c2023adb65d57607d07b19a0d5b41b31677896abc2260ed70",
+    "docs/results/whu_architecture_test_2026-11-16/README.md": "509f8b712cdf546ea0bd47d98e3097ec667d50f59ef2aee128c7cc5e4832c3a0",
+    "docs/results/whu_architecture_test_2026-11-16/registration.json": "a6290227e9238fb93409e9ae4a9e0c43eadd9112c4c67b40cb4af831a196ada2",
+    "docs/results/whu_architecture_test_2026-11-16/segformer-b0_metrics.json": "41a1d683417b875cf83a0833772ac93161c3d84bb1aca37d243291c1fd6493b9",
+    "docs/results/whu_architecture_test_2026-11-16/segformer-b0_per_image.csv": "c23a92160baf1b820afc28281483c72c6fb0960c50ffae6c57cf4bb590ec5818",
+    "docs/results/whu_architecture_test_2026-11-16/unet-resnet34_metrics.json": "16064c3b7f20c064db3d445172b45bf714cedb6a441e6cc29271aeaa1a0aa7ec",
+    "docs/results/whu_architecture_test_2026-11-16/unet-resnet34_per_image.csv": "910e589a5ca6a1f966fb76fc0839bef708b8a9c5518248d2ffe96d531daa1fb7",
+    "docs/results/whu_architecture_test_2026-11-16/unetplusplus-resnet34_metrics.json": "4807857d2c84f63f752203c454afbee1dc252353caf0f1f2bb91d62df3a7d20c",
+    "docs/results/whu_architecture_test_2026-11-16/unetplusplus-resnet34_per_image.csv": "40f00431fc4147077ea644531e654013b89a30e10578d1bab4bcfb13c86b3439",
+    "docs/results/whu_texture_errors_2026-11-16/analysis.json": "12b06f526c996691ebd78c181485558fa80613416ff4e2feafc7c4a5419a9c10",
+    "docs/results/whu_texture_errors_2026-11-16/checksums.json": "106fee0817762321a3ef7b0b1631c1f585a12bdbe9fa30f891cdaedea8badbe9",
+    "docs/results/whu_texture_errors_2026-11-16/field_examples.png": "b57a38c5e92aabbc9edda9dc313cab8a7a49547fe6d52e16de2b519c2f2677e8",
+    "docs/results/whu_texture_errors_2026-11-16/field_examples.svg": "dd46a9c11a670d93e14de9a8804b2681cdeb948ccfbd8b1e64717a7702fc8c7c",
+    "docs/results/whu_texture_errors_2026-11-16/per_tile_error_comparison.csv": "9334819c023763cf6500a5058c149858ae0233f8eb77d26b00dd1b63fbde117f",
+    "docs/results/whu_texture_errors_2026-11-16/README.md": "271e827afc2c6db0cd4a18e513753f7b854f3a69c4546c2ac72348cce970fc28",
+    "docs/results/whu_texture_errors_2026-11-16/replay.json": "4c55ac98dad7b24bafaa95aaa5b2010a44e6a104137881d7f5519814758cdbbe",
+    "docs/results/whu_texture_errors_2026-11-16/selection.json": "522d8df2497a03b651722d6ff31f9a1395686a4569831b09c1e1b7d2cd8e2d55"
+  },
+  "historical_whu_scores_unaffected_by_declared_validity_bug": true,
+  "selected_agricultural_tiles": [
+    {
+      "sample_id": "whu_test_000046",
+      "split": "test",
+      "source_image": "test/image/14.tif",
+      "source_label": "test/label/14.tif",
+      "prepared_image": "images/whu_test_000046.png",
+      "prepared_label": "masks/whu_test_000046.png",
+      "source_image_sha256": "c7623be678d07bfabc4157125fab2e4ca27c5d4b415ca512b7b1187b2fb31201",
+      "source_label_sha256": "bdca5b77d9c095c314ececbc5ab89c3ca2fe16e9c7513f492b101dd42e7be3a6",
+      "prepared_image_sha256": "efab18e63f9e6c2de8fbc46ef6279593759c69ce5176d7714ae345b5d486b5e5",
+      "prepared_label_sha256": "65795a5b91030a2a433dae510d1edf494082a9cfa1153cd94f3797759f68f257",
+      "pixels": 262144,
+      "image_rgb_pixel_parity": true,
+      "normalized_label_pixel_parity": true,
+      "source_invalid_pixels": 0,
+      "prepared_lost_declared_or_nonfinite_invalid_pixels": 0,
+      "source_label_values": "[1]",
+      "source_label_pil_mode": "1",
+      "source_label_photometric": 0,
+      "source_label_rendered_values": "[0]",
+      "image_width": 512,
+      "image_height": 512,
+      "image_bands": 3,
+      "image_dtypes": [
+        "uint8",
+        "uint8",
+        "uint8"
+      ],
+      "image_nodata": [
+        null,
+        null,
+        null
+      ],
+      "image_mask_flags": [
+        [
+          "all_valid"
+        ],
+        [
+          "all_valid"
+        ],
+        [
+          "all_valid"
+        ]
+      ],
+      "image_colorinterp": [
+        "red",
+        "green",
+        "blue"
+      ],
+      "image_alpha_bands": 0,
+      "image_alpha_invalid_pixels": 0,
+      "image_declared_invalid_pixels": 0,
+      "image_nonfinite_pixels": 0,
+      "image_invalid_pixels": 0,
+      "image_nodata_class_collision": false,
+      "image_palette": null,
+      "image_sidecars": [],
+      "label_width": 512,
+      "label_height": 512,
+      "label_bands": 1,
+      "label_dtypes": [
+        "uint8"
+      ],
+      "label_nodata": [
+        null
+      ],
+      "label_mask_flags": [
+        [
+          "all_valid"
+        ]
+      ],
+      "label_colorinterp": [
+        "palette"
+      ],
+      "label_alpha_bands": 0,
+      "label_alpha_invalid_pixels": 0,
+      "label_declared_invalid_pixels": 0,
+      "label_nonfinite_pixels": 0,
+      "label_invalid_pixels": 0,
+      "label_nodata_class_collision": false,
+      "label_palette": {
+        "1": [
+          0,
+          0,
+          0,
+          255
+        ]
+      },
+      "label_sidecars": []
+    },
+    {
+      "sample_id": "whu_test_001948",
+      "split": "test",
+      "source_image": "test/image/32.tif",
+      "source_label": "test/label/32.tif",
+      "prepared_image": "images/whu_test_001948.png",
+      "prepared_label": "masks/whu_test_001948.png",
+      "source_image_sha256": "70462eda217f2c6218b9d2172ce15b2d1f45be77b3f7abcb92399ad32dc603df",
+      "source_label_sha256": "bdca5b77d9c095c314ececbc5ab89c3ca2fe16e9c7513f492b101dd42e7be3a6",
+      "prepared_image_sha256": "4d73d4248698b43a01c3de551753c6e541248bed866608b513bbde496a6ade34",
+      "prepared_label_sha256": "65795a5b91030a2a433dae510d1edf494082a9cfa1153cd94f3797759f68f257",
+      "pixels": 262144,
+      "image_rgb_pixel_parity": true,
+      "normalized_label_pixel_parity": true,
+      "source_invalid_pixels": 0,
+      "prepared_lost_declared_or_nonfinite_invalid_pixels": 0,
+      "source_label_values": "[1]",
+      "source_label_pil_mode": "1",
+      "source_label_photometric": 0,
+      "source_label_rendered_values": "[0]",
+      "image_width": 512,
+      "image_height": 512,
+      "image_bands": 3,
+      "image_dtypes": [
+        "uint8",
+        "uint8",
+        "uint8"
+      ],
+      "image_nodata": [
+        null,
+        null,
+        null
+      ],
+      "image_mask_flags": [
+        [
+          "all_valid"
+        ],
+        [
+          "all_valid"
+        ],
+        [
+          "all_valid"
+        ]
+      ],
+      "image_colorinterp": [
+        "red",
+        "green",
+        "blue"
+      ],
+      "image_alpha_bands": 0,
+      "image_alpha_invalid_pixels": 0,
+      "image_declared_invalid_pixels": 0,
+      "image_nonfinite_pixels": 0,
+      "image_invalid_pixels": 0,
+      "image_nodata_class_collision": false,
+      "image_palette": null,
+      "image_sidecars": [],
+      "label_width": 512,
+      "label_height": 512,
+      "label_bands": 1,
+      "label_dtypes": [
+        "uint8"
+      ],
+      "label_nodata": [
+        null
+      ],
+      "label_mask_flags": [
+        [
+          "all_valid"
+        ]
+      ],
+      "label_colorinterp": [
+        "palette"
+      ],
+      "label_alpha_bands": 0,
+      "label_alpha_invalid_pixels": 0,
+      "label_declared_invalid_pixels": 0,
+      "label_nonfinite_pixels": 0,
+      "label_invalid_pixels": 0,
+      "label_nodata_class_collision": false,
+      "label_palette": {
+        "1": [
+          0,
+          0,
+          0,
+          255
+        ]
+      },
+      "label_sidecars": []
+    }
+  ],
+  "metadata_profiles": {
+    "image": {
+      "{\"bands\": 3, \"colorinterp\": [\"red\", \"green\", \"blue\"], \"dtypes\": [\"uint8\", \"uint8\", \"uint8\"], \"mask_flags\": [[\"all_valid\"], [\"all_valid\"], [\"all_valid\"]], \"nodata\": [null, null, null]}": 8188
+    },
+    "label": {
+      "{\"bands\": 1, \"colorinterp\": [\"palette\"], \"dtypes\": [\"uint8\"], \"mask_flags\": [[\"all_valid\"]], \"nodata\": [null]}": 8188
+    }
+  },
+  "environment": {
+    "python": "3.10.11",
+    "numpy": "2.2.6",
+    "rasterio": "1.3.11"
+  },
+  "limits": [
+    "All-valid metadata cannot detect undocumented publisher missingness or incomplete labels.",
+    "WHU background/class-zero remains valid; nodata collisions are flagged, not relabeled.",
+    "No training, model loading, inference, metric recomputation or data mutation occurred."
+  ]
+}

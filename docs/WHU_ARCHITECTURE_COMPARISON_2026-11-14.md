@@ -178,6 +178,35 @@ mechanism has not been established.
 [SVG examples](results/whu_texture_errors_2026-11-16/field_examples.svg) ·
 [Packet checksums](results/whu_texture_errors_2026-11-16/checksums.json).
 
+### November 18 NoData audit and correction
+
+The pipeline now carries explicit source validity through preprocessing,
+training objectives, threshold calibration, evaluation, prediction, and area
+reporting. The serving `valid_pixel_count` previously meant total image pixels;
+it now counts valid pixels and is accompanied by invalid/total counts and a
+validity artifact. See the [policy, regressions, and release migration](NODATA_HANDLING_2026-11-18.md).
+
+The [independent full-source audit](results/whu_nodata_audit_2026-11-18/README.md)
+compares all 8,188 original image/label TIFF pairs with the publisher ZIP and
+prepared PNGs, including source masks, declared NoData, alpha, nonfinite data,
+and image/label parity. All 8,188 pairs have zero invalid pixels under this
+policy and zero image or normalized-label parity failures. No WHU metric rerun
+is needed for this declared-validity fix: the validation-best checkpoints,
+thresholds, test scores, and agricultural false-positive counts remain valid
+as originally reported. Both agricultural examples have zero invalid pixels,
+so declared NoData does not explain those errors.
+
+Original WHU labels are one-bit `WhiteIsZero` TIFFs:
+raw bit 0 renders white/building, and raw bit 1 renders black/background.
+The importer and audit preserve that photometric interpretation; ordinary
+indexed class-label palettes retain their indices.
+
+The audit packet records partition totals, the two agricultural examples,
+source/archive hashes, and before/after protection of all 95 original training
+artifacts and the published test/error packets. No training or inference is
+performed by the audit. It cannot detect missing imagery or incomplete labels
+that the publisher did not declare in metadata.
+
 ### Proposed response: train-only hard-background pilot
 
 **No remedial training has been run.** The next step is a controlled experiment

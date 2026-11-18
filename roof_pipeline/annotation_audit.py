@@ -13,7 +13,7 @@ from pathlib import Path
 import numpy as np
 from PIL import Image, ImageDraw
 
-from .common import load_binary_mask, read_manifest
+from .common import read_manifest, read_paired_sample
 
 STRATA = ("empty", "positive_lt_1pct", "1_to_10pct", "at_least_10pct")
 REVIEW_FIELDS = (
@@ -40,14 +40,20 @@ def coverage_stratum(fraction: float) -> str:
     return STRATA[3]
 
 
-def mask_outline(mask: np.ndarray) -> np.ndarray:
+def mask_outline(mask: np.ndarray, valid: np.ndarray | None = None) -> np.ndarray:
     """One-pixel interior contour, including shapes cropped at tile edges."""
     foreground = mask > 0
     padded = np.pad(foreground, 1, constant_values=False)
     interior = foreground.copy()
     for dy, dx in ((0, 1), (2, 1), (1, 0), (1, 2)):
         interior &= padded[dy : dy + mask.shape[0], dx : dx + mask.shape[1]]
-    return foreground & ~interior
+    contour = foreground & ~interior
+    if valid is not None:
+        available = np.pad(valid, 1, constant_values=True)
+        contour &= valid
+        for dy, dx in ((0, 1), (2, 1), (1, 0), (1, 2)):
+            contour &= available[dy : dy + mask.shape[0], dx : dx + mask.shape[1]]
+    return contour
 
 
 def select_samples(root: Path, per_stratum: int = 4, seed: int = 20261029):
@@ -57,7 +63,10 @@ def select_samples(root: Path, per_stratum: int = 4, seed: int = 20261029):
     for row in read_manifest(root):
         if row["split"] not in {"train", "val"}:
             continue
-        fraction = float((load_binary_mask(root / row["mask"]) > 0).mean())
+        _, labels, valid = read_paired_sample(root, row)
+        if not valid.any():
+            continue  # Fully unavailable tiles are not empty-background examples.
+        fraction = float(np.count_nonzero((labels > 0) & valid) / valid.sum())
         stratum = coverage_stratum(fraction)
         buckets[(row["split"], stratum)].append(
             dict(row, coverage=fraction, stratum=stratum)
@@ -86,11 +95,13 @@ def make_packet(root: Path, out: Path, per_stratum: int = 4, seed: int = 2026102
     (out / "panels").mkdir(parents=True, exist_ok=True)
     groups = defaultdict(list)
     for row in selected:
-        with Image.open(root / row["image"]) as source:
-            image = source.convert("RGB")
-        mask = load_binary_mask(root / row["mask"], image.size)
-        rgb = np.asarray(image).copy()
-        rgb[mask_outline(mask)] = (255, 0, 255)
+        rgb, mask, valid = read_paired_sample(root, row)
+        if not valid.all():
+            rgb = rgb.copy()
+            rgb[~valid] = 128
+        image = Image.fromarray(rgb)
+        rgb = rgb.copy()
+        rgb[mask_outline(mask, valid)] = (255, 0, 255)
         panel = Image.new("RGB", (image.width * 2, image.height + 28), (25, 25, 25))
         ImageDraw.Draw(panel).text(
             (6, 6),
@@ -102,10 +113,24 @@ def make_packet(root: Path, out: Path, per_stratum: int = 4, seed: int = 2026102
         relative = f"panels/{row['sample_id']}.png"
         panel.save(out / relative)
         row["panel"] = relative
-        for field in ("image", "mask"):
+        for field in (
+            "image",
+            "mask",
+            *(("valid_mask",) if row.get("valid_mask") else ()),
+        ):
             row[f"{field}_sha256"] = hashlib.sha256(
                 (root / row[field]).read_bytes()
             ).hexdigest()
+        companions = {
+            row[field] + suffix: hashlib.sha256(
+                (root / (row[field] + suffix)).read_bytes()
+            ).hexdigest()
+            for field in ("image", "mask")
+            for suffix in (".msk", ".aux.xml")
+            if (root / (row[field] + suffix)).is_file()
+        }
+        if companions:
+            row["validity_companion_sha256"] = companions
         groups[(row["split"], row["stratum"])].append(panel)
     for (split, stratum), panels in groups.items():
         width = max(panel.width for panel in panels)

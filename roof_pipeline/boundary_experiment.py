@@ -30,6 +30,7 @@ from .refine import (
     _snapshot,
     _write_json,
 )
+from .validity import target_validity
 
 
 def select_candidate(candidates: list[dict]) -> dict:
@@ -63,11 +64,21 @@ def mask_edges(mask: torch.Tensor) -> torch.Tensor:
     return boundary_target(mask.float()) > 0
 
 
-def boundary_counts(prediction, truth, tolerance=2) -> tuple[int, int, int, int]:
+def boundary_counts(
+    prediction, truth, tolerance=2, valid=None
+) -> tuple[int, int, int, int]:
     """Matched predicted/true boundary pixels and both independent denominators."""
     if type(tolerance) is not int or tolerance < 0:
         raise ValueError("Boundary tolerance must be a nonnegative integer")
     predicted_edges, true_edges = mask_edges(prediction), mask_edges(truth)
+    if valid is not None and not valid.all():
+        # Neither a boundary's 3x3 neighborhood nor its tolerance window may
+        # cross unknown data, otherwise masking would manufacture an outline.
+        radius = tolerance + 1
+        invalid = F.pad((~valid).float(), (radius,) * 4, mode="replicate")
+        safe = F.max_pool2d(invalid, 2 * radius + 1, 1) == 0
+        predicted_edges &= safe
+        true_edges &= safe
     kernel = 2 * tolerance + 1
     near_truth = F.max_pool2d(true_edges.float(), kernel, 1, tolerance) > 0
     near_prediction = F.max_pool2d(predicted_edges.float(), kernel, 1, tolerance) > 0
@@ -109,26 +120,37 @@ def validation_diagnostics(checkpoint, data, out, *, device, batch_size, workers
     outline_totals = [0, 0, 0, 0]
     details = []
     for x, y in loader:
+        valid = target_validity(y).to(device)
         truth = y.to(device) > 0.5
-        prediction = model(x.to(device)).sigmoid() >= threshold
-        for predicted, target in zip(prediction, truth):
-            predicted, target = predicted[None], target[None]
-            counts = (
-                int((predicted & target).sum()),
-                int((predicted & ~target).sum()),
-                int((~predicted & target).sum()),
-                int((~predicted & ~target).sum()),
+        available = valid.flatten(1).any(1)
+        prediction = torch.zeros_like(truth)
+        if available.any():
+            prediction[available] = (
+                model(x.to(device)[available]).sigmoid() >= threshold
             )
-            outline = boundary_counts(predicted, target)
+        for predicted, target, known in zip(prediction, truth, valid):
+            predicted, target = predicted[None], target[None]
+            known = known[None]
+            counts = (
+                int((predicted & target & known).sum()),
+                int((predicted & ~target & known).sum()),
+                int((~predicted & target & known).sum()),
+                int((~predicted & ~target & known).sum()),
+            )
+            outline = boundary_counts(predicted, target, valid=known)
             pixel_totals = [a + b for a, b in zip(pixel_totals, counts)]
             outline_totals = [a + b for a, b in zip(outline_totals, outline)]
             details.append(
                 {
                     "sample_id": dataset.rows[len(details)]["sample_id"],
                     **metrics_from_counts(*counts),
+                    "valid_pixel_count": int(known.sum()),
+                    "invalid_pixel_count": int((~known).sum()),
                     "boundary_f1_tolerance_2px": boundary_scores(outline)["f1"],
                 }
             )
+    if not sum(pixel_totals):
+        raise ValueError("Validation diagnostics have no valid pixels")
     result = {
         "split": "val",
         "samples": len(dataset),

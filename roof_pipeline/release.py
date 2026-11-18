@@ -7,9 +7,14 @@ import hashlib
 import io
 import json
 import math
+import os
 from pathlib import Path
 
 import torch
+
+PREPROCESSING_VERSION = "imagenet-rgb-validity-edgepad-tiled-v2"
+ALPHA_POLICY = "Alpha zero is invalid; alpha greater than zero retains original RGB without compositing; grayscale repeats into RGB"
+VALIDITY_POLICY = "Explicit source masks and finite RGB define validity; invalid normalized model inputs are zero; invalid output probabilities are zero placeholders excluded from coverage and polygons"
 
 
 def sha256(content: bytes) -> str:
@@ -48,9 +53,14 @@ def read_checkpoint(checkpoint):
     if not path.is_file() or path.stat().st_size > 512_000_000:
         raise ValueError("Checkpoint must be a regular file smaller than 512 MB")
     with path.open("rb") as stream:
-        content = stream.read(512_000_001)
-    if len(content) > 512_000_000:
-        raise ValueError("Checkpoint exceeds size limit")
+        size = os.fstat(stream.fileno()).st_size
+        if size > 512_000_000:
+            raise ValueError("Checkpoint exceeds size limit")
+        # Bound by the opened file's actual size rather than allocating a
+        # 512-MB read buffer on every cached readiness/inference check.
+        content = stream.read(size + 1)
+        if len(content) != size or os.fstat(stream.fileno()).st_size != size:
+            raise ValueError("Checkpoint changed while reading")
     return content
 
 
@@ -87,10 +97,11 @@ def prepare_release(checkpoint, output, source_manifest=None):
         "training_dataset_content_sha256": config.get("dataset_content_sha256"),
         "training_dataset_manifest_sha256": config.get("dataset_manifest_sha256"),
         "training_source": source,
-        "preprocessing_version": "imagenet-rgb-edgepad-tiled-v1",
+        "preprocessing_version": PREPROCESSING_VERSION,
         "overlap": min(64, config["image_size"] // 4),
         "image_policy": "No full-image resize; edge padding; weighted probability blending before thresholding",
-        "alpha_policy": "Pillow RGB conversion discards alpha without compositing; grayscale repeats into RGB",
+        "alpha_policy": ALPHA_POLICY,
+        "validity_policy": VALIDITY_POLICY,
         "gsd_policy": "Native image pixels; GSD is not inferred or validated",
         "label_definition": "binary building extent",
         "limitations": [
@@ -116,9 +127,16 @@ def validate_release(record):
         raise ValueError("Missing checkpoint SHA256")
     if (
         record.get("input_channels") != 3
-        or record.get("preprocessing_version") != "imagenet-rgb-edgepad-tiled-v1"
+        or record.get("preprocessing_version") != PREPROCESSING_VERSION
     ):
-        raise ValueError("Unsupported preprocessing")
+        raise ValueError(
+            "Unsupported preprocessing; prepare a fresh v2 release manifest for the same checkpoint"
+        )
+    if (
+        record.get("alpha_policy") != ALPHA_POLICY
+        or record.get("validity_policy") != VALIDITY_POLICY
+    ):
+        raise ValueError("Unsupported alpha or source-validity policy")
     size = record.get("image_size")
     if type(size) is not int or not 32 <= size <= 1024 or size % 32:
         raise ValueError("Unsupported release image size")

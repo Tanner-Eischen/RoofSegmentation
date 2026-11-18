@@ -34,6 +34,7 @@ from .models import (
     load_model,
     validate_aspp_rates,
 )
+from .validity import VALIDITY_POLICY, target_validity
 
 
 def initialize_model(args, device, dataset_sha):
@@ -116,7 +117,23 @@ def seed_worker(worker_id):
 
 
 def bce_dice_loss(logits, labels, pos_weight: float = 1.0):
+    valid = target_validity(labels)
     weight = torch.tensor(pos_weight, device=logits.device, dtype=logits.dtype)
+    if not valid.all():
+        # Mask before arithmetic: NaN * 0 would still poison a masked loss.
+        logits = logits.masked_fill(~valid, 0)
+        labels = labels.masked_fill(~valid, 0)
+        if not valid.any():
+            return logits.sum() * 0
+        bce = F.binary_cross_entropy_with_logits(
+            logits, labels, pos_weight=weight, reduction="none"
+        )[valid].mean()
+        probs = logits.sigmoid().masked_fill(~valid, 0)
+        dims = (1, 2, 3)
+        dice = (2 * (probs * labels).sum(dim=dims) + 1) / (
+            (probs + labels).sum(dim=dims) + 1
+        )
+        return bce + (1 - dice)[valid.flatten(1).any(1)].mean()
     bce = F.binary_cross_entropy_with_logits(logits, labels, pos_weight=weight)
     probs = torch.sigmoid(logits)
     dims = (1, 2, 3)
@@ -261,6 +278,7 @@ def train(args):
             (args.data / "manifest.csv").read_bytes()
         ).hexdigest(),
         "dataset_content_sha256": dataset_sha,
+        "validity_policy": VALIDITY_POLICY,
         "photometric_profile": profile,
         "boundary_supervision": boundary_weight > 0,
         "boundary_weight": boundary_weight,
@@ -317,7 +335,14 @@ def train(args):
         segmentation_total = 0.0
         boundary_total = 0.0
         n = 0
+        draws = 0
         for batch_index, (x, y) in enumerate(train_loader, start=1):
+            draws += x.size(0)
+            available = target_validity(y).flatten(1).any(1)
+            if not available.any():
+                continue
+            if not available.all():
+                x, y = x[available], y[available]
             x = x.to(dev, non_blocking=True)
             y = y.to(dev, non_blocking=True)
             opt.zero_grad(set_to_none=True)
@@ -370,11 +395,15 @@ def train(args):
                     f"train_loss={total / n:.4f}",
                     flush=True,
                 )
+        if not n:
+            raise ValueError("Training epoch has no valid pixels")
         val_metrics, _ = evaluate_loader(model, val_loader, dev, threshold=0.5)
         current = val_metrics["iou"]
         entry = {
             "epoch": epoch,
-            "train_draws": n,
+            "train_draws": draws,
+            "train_scored_samples": n,
+            "train_ignored_samples": draws - n,
             "unique_train_samples": sampler.unique_samples
             if sampler is not None
             else len(train_ds),

@@ -16,6 +16,7 @@ from PIL import Image
 
 from .dataset import normalize_rgb
 from .models import load_model
+from .validity import read_rgb
 
 
 def starts(n: int, block: int, stride: int) -> list[int]:
@@ -29,12 +30,32 @@ def starts(n: int, block: int, stride: int) -> list[int]:
 
 @torch.no_grad()
 def predict_array(
-    model, rgb: np.ndarray, device, chip: int = 512, overlap: int = 64
+    model,
+    rgb: np.ndarray,
+    device,
+    chip: int = 512,
+    overlap: int = 64,
+    *,
+    valid_mask: np.ndarray | None = None,
 ) -> np.ndarray:
-    """Probability raster at original resolution, tiled without resizing full scene."""
+    """Predict original pixels; invalid slots are zero placeholders with a separate mask."""
     if chip < 32 or chip % 32 or overlap < 0 or overlap >= chip:
         raise ValueError("chip >=32 and divisible by 32; overlap must be in [0, chip)")
+    rgb = np.asarray(rgb)
+    if rgb.ndim != 3 or rgb.shape[2] != 3 or min(rgb.shape[:2]) < 1:
+        raise ValueError("Expected nonempty HWC RGB array")
     h, w = rgb.shape[:2]
+    valid = (
+        np.ones((h, w), dtype=bool)
+        if valid_mask is None
+        else np.asarray(valid_mask, dtype=bool)
+    )
+    if valid.shape != (h, w):
+        raise ValueError("Validity mask must match the original image dimensions")
+    if not valid.any():
+        raise ValueError("Image contains no valid pixels")
+    if not np.isfinite(rgb[valid]).all():
+        raise ValueError("Valid RGB pixels must be finite")
     stride = chip - overlap
     total = np.zeros((h, w), dtype=np.float32)
     weights = np.zeros((h, w), dtype=np.float32)
@@ -45,41 +66,36 @@ def predict_array(
         for c in starts(w, chip, stride):
             part = rgb[r : min(r + chip, h), c : min(c + chip, w)]
             ph, pw = part.shape[:2]
+            part_valid = valid[r : r + ph, c : c + pw]
+            if not part_valid.any():
+                continue
+            model_valid = part_valid
             if ph != chip or pw != chip:
                 part = np.pad(
                     part, ((0, chip - ph), (0, chip - pw), (0, 0)), mode="edge"
                 )
+                # Preserve legacy edge padding for valid RGB inputs. Padded
+                # positions never contribute to source-pixel area or blending.
+                model_valid = np.pad(
+                    part_valid, ((0, chip - ph), (0, chip - pw)), mode="edge"
+                )
+            if not model_valid.all():
+                # Remove NaN/sentinel values before normalization, then make the
+                # actual normalized model input exactly zero at missing pixels.
+                part = part.copy()
+                part[~model_valid] = 0
             input_tensor = normalize_rgb(part).to(device)
+            if not model_valid.all():
+                input_tensor.masked_fill_(
+                    ~torch.from_numpy(model_valid).to(device)[None, None], 0
+                )
             prob = model(input_tensor).sigmoid().float()[0, 0].cpu().numpy()[:ph, :pw]
-            weight = win2d[:ph, :pw]
-            total[r : r + ph, c : c + pw] += prob * weight
+            weight = win2d[:ph, :pw] * part_valid
+            total[r : r + ph, c : c + pw] += np.where(part_valid, prob, 0) * weight
             weights[r : r + ph, c : c + pw] += weight
-    return total / np.maximum(weights, 1e-8)
-
-
-def _read_rgb(path: Path):
-    """Return RGB uint8 array, rasterio metadata or None."""
-    if path.suffix.lower() in (".tif", ".tiff"):
-        import rasterio
-
-        with rasterio.open(path) as src:
-            if src.count < 3:
-                raise ValueError("GeoTIFF needs >=3 RGB bands")
-            rgb = np.moveaxis(src.read([1, 2, 3]), 0, -1)
-            meta = {"crs": src.crs, "transform": src.transform, "profile": src.profile}
-            if rgb.dtype != np.uint8:
-                result = np.zeros_like(rgb, dtype=np.uint8)
-                for i in range(3):
-                    channel = rgb[:, :, i].astype(np.float32)
-                    valid = channel[np.isfinite(channel)]
-                    lo, hi = np.percentile(valid, [2, 98]) if valid.size else (0, 1)
-                    result[:, :, i] = np.clip(
-                        (channel - lo) * 255 / max(hi - lo, 1e-8), 0, 255
-                    ).astype(np.uint8)
-                rgb = result
-            return rgb, meta
-    with Image.open(path) as img:
-        return np.asarray(img.convert("RGB")), None
+    result = total / np.maximum(weights, 1e-8)
+    result[~valid] = 0
+    return result
 
 
 def predict(
@@ -97,14 +113,20 @@ def predict(
     if not (0 < t < 1):
         raise ValueError("threshold must be in (0,1)")
     tile = int(chip or cfg["image_size"])
-    rgb, meta = _read_rgb(image)
-    prob = predict_array(model, rgb, torch.device(device), tile, overlap)
-    mask = (prob >= t).astype(np.uint8) * 255
+    rgb, valid, meta = read_rgb(image)
+    if not valid.any():
+        raise ValueError("Image contains no valid pixels")
+    prob = predict_array(
+        model, rgb, torch.device(device), tile, overlap, valid_mask=valid
+    )
+    mask = ((prob >= t) & valid).astype(np.uint8) * 255
     out.mkdir(parents=True, exist_ok=True)
     out_mask = out / (image.stem + "_mask.png")
     out_prob = out / (image.stem + "_probability.png")
+    out_valid = out / (image.stem + "_validity.png")
     Image.fromarray(mask).save(out_mask)
     Image.fromarray(np.rint(prob * 255).astype(np.uint8)).save(out_prob)
+    Image.fromarray(valid.astype(np.uint8) * 255).save(out_valid)
     overlay = Image.blend(
         Image.fromarray(rgb),
         Image.fromarray(
@@ -112,14 +134,24 @@ def predict(
         ),
         0.45,
     )
+    if not valid.all():
+        overlay = overlay.convert("RGBA")
+        overlay.putalpha(Image.fromarray(valid.astype(np.uint8) * 255))
     overlay.save(out / (image.stem + "_overlay.png"))
     result = {
         "checkpoint": str(checkpoint),
         "image": str(image),
         "threshold": t,
         "roof_area_pixels": int((mask > 0).sum()),
+        "pixel_coverage": float((mask > 0).sum() / valid.sum()),
+        "valid_pixel_count": int(valid.sum()),
+        "invalid_pixel_count": int(valid.size - valid.sum()),
+        "total_pixel_count": int(valid.size),
         "geo_products": False,
         "mask_png": str(out_mask),
+        "probability_png": str(out_prob),
+        "validity_png": str(out_valid),
+        "validity_definition": "255 valid source pixel; 0 missing/transparent/nonfinite. Zero probability at invalid pixels is a placeholder, not background evidence.",
         "warning": "Pixel area is not a physical roof area without georeferencing.",
     }
     if meta and meta["crs"] is not None:
@@ -141,8 +173,10 @@ def predict(
         profile.pop("nodata", None)  # zero is a real background class
         profile.pop("photometric", None)  # a single-band mask is not RGB
         tif_path = out / (image.stem + "_mask.tif")
-        with rasterio.open(tif_path, "w", **profile) as dst:
-            dst.write(mask, 1)
+        with rasterio.Env(GDAL_TIFF_INTERNAL_MASK=True):
+            with rasterio.open(tif_path, "w", **profile) as dst:
+                dst.write(mask, 1)
+                dst.write_mask(valid.astype(np.uint8) * 255)
         features = []
         total_area = None
         projected_meters = (
@@ -150,7 +184,9 @@ def predict(
         )
         if projected_meters:
             total_area = 0.0
-        for geom, v in shapes(mask, mask=mask > 0, transform=meta["transform"]):
+        for geom, v in shapes(
+            mask, mask=(mask > 0) & valid, transform=meta["transform"]
+        ):
             if int(v) == 0:
                 continue
             props = {}

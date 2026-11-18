@@ -1,0 +1,10 @@
+{
+  "audit_script_sha256": "7131a3a4e967dc0993137767fca20369921a01637191d402508948ab29092a00",
+  "audit_tests_sha256": "c6d61512dbddc40d1e389fb20c418416bfc22da9e44c17ad50ae079bec8a2f52",
+  "audit_fixture_tests_passed": 11,
+  "ruff_passed": true,
+  "Pillow": "11.3.0",
+  "full_source_archive_member_and_png_audit_pairs": 8188,
+  "photometric_regression": "1-bit WhiteIsZero applies original PIL mode1 semantics; multibit modeP retains class indices",
+  "no_model_loading_training_or_inference": true
+}

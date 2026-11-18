@@ -34,6 +34,9 @@ export default function Dashboard({ onInferenceSuccess }) {
     finally { setLoading(false); }
   }
 
+  const validPixels = result?.valid_pixel_count ?? (result ? result.width * result.height : 0);
+  const coverage = result?.pixel_coverage ?? (validPixels > 0 ? result.roof_area_px / validPixels : null);
+
   return (
     <section className="max-w-6xl mx-auto p-6 space-y-5">
       <h1 className="text-2xl font-bold">Roof segmentation</h1>
@@ -58,11 +61,12 @@ export default function Dashboard({ onInferenceSuccess }) {
         {result && <figure><img src={`data:image/png;base64,${result.mask_base64}`} alt="Predicted binary roof mask" className="max-w-full" /><figcaption>Predicted mask, {result.width} x {result.height} pixels</figcaption></figure>}
         {result?.probability_preview_base64 && <figure>
           <img src={`data:image/png;base64,${result.probability_preview_base64}`} alt="Predicted foreground probability" className="max-w-full" />
-          <figcaption>Foreground probability: black 0, white 1. Linear 8-bit preview; no auto-scaling.</figcaption>
+          <figcaption>Foreground probability on valid pixels: black 0, white 1. Linear 8-bit preview; no auto-scaling. {result.validity_base64 && 'Use the source validity mask to identify missing pixels.'}</figcaption>
         </figure>}
       </div>
       {result && <div className="space-y-2">
-        <p>{result.roof_area_px.toLocaleString()} roof pixels ({(100 * result.roof_area_px / (result.width * result.height)).toFixed(2)}% coverage)</p>
+        <p>{result.roof_area_px.toLocaleString()} roof pixels ({coverage == null ? 'coverage unavailable' : `${(100 * coverage).toFixed(2)}% coverage`})</p>
+        {result.valid_pixel_count != null && <p>Measured over {result.valid_pixel_count.toLocaleString()} valid source pixels{result.invalid_pixel_count > 0 ? `; ${result.invalid_pixel_count.toLocaleString()} missing pixels excluded.` : '.'}</p>}
         <p>{result.polygons.length} external polygon contours. Holes and tiny components are omitted from simplified contours.</p>
         <p>Mean predicted roof probability: {result.mean_foreground_probability == null ? 'Not applicable (no positive pixels)' : `${(100 * result.mean_foreground_probability).toFixed(1)}%`}. This score is uncalibrated.</p>
         <p>Model: {result.model.architecture}, threshold {result.model.threshold}.</p>
@@ -71,6 +75,7 @@ export default function Dashboard({ onInferenceSuccess }) {
         <a download={result.artifacts?.mask.filename || "roof-mask.png"} href={`data:image/png;base64,${result.mask_base64}`} className="underline">Download predicted mask</a>
         {result.probability_base64 && <a download={result.artifacts.probability.filename} href={`data:application/octet-stream;base64,${result.probability_base64}`} className="block underline">Download float32 probability array</a>}
         {result.probability_preview_base64 && <a download={result.artifacts.probability_preview.filename} href={`data:image/png;base64,${result.probability_preview_base64}`} className="block underline">Download probability preview</a>}
+        {result.validity_base64 && <a download={result.artifacts?.validity?.filename || 'validity.png'} href={`data:image/png;base64,${result.validity_base64}`} className="block underline">Download source validity mask</a>}
       </div>}
     </section>
   );

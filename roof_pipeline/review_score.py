@@ -18,10 +18,10 @@ import numpy as np
 import torch
 from PIL import Image
 
-from .common import load_binary_mask
 from .dataset import normalize_rgb
 from .metrics import metrics_from_counts
 from .models import load_model
+from .validity import read_label, read_rgb, read_valid_mask
 
 
 def _load_review(root):
@@ -189,14 +189,19 @@ def score_review(
     strata = {name: {} for name in cohorts}
     details = []
     for case in val_cases:
-        with Image.open(review / case["image"]) as image:
-            rgb = np.asarray(image.convert("RGB")).copy()
+        rgb, image_valid, _ = read_rgb(review / case["image"])
         if rgb.shape[:2] != (size, size):
             raise ValueError("Review image size differs from native checkpoint grid")
-        original = load_binary_mask(review / case["original_mask"], (size, size)) > 0
-        revised = load_binary_mask(review / case["mask"], (size, size)) > 0
-        ignored = load_binary_mask(review / case["ignore_mask"], (size, size)) > 0
-        changed = original != revised
+        original, original_valid = read_label(
+            review / case["original_mask"], (size, size)
+        )
+        revised, revised_valid = read_label(review / case["mask"], (size, size))
+        ignored, ignore_valid = read_label(review / case["ignore_mask"], (size, size))
+        original, revised, ignored = original > 0, revised > 0, ignored > 0
+        input_valid = image_valid & original_valid
+        if case.get("valid_mask"):
+            input_valid &= read_valid_mask(review / case["valid_mask"], (size, size))
+        changed = (original != revised) & input_valid & revised_valid
         if case["decision"] == "uncertain" and changed.any():
             raise ValueError(
                 "Uncertain case cannot change label values; use ignore mask"
@@ -205,7 +210,12 @@ def score_review(
             raise ValueError("Unknown adjudication decision")
         if case["decision"] == "keep" and changed.any():
             raise ValueError("Keep decision cannot change label values")
-        probability = model(normalize_rgb(rgb).to(device)).sigmoid().float()
+        normalized = normalize_rgb(rgb).to(device)
+        if not input_valid.all():
+            normalized.masked_fill_(
+                ~torch.from_numpy(input_valid).to(device)[None, None], 0
+            )
+        probability = model(normalized).sigmoid().float()
         if (
             probability.shape != (1, 1, size, size)
             or not torch.isfinite(probability).all()
@@ -213,7 +223,7 @@ def score_review(
             raise ValueError("Expected finite single-channel binary probabilities")
         probability = probability[0, 0].cpu().numpy()
         prediction = probability >= threshold
-        valid = ~ignored
+        valid = input_valid & revised_valid & ignore_valid & ~ignored
         unresolved = case["decision"] == "uncertain" and not bool(ignored.any())
         if case["decision"] == "pending":
             exclusion_reason = "pending_decision"
@@ -224,7 +234,7 @@ def score_review(
         else:
             exclusion_reason = ""
         eligible = not exclusion_reason
-        all_counts = _counts(prediction, original, np.ones_like(valid))
+        all_counts = _counts(prediction, original, input_valid)
         original_counts = _counts(prediction, original, valid) if eligible else None
         review_counts = _counts(prediction, revised, valid) if eligible else None
         row = {
@@ -241,7 +251,7 @@ def score_review(
             "paired_exclusion_reason": exclusion_reason,
             "unresolved": unresolved,
             "fully_ignored": not bool(valid.any()),
-            "ignored_pixels": int(ignored.sum()),
+            "ignored_pixels": int((~valid).sum()),
             "evaluated_paired_pixels": int(valid.sum()) if eligible else 0,
             "changed_pixels": int(changed.sum()),
             "changed_evaluated_pixels": int((changed & valid).sum()) if eligible else 0,
@@ -281,7 +291,7 @@ def score_review(
             row["prediction_probability"] = (
                 f"predictions/{prediction_stem}_probability.png"
             )
-            Image.fromarray(prediction.astype(np.uint8) * 255).save(
+            Image.fromarray((prediction & input_valid).astype(np.uint8) * 255).save(
                 out / row["prediction_mask"]
             )
             Image.fromarray(np.rint(probability * 255).astype(np.uint8)).save(

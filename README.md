@@ -101,6 +101,15 @@ Outputs include run/input/model-release identities, artifact hashes, original
 image dimensions, threshold, pixel coverage and valid-pixel count. Image-space
 uploads have no physical area. Mean foreground probability is uncalibrated.
 
+[Explicit NoData handling](docs/NODATA_HANDLING_2026-11-18.md) now preserves
+source validity through training, evaluation, and prediction. Coverage excludes
+invalid pixels, and outputs include a validity mask and correct valid/invalid/
+total counts. Existing serving releases need a fresh v2 preprocessing manifest
+for the same checkpoint; see the migration instructions and WHU impact audit.
+The audit found no invalid source pixels or prepared-pixel mismatches across
+all 8,188 WHU pairs, so this fix does not change the published WHU scores or
+explain the agricultural-field false positives.
+
 A new genuine baseline-checkpoint integration on a generated non-square fixture
 found zero difference between CLI and HTTP probabilities, an independent forward
 pass difference below 1e-6, and identical masks. This is an integration check,

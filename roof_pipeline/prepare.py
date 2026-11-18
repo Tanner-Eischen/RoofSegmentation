@@ -17,10 +17,10 @@ from .common import (
     IMAGE_SUFFIXES,
     SPLITS,
     dataset_audit,
-    load_binary_mask,
     save_pair,
     write_manifest,
 )
+from .validity import VALIDITY_POLICY, read_label, read_rgb
 
 
 def _split_dir(root: Path, split: str) -> Path:
@@ -79,8 +79,18 @@ def import_whu(source: Path, out: Path, limit_per_split: int = 0) -> None:
             mask_path = masks.get(img_path.stem)
             if mask_path is None:
                 raise FileNotFoundError(f"Missing corresponding mask for {img_path}")
-            with Image.open(img_path) as img:
-                mask = load_binary_mask(mask_path, img.size)
+            rgb, image_valid, _ = read_rgb(img_path)
+            mask, label_valid = read_label(mask_path, (rgb.shape[1], rgb.shape[0]))
+            with Image.open(img_path) as original:
+                # Keep original PIL metadata/encoding behavior for the all-valid
+                # uint8 path. Use the reader's scene-level conversion otherwise.
+                candidate = np.asarray(original.convert("RGB"))
+                img = (
+                    original
+                    if candidate.shape == rgb.shape
+                    and np.array_equal(candidate[image_valid], rgb[image_valid])
+                    else Image.fromarray(rgb)
+                )
                 sample_id = f"whu_{split}_{idx:06d}"
                 rows.append(
                     save_pair(
@@ -91,6 +101,7 @@ def import_whu(source: Path, out: Path, limit_per_split: int = 0) -> None:
                         split,
                         group=f"whu_provided_{split}_partition",
                         source="WHU aerial buildings",
+                        valid_mask=image_valid & label_valid,
                     )
                 )
             if (idx + 1) % 500 == 0 or idx + 1 == len(images):
@@ -104,6 +115,11 @@ def import_whu(source: Path, out: Path, limit_per_split: int = 0) -> None:
             "license": "Check license of chosen official or third-party distribution",
             "labels": "binary building extent (not instance/roof-material classification)",
             "limited_subset": bool(limit_per_split),
+            **(
+                {"validity_policy": VALIDITY_POLICY}
+                if any(row.get("valid_mask") for row in rows)
+                else {}
+            ),
             "source_provenance": json.loads(
                 (source / "download_provenance.json").read_text(encoding="utf-8")
             )
@@ -214,6 +230,11 @@ def import_labelme(source: Path, out: Path, split_map: Path) -> None:
             "dataset": "User-labeled imagery",
             "split_policy": "User-specified site/scene groups",
             "labels": "Manual Labelme roof/building polygon masks; annotations must be reviewed",
+            **(
+                {"validity_policy": VALIDITY_POLICY}
+                if any(row.get("valid_mask") for row in rows)
+                else {}
+            ),
         },
     )
     print(f"Rasterized {len(rows)} manual annotations -> {out}")
@@ -279,21 +300,12 @@ def import_geopairs(pairs_csv: Path, out: Path, tile_size: int = 512) -> None:
                 )
                 * 255
             )
+            rgb, valid, _ = read_rgb(img_path)
+            scene_mask[~valid] = 0
             if not scene_mask.any():
                 raise ValueError(
-                    f"Vector labels do not overlap raster: {img_path} {vec_path}; verify EPSG:4326 coordinates and source transform"
+                    f"Vector labels do not overlap valid raster pixels: {img_path} {vec_path}; verify EPSG:4326 coordinates, validity and source transform"
                 )
-            rgb = np.moveaxis(src.read([1, 2, 3]), 0, -1)
-            if rgb.dtype != np.uint8:
-                # Deterministic scene-level stretch, with clipping; never stretch each chip independently.
-                r = np.zeros(rgb.shape, dtype=np.uint8)
-                for band in range(3):
-                    arr = rgb[:, :, band].astype(np.float32)
-                    lo, hi = np.percentile(arr[np.isfinite(arr)], [2, 98])
-                    r[:, :, band] = np.clip(
-                        (arr - lo) * 255 / max(hi - lo, 1e-8), 0, 255
-                    ).astype(np.uint8)
-                rgb = r
             scene_id = f"geo_{scene_idx:04d}"
             metadata.append(
                 {
@@ -306,6 +318,15 @@ def import_geopairs(pairs_csv: Path, out: Path, tile_size: int = 512) -> None:
                     "height": src.height,
                     "split": split,
                     "group": group,
+                    **(
+                        {
+                            "validity_policy": VALIDITY_POLICY,
+                            "valid_pixels": int(valid.sum()),
+                            "invalid_pixels": int(valid.size - valid.sum()),
+                        }
+                        if not valid.all()
+                        else {}
+                    ),
                 }
             )
             for row0 in range(0, src.height, tile_size):
@@ -324,6 +345,7 @@ def import_geopairs(pairs_csv: Path, out: Path, tile_size: int = 512) -> None:
                             split,
                             group,
                             source="georeferenced polygon labels",
+                            valid_mask=valid[row0 : row0 + h, col0 : col0 + w],
                         )
                     )
     write_manifest(
@@ -335,6 +357,11 @@ def import_geopairs(pairs_csv: Path, out: Path, tile_size: int = 512) -> None:
             "label_crs": "EPSG:4326 GeoJSON",
             "tile_size": tile_size,
             "border_policy": "retain_unpadded_partial_chips",
+            **(
+                {"validity_policy": VALIDITY_POLICY}
+                if any(row.get("valid_mask") for row in rows)
+                else {}
+            ),
             "notes": "Chips are PNG; partial border chips retain actual dimensions. RoofDataset resizes each chip to the model input size, so metrics use that resized grid. Refer to scene_metadata.json for source georeferencing.",
         },
     )

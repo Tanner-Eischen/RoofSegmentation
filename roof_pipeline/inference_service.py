@@ -20,6 +20,7 @@ from roof_pipeline.models import DEFAULT_ASPP_RATES, create_model
 from roof_pipeline.predict import predict_array
 from roof_pipeline.release import checkpoint_config, read_checkpoint, validate_release
 from roof_pipeline.runtime import runtime_identity
+from roof_pipeline.validity import pil_rgb
 
 
 class ModelUnavailable(RuntimeError):
@@ -38,7 +39,9 @@ class InferenceBusy(RuntimeError):
     pass
 
 
-def decode_image(content: bytes, *, max_bytes: int, max_pixels: int) -> np.ndarray:
+def decode_image_with_validity(
+    content: bytes, *, max_bytes: int, max_pixels: int
+) -> tuple[np.ndarray, np.ndarray]:
     if not content:
         raise InvalidImage("Empty image")
     if len(content) > max_bytes:
@@ -56,13 +59,25 @@ def decode_image(content: bytes, *, max_bytes: int, max_pixels: int) -> np.ndarr
                 if image.width * image.height > max_pixels:
                     raise ImageTooLarge("Image exceeds decoded pixel limit")
                 image.load()
-                return np.array(image.convert("RGB"), dtype=np.uint8)
+                rgb, valid = pil_rgb(image)
+                if not valid.any():
+                    raise InvalidImage("Image contains no valid pixels")
+                return rgb, valid
     except ImageTooLarge:
         raise
     except (Image.DecompressionBombError, Image.DecompressionBombWarning) as exc:
         raise ImageTooLarge("Image exceeds decoded pixel limit") from exc
+    except InvalidImage:
+        raise
     except (UnidentifiedImageError, OSError, ValueError) as exc:
         raise InvalidImage("Invalid or unsupported image") from exc
+
+
+def decode_image(content: bytes, *, max_bytes: int, max_pixels: int) -> np.ndarray:
+    """Compatibility decoder; inference itself retains the source validity mask."""
+    return decode_image_with_validity(
+        content, max_bytes=max_bytes, max_pixels=max_pixels
+    )[0]
 
 
 class ModelService:
@@ -166,6 +181,8 @@ class ModelService:
                     "preprocessing_version": release["preprocessing_version"],
                     "overlap": release["overlap"],
                     "label_definition": release["label_definition"],
+                    "alpha_policy": release["alpha_policy"],
+                    "validity_policy": release["validity_policy"],
                 }
                 self._loaded = model, metadata
                 self._fingerprint = fingerprint
@@ -181,7 +198,7 @@ class ModelService:
         if not self._slot.acquire(blocking=False):
             raise InferenceBusy("Inference busy; retry after active request finishes")
         try:
-            rgb = decode_image(
+            rgb, valid = decode_image_with_validity(
                 content, max_bytes=self.max_bytes, max_pixels=self.max_pixels
             )
             model, metadata = self.load()
@@ -191,6 +208,7 @@ class ModelService:
                 torch.device("cpu"),
                 chip=metadata["image_size"],
                 overlap=metadata["overlap"],
+                valid_mask=valid,
             )
             if (
                 probability.shape != rgb.shape[:2]
@@ -199,12 +217,30 @@ class ModelService:
                 or np.any(probability > 1)
             ):
                 raise ModelUnavailable("Model produced invalid probabilities")
-            binary = (probability >= metadata["threshold"]).astype(np.uint8)
+            probability = probability.copy()
+            probability[~valid] = 0
+            binary = ((probability >= metadata["threshold"]) & valid).astype(np.uint8)
             contours, _ = cv2.findContours(
                 binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
             )
-            polygons = [c.reshape(-1, 2).tolist() for c in contours if len(c) >= 3]
-            mask_stream, probability_stream, preview_stream = (
+            polygons = []
+            omitted_invalid = 0
+            all_valid = bool(valid.all())
+            for contour in contours:
+                if len(contour) < 3:
+                    continue
+                if not all_valid:
+                    exterior = np.zeros_like(binary)
+                    cv2.fillPoly(exterior, [contour], 1)
+                    if np.any((exterior > 0) & ~valid):
+                        # The legacy flat polygon format cannot represent holes.
+                        # Keep the exact raster mask authoritative rather than
+                        # returning a filled exterior that claims missing pixels.
+                        omitted_invalid += 1
+                        continue
+                polygons.append(contour.reshape(-1, 2).tolist())
+            mask_stream, probability_stream, preview_stream, validity_stream = (
+                io.BytesIO(),
                 io.BytesIO(),
                 io.BytesIO(),
                 io.BytesIO(),
@@ -216,11 +252,14 @@ class ModelService:
             Image.fromarray(np.rint(probability * 255).astype(np.uint8)).save(
                 preview_stream, format="PNG"
             )
+            Image.fromarray(valid.astype(np.uint8) * 255).save(
+                validity_stream, format="PNG"
+            )
             mask_bytes, probability_bytes = (
                 mask_stream.getvalue(),
                 probability_stream.getvalue(),
             )
-            positive = probability[binary > 0]
+            positive = probability[(binary > 0) & valid]
             run_id = str(uuid.uuid4())
             artifacts = {
                 "mask": {
@@ -243,28 +282,41 @@ class ModelService:
                     "bytes": len(preview_stream.getvalue()),
                     "display_mapping": "linear probability 0..1 to uint8 0..255; no auto-scaling",
                 },
+                "validity": {
+                    "filename": run_id + "-validity.png",
+                    "sha256": hashlib.sha256(validity_stream.getvalue()).hexdigest(),
+                    "media_type": "image/png",
+                    "bytes": len(validity_stream.getvalue()),
+                    "definition": "255 valid source pixel; 0 missing/transparent. Invalid probability values are zero placeholders, not background evidence.",
+                },
             }
             return {
                 "run_id": run_id,
                 "mask_png": mask_bytes,
                 "probability_npy": probability_bytes,
                 "probability_preview_png": preview_stream.getvalue(),
+                "validity_png": validity_stream.getvalue(),
                 "input_sha256": hashlib.sha256(content).hexdigest(),
                 "polygons": polygons,
                 "roof_area_px": int(binary.sum()),
-                "pixel_coverage": float(binary.mean()),
-                "valid_pixel_count": int(binary.size),
+                "pixel_coverage": float(binary.sum() / valid.sum()),
+                "valid_pixel_count": int(valid.sum()),
+                "invalid_pixel_count": int(valid.size - valid.sum()),
+                "total_pixel_count": int(valid.size),
                 "mean_foreground_probability": float(positive.mean())
                 if positive.size
                 else None,
                 "probability_definition": "Mean model probability over predicted foreground pixels; uncalibrated",
+                "invalid_probability_value": 0.0,
+                "probability_validity": "Use the validity artifact; zero values outside valid pixels are missing-data placeholders.",
                 "width": rgb.shape[1],
                 "height": rgb.shape[0],
                 "area": None,
                 "area_unit": "pixels",
                 "georeferencing_status": "unavailable_image_space_only",
                 "polygon_coordinates": "image_pixels_xy",
-                "polygon_limitation": "External simplified contours; holes and sub-three-point components omitted",
+                "polygon_limitation": "External simplified contours; holes and sub-three-point components omitted. Any filled exterior enclosing invalid pixels is omitted; the validity-masked raster is authoritative.",
+                "polygon_components_omitted_invalid": omitted_invalid,
                 "mode": "real",
                 "model": metadata,
                 "artifacts": artifacts,
@@ -289,9 +341,11 @@ def predict_file(checkpoint, release_manifest, image, out, *, cpu_threads=2):
     (out / "mask.png").write_bytes(result.pop("mask_png"))
     (out / "probability.npy").write_bytes(result.pop("probability_npy"))
     (out / "probability.png").write_bytes(result.pop("probability_preview_png"))
+    (out / "validity.png").write_bytes(result.pop("validity_png"))
     result["artifacts"]["mask"]["path"] = "mask.png"
     result["artifacts"]["probability"]["path"] = "probability.npy"
     result["artifacts"]["probability_preview"]["path"] = "probability.png"
+    result["artifacts"]["validity"]["path"] = "validity.png"
     (out / "prediction_manifest.json").write_text(
         json.dumps(result, indent=2) + "\n", encoding="utf-8"
     )

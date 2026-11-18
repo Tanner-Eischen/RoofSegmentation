@@ -18,6 +18,7 @@ from .common import dataset_fingerprint
 from .dataset import RoofDataset
 from .metrics import evaluate_loader
 from .models import load_model
+from .validity import VALIDITY_POLICY
 
 
 def evaluate(
@@ -56,6 +57,7 @@ def evaluate(
         "samples": len(ds),
         "threshold_frozen_from_validation": threshold,
         "aggregate": aggregate,
+        "validity_policy": VALIDITY_POLICY,
         "dataset_content_sha256": config["dataset_content_sha256"],
         "checkpoint_sha256": hashlib.sha256(checkpoint.read_bytes()).hexdigest(),
         "note": "No threshold sweep or checkpoint selection was performed on test",

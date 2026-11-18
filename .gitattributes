@@ -12,3 +12,7 @@ docs/figures/whu_factorial_2026-10-31/*.png -text
 docs/results/whu_architecture_test_2026-11-16/** -text whitespace=trailing-space,space-before-tab,cr-at-eol
 # Post-hoc texture error evidence and figure hashes are byte-bound too.
 docs/results/whu_texture_errors_2026-11-16/** -text whitespace=trailing-space,space-before-tab,cr-at-eol
+docs/results/whu_nodata_audit_2026-11-18/** -text whitespace=trailing-space,space-before-tab,cr-at-eol
+# The NoData audit packet also binds the exact executed audit/test source bytes.
+scripts/audit_whu_validity.py -text whitespace=trailing-space,space-before-tab,cr-at-eol
+tests/test_whu_validity_audit.py -text whitespace=trailing-space,space-before-tab,cr-at-eol

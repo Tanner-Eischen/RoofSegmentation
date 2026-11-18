@@ -17,7 +17,7 @@ from PIL import Image
 
 from .adjudication import load_review
 from .boundary_experiment import validation_diagnostics
-from .common import dataset_fingerprint, load_binary_mask
+from .common import dataset_fingerprint
 from .correction_overlay import load_training_overlay
 from .dataset import normalize_rgb
 from .metrics import metrics_from_counts
@@ -31,6 +31,7 @@ from .refine import (
     _snapshot,
     _write_json,
 )
+from .validity import read_label, read_rgb, read_valid_mask
 
 
 def select_candidate(candidates):
@@ -58,12 +59,13 @@ def select_candidate(candidates):
     return max(eligible, key=lambda c: (c["validation_iou"], priority[c["name"]]))
 
 
-def _counts(prediction, truth):
+def _counts(prediction, truth, valid=None):
+    valid = np.ones_like(truth, dtype=bool) if valid is None else valid
     return [
-        int((prediction & truth).sum()),
-        int((prediction & ~truth).sum()),
-        int((~prediction & truth).sum()),
-        int((~prediction & ~truth).sum()),
+        int((prediction & truth & valid).sum()),
+        int((prediction & ~truth & valid).sum()),
+        int((~prediction & truth & valid).sum()),
+        int((~prediction & ~truth & valid).sum()),
     ]
 
 
@@ -78,23 +80,31 @@ def correction_case_diagnostics(checkpoint, reviewroot, out, *, device):
     for case in review["cases"]:
         if case["split"] != "train" or case["decision"] != "correct":
             continue
-        with Image.open(reviewroot / case["image"]) as image:
-            rgb = np.asarray(image.convert("RGB")).copy()
+        rgb, image_valid, _ = read_rgb(reviewroot / case["image"])
         if rgb.shape[:2] != (config["image_size"], config["image_size"]):
             raise ValueError("Correction-case grid differs from checkpoint")
-        prediction = (
-            model(normalize_rgb(rgb).to(device)).sigmoid()[0, 0].cpu().numpy() >= 0.5
-        )
+        size = (config["image_size"], config["image_size"])
+        original, original_valid = read_label(reviewroot / case["original_mask"], size)
+        proposed, proposed_valid = read_label(reviewroot / case["mask"], size)
+        input_valid = image_valid & original_valid
+        if case.get("valid_mask"):
+            input_valid &= read_valid_mask(reviewroot / case["valid_mask"], size)
+        normalized = normalize_rgb(rgb).to(device)
+        if not input_valid.all():
+            normalized.masked_fill_(
+                ~torch.from_numpy(input_valid).to(device)[None, None], 0
+            )
+        prediction = model(normalized).sigmoid()[0, 0].cpu().numpy() >= 0.5
+        paired_valid = input_valid & proposed_valid
         row = {"sample_id": case["sample_id"], "split": "train"}
-        for name, field in (("original", "original_mask"), ("proposed", "mask")):
-            truth = load_binary_mask(reviewroot / case[field]) > 0
-            counts = _counts(prediction, truth)
+        for name, mask in (("original", original), ("proposed", proposed)):
+            counts = _counts(prediction, mask > 0, paired_valid)
             totals[name] = [a + b for a, b in zip(totals[name], counts)]
             row[name] = metrics_from_counts(*counts)
         row["same_model_label_rescore_iou_change"] = (
             row["proposed"]["iou"] - row["original"]["iou"]
         )
-        Image.fromarray(prediction.astype(np.uint8) * 255).save(
+        Image.fromarray((prediction & input_valid).astype(np.uint8) * 255).save(
             out / f"{case['sample_id']}_prediction.png"
         )
         details.append(row)

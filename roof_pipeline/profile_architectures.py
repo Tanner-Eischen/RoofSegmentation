@@ -25,6 +25,7 @@ from .common import dataset_fingerprint
 from .dataset import RoofDataset
 from .models import create_model, encoder_fingerprint
 from .train import bce_dice_loss, seed_everything, seed_worker
+from .validity import target_validity
 
 
 def sha256(path):
@@ -77,6 +78,11 @@ def measure_phase(model, loader, *, training, optimizer, scaler, warmup, measure
         start = time.perf_counter()
         x, y = next(iterator)
         x, y = x.cuda(non_blocking=True), y.cuda(non_blocking=True)
+        valid = target_validity(y)
+        available = valid.flatten(1).any(1)
+        if not available.any():
+            raise ValueError("Cannot profile a batch with no valid pixels")
+        x, y, valid = x[available], y[available], valid[available]
         if training:
             optimizer.zero_grad(set_to_none=True)
             with torch.autocast(device_type="cuda", enabled=True):
@@ -105,7 +111,7 @@ def measure_phase(model, loader, *, training, optimizer, scaler, warmup, measure
                     ~prediction & truth,
                     ~prediction & ~truth,
                 ):
-                    values.flatten(1).sum(1).cpu().tolist()
+                    (values & valid).flatten(1).sum(1).cpu().tolist()
         torch.cuda.synchronize()
         elapsed = time.perf_counter() - start
         if step >= warmup:

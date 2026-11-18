@@ -16,7 +16,12 @@ import torch
 from PIL import Image, ImageDraw
 
 from .annotation_audit import coverage_stratum, mask_outline
-from .common import dataset_fingerprint, load_binary_mask, read_manifest
+from .common import (
+    dataset_fingerprint,
+    load_binary_mask,
+    read_manifest,
+    read_paired_sample,
+)
 
 SCHEMA = "roof_review_v1"
 FILE_FIELDS = ("image", "original_mask", "mask", "ignore_mask")
@@ -230,6 +235,7 @@ def load_review(root: Path, *, require_sealed=False, allow_draft_edits=False):
 
 
 def build_review(data, audit, checkpoint, out, version):
+    """Build only fully valid cases; this review schema cannot carry NoData masks."""
     data, audit, checkpoint, out = map(Path, (data, audit, checkpoint, out))
     _version(version)
     if out.exists():
@@ -265,6 +271,11 @@ def build_review(data, audit, checkpoint, out, version):
             raise ValueError("Audit selection contains a test case")
         if not re.fullmatch(r"[A-Za-z0-9_-]+", ident):
             raise ValueError("Invalid review sample ID")
+        if not read_paired_sample(data, row)[2].all():
+            raise ValueError(
+                "Current review packet schema cannot carry partial pixel validity; "
+                "use a validity-aware review format before exporting this source"
+            )
         for field in ("image", "mask"):
             if sha256(data / row[field]) != selected[field + "_sha256"]:
                 raise ValueError("Audit source content changed")

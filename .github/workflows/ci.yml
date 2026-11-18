@@ -24,7 +24,7 @@ jobs:
           pip install torch --index-url https://download.pytorch.org/whl/cpu
           pip install -r requirements-smoke.txt
       - name: Lint training pipeline
-        run: python -m ruff check roof_pipeline scripts/download_whu.py scripts/make_smoke_dataset.py scripts/analyze_architecture_comparison.py scripts/qualitative_architecture_comparison.py scripts/evaluate_architecture_test.py scripts/analyze_texture_errors.py scripts/runpod tests integration_optional/api ablation_study
+        run: python -m ruff check roof_pipeline scripts/download_whu.py scripts/make_smoke_dataset.py scripts/analyze_architecture_comparison.py scripts/qualitative_architecture_comparison.py scripts/evaluate_architecture_test.py scripts/analyze_texture_errors.py scripts/audit_whu_validity.py scripts/runpod tests integration_optional/api ablation_study
       - name: Test dataset guards and train/evaluate/predict workflow
         run: python -m pytest tests/ ablation_study/tests/ -q
 

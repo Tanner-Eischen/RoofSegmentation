@@ -7,6 +7,8 @@ import math
 import torch
 import torch.nn.functional as F
 
+from .validity import target_validity
+
 BOUNDARY_TARGET = "morphological_band_replicate_v1"
 
 
@@ -29,9 +31,15 @@ def boundary_target(labels: torch.Tensor, radius: int = 1) -> torch.Tensor:
         raise ValueError("Boundary radius must be a positive integer")
     if labels.ndim != 4 or labels.shape[1] != 1:
         raise ValueError("Boundary targets require N x 1 x H x W masks")
+    valid = target_validity(labels)
     mask = (labels > 0.5).to(dtype=labels.dtype)
     padded = F.pad(mask, (radius,) * 4, mode="replicate")
     kernel = 2 * radius + 1
     dilated = F.max_pool2d(padded, kernel, stride=1)
     eroded = -F.max_pool2d(-padded, kernel, stride=1)
-    return dilated - eroded
+    target = dilated - eroded
+    if not valid.all():
+        invalid = F.pad((~valid).to(labels.dtype), (radius,) * 4, mode="replicate")
+        safe = F.max_pool2d(invalid, kernel, stride=1) == 0
+        target = target.masked_fill(~safe, -1)
+    return target
